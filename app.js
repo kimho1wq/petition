@@ -8,6 +8,7 @@ var mysql = require('mysql');
 
 var database = require('./database');
 
+
 global.pool = mysql.createPool({
     connectionLimit: 10,
     host: 'localhost',
