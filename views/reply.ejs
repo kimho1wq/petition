@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <style>
+            
+        
+        </style>
+        <% include ./head.html %>
+        <title>Siri-b Petition</title>
+    </head>
+    <body>
+        <!-- Navigation -->
+        <% include ./navigation.html %>
+
+        <!-- Page Header -->
+        <% include ./header.html %>
+
+        <div class="container" style="max-width: 75rem;">
+            <br>
+            <p style="margin-bottom: 50px;" align="center"><strong class="text-dark" style="font-size: 40px"><span style="color: #003c70">&laquo;</span> 답변된 청원</strong> </p>
+    
+            <%if(contents.length > 0) {%>
+                <%for(var i = 0; i < contents.length; i++) {%>
+                    <br><hr><br>
+                    <div class="container" style="max-width: 75rem;">
+                        <button style=" background-color: #003c70; border: 2px solid #003c70" class="btn btn-primary my-5 my-sm-0" type="submit"><h5>답변청원　<%=(i+1)%>호</h5></button>
+                    </div>  
+                    <div class="container" style="max-width: 75rem;">      
+                        <div style="display: inline-block;">
+                            <video src="uploads/<%=filenames[i]%>" width="500px" height="350px" controls></video>
+                        </div>
+                        <div style="display: inline-block; max-width: 37rem; margin-left: 30px">
+                            <h5 style="margin-left: 10px; font-size:28px; color: #003c70;"><%=contents[i].title%></h5>
+                            <br>
+                            <ul style="list-style: none; ">
+                                <li style="display: inline-block; margin: 0 5px; text-align: center;" >
+                                    <img src="img/clock.jpg" width="65em" height="65em">
+                                    <p style="font-size:21px; color: #003c70; margin: 0 5px; font-weight: bold;">청원시작</p>
+                                    <p style="font-size:19px; color: #003c70; margin: 0 5px;">[ <span style="font-weight: bold;"><%=contents[i].startDay%></span> ]</p>
+                                </li>
+                                <li style="display: inline-block; margin: 0px 10px; text-align: center;" >
+                                    <img src="img/clock.jpg" width="65em" height="65em">
+                                    <p style="font-size:21px; color: #003c70; margin: 0 5px; font-weight: bold;">청원종료</p>
+                                    <p style="font-size:19px; color: #003c70; margin: 0 5px;">[ <span style="font-weight: bold;"><%=contents[i].endDay%></span> ]</p>
+                                </li>
+                                <li style="display: inline-block; margin: 0px 10px; text-align: center;">
+                                    <img src="img/clock.jpg" width="65em" height="65em">
+                                    <p style="font-size:21px; color: #003c70; margin: 0 5px; font-weight: bold;">참여인원</p>
+                                    <p style="font-size:19px; color: #003c70; margin: 0 5px;">[ <span style="font-weight: bold;"><%=contents[i].count%>명</span> ]</p>
+                                </li>
+                            </ul>
+                            <br><br>
+                        </div>
+                    </div>
+                <%}%>  
+            <%} else {%>
+                <br><hr><br>
+                <div class="container" style="max-width: 65rem;">
+                    <p align="center"><strong class="text-dark" style="font-size: 33px">답변된 청원이 없습니다.</strong> </p>
+                </div>
+            <%}%>
+            <br><br><br>
+            
+            <div class="container border-light mb-5" style="max-width: 21rem;">
+                <ul class="pagination">
+                    <%if(info.active==1) {%>
+                        <li class="page-item disabled">
+                            <a class="page-link" href="/petition/list?page=1&sort=<%=info.sort%>&type=<%=info.type%>&word=<%=info.word%>&deadlineFlag=<%=info.deadlineFlag%>">&laquo;</a>
+                        </li>
+                    <%} else {%>
+                        <li class="page-item">
+                            <a class="page-link " href="/petition/list?page=1&sort=<%=info.sort%>&type=<%=info.type%>&word=<%=info.word%>&deadlineFlag=<%=info.deadlineFlag%>">&laquo;</a>
+                        </li>
+                    <%}%>
+                    <%if(info.startPage==1) {%>
+                        <li class="page-item disabled">
+                            <a class="page-link" href="/petition/list?page=<%=info.startPage-info.limitPage%>&sort=<%=info.sort%>&type=<%=info.type%>&word=<%=info.word%>&deadlineFlag=<%=info.deadlineFlag%>">&lt;</a>
+                        </li>
+                    <%} else {%>
+                        <li class="page-item">
+                            <a class="page-link" href="/petition/list?page=<%=info.startPage-info.limitPage%>&sort=<%=info.sort%>&type=<%=info.type%>&word=<%=info.word%>&deadlineFlag=<%=info.deadlineFlag%>">&lt;</a>
+                        </li>
+                    <%}%>
+                    <%for(var i=info.startPage; i<=info.endPage; i++){%>
+                        <%if(i==info.active) {%>
+                            <li class="page-item active">
+                                <a class="page-link" href="/petition/list?page=<%=i%>&sort=<%=info.sort%>&type=<%=info.type%>&word=<%=info.word%>&deadlineFlag=<%=info.deadlineFlag%>"><%=i%></a>
+                            </li>
+                        <%} else {%>
+                            <li class="page-item">
+                                <a class="page-link" href="/petition/list?page=<%=i%>&sort=<%=info.sort%>&type=<%=info.type%>&word=<%=info.word%>&deadlineFlag=<%=info.deadlineFlag%>"><%=i%></a>
+                            </li>
+                        <%}%>
+                    <%}%>
+                    <%if(info.endPage==info.pagination) {%>
+                        <li class="page-item disabled">
+                            <a class="page-link" href="/petition/list?page=<%=info.startPage-(-info.limitPage)%>&sort=<%=info.sort%>&type=<%=info.type%>&word=<%=info.word%>&deadlineFlag=<%=info.deadlineFlag%>">&gt;</a>
+                        </li>
+                    <%} else {%>
+                        <li class="page-item">
+                            <a class="page-link" href="/petition/list?page=<%=info.startPage-(-info.limitPage)%>&sort=<%=info.sort%>&type=<%=info.type%>&word=<%=info.word%>&deadlineFlag=<%=info.deadlineFlag%>">&gt;</a>
+                        </li>
+                    <%}%>
+                    <%if(info.active==info.pagination) {%>
+                        <li class="page-item disabled">
+                            <a class="page-link" href="/petition/list?page=<%=info.pagination%>&sort=<%=info.sort%>&type=<%=info.type%>&word=<%=info.word%>&deadlineFlag=<%=info.deadlineFlag%>">&raquo;</a>
+                        </li>
+                    <%} else {%>
+                        <li class="page-item">
+                            <a class="page-link " href="/petition/list?page=<%=info.pagination%>&sort=<%=info.sort%>&type=<%=info.type%>&word=<%=info.word%>&deadlineFlag=<%=info.deadlineFlag%>">&raquo;</a>
+                        </li>
+                    <%}%>
+                </ul>
+            </div>
+        </div>
+        <br><hr>
+        <!-- Footer -->
+        <% include ./footer.html %>
+
+        <!-- Bootstrap core JavaScript -->
+        <script src="vendor/jquery/jquery.min.js"></script>
+        <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+
+        <!-- Custom scripts for this template -->
+        <script src="js/clean-blog.min.js"></script>
+    </body>
+</html>

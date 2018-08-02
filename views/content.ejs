@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <% include ./head.html %>
+        <title>Siri-b Petition</title>
+    </head> 
+    <body>
+        <!-- Navigation -->
+        <% include ./navigation.html %>
+        
+        <!-- Page Header -->
+        <% include ./header.html %>
+        
+        <div class="container" style="max-width: 70rem;">
+            <br>
+            <p align="center"><strong class="text-dark" style="font-size: 40px"><span style="color: #003c70">&laquo;</span> 내용 자세히</strong> </p>
+            <br><br>
+            
+            <div class="container card mb-10" style="padding: 10px; border: 2px solid #003c70; max-width: 70rem;">
+                <br>
+                <div class="container border-light mb-5" style="max-width: 65rem;">
+                    <div class="card-body">
+                        <%if(content.dayFlag==1) {%>
+                            <p align="center" class="text-muted" style="font-size: 25px"><strong>&#91; 청원 진행중 &#93;</strong></p>
+                        <%} else {%>
+                            <p align="center" class="text-muted" style="font-size: 25px"><strong>&#91; 청원 종료 &#93;</strong></p>
+                        <%}%>
+                        <p align="center"><strong style="font-size: 42px"><%=content.title%></strong></p>
+                        <p align="center"><strong style="font-size: 30px">참여인원 : [<strong class="text-primary"><%=content.count%></strong>명]</strong></p>
+                
+                    </div>
+                </div>
+                <div class="container border-secondary mb-5" style="max-width: 55rem;">
+                    <div class="card-header">
+                        <p align="center" style="font-size: 25px">분류 : <strong><%=content.type%></strong>　　　청원인 : <strong><%=content.nickname%></strong></p>
+                        <p align="center" style="font-size: 25px">청원시작 : <strong><%=content.startDay%></strong>　　　청원종료 : <strong><%=content.endDay%></strong></p>
+                    </div>
+                </div>
+                <br><br>
+                
+                <div class="container border-light mb-5" style="max-width: 63rem;">
+                    <p><strong class="text-dark" style="font-size: 35px"><span style="color: #003c70"> ●     </span>청원 개요</strong></p>
+                </div>
+                <div class="container border-light mb-5" style="max-width: 65rem;">
+                    <p><strong style="font-size: 20px">
+                        <%var lines = content.contents.split("\n");%>
+                        <%lines.forEach(function(item) {%>
+                        <%=item%><br/><%})%>
+                        </strong></p>
+                </div>
+                
+                <div class="navbar navbar-expand-lg">
+                            <div class="collapse navbar-collapse" id="navbarColor02">
+                                <ul class="mr-auto"></ul>
+                               
+                                    <form action="/petition/reply_post" method="get" class="form-inline my-2 my-lg-0" style="margin-left: 20px;margin-right: 20px;">
+                                        <input type="hidden" name="id" value="<%=content._id%>">
+                                        <button class="btn btn-secondary my-2 my-sm-0" type="submit"><h5>　답변하기　</h5></button>
+                                    </form>
+                                    <form action="/petition/delete" method="get" class="form-inline my-2 my-lg-0" style="margin-left: 20px;margin-right: 20px;">
+                                        <input type="hidden" name="id" value="<%=content._id%>">
+                                        <button class="btn  my-2 my-sm-0" type="submit"><h5>　글 삭제하기　</h5></button>
+                                    </form>
+                                
+                            </div>
+                </div>
+                <%if(login) {%>
+                    <%if(login.uid == "DYYuut6bTfNEkNLbMiFjyDIui1e2") {%>
+                    <%}%> 
+                <%}%> 
+                
+            </div>
+            <br><br>
+            
+            <div class="container border-light mb-5" style="max-width: 65rem;">
+                <p><strong class="text-dark" style="font-size: 35px"><span style="color: #003c70"> ●     </span>청원 동의</strong></p>
+            </div>
+            <div style="max-width: 65rem; margin-left: 20px; background-color: #f3f3f3; border: 2px solid #dedede;">
+                <div style="padding-top: 20px; padding-bottom: 20px; overflow: hidden;">
+                    <form action="/petition/comment" method="post" class="form-inline container my-5 my-lg-0">
+                        <input type="hidden" name="id" value="<%=content._id%>">
+                        <textarea style="margin: 0px; width: 700px; height: 80px;" required="" placeholder="동의합니다." class="form-control mr-sm-5" name="contents">동의합니다.</textarea>
+                        <button style="float: right; background-color: #003c70; border: 2px solid #003c70" class="btn btn-primary my-5 my-sm-0" type="submit"><h5>　SUBMIT　</h5></button>
+                    </form>
+                </div>
+            </div>
+            <br>
+          
+            
+            <div class="row">
+                <div class="col-lg-20 col-md-12" style="margin-left: 20px; max-width: 65rem;">
+                    <table class="table table-hover">
+                        <tbody> 
+                            <%if(content.comments.length>0){%>
+                                <%var commentsList = content.comments;%>
+                                <%commentsList.forEach(function(item){%>
+                                    <tr style="font-size: 17px" class="table-light">
+                                        <td><strong class="text-dark"><%=item.writer%></strong>
+                                            <p><%=item.contents%></p></td>
+                                    </tr>
+                                <%})%>
+                            <%} else {%>  
+                                <tr style="font-size: 17px" class="table-light">
+                                    <td><strong class="text-dark">댓글이 없습니다.</strong></td>
+                                </tr>
+                            <%}%>
+                        </tbody>
+                    </table> 
+                </div>
+            </div>
+     
+            <div class="container border-light mb-5" style="max-width: 23rem;">
+                 <ul class="pagination">
+                 <%if(info.active==1) {%>
+                    <li class="page-item disabled">
+                        <a class="page-link" href="/petition/content?id=<%=content._id%>&page=1">&laquo;</a>
+                    </li>
+                 <%} else {%>
+                    <li class="page-item">
+                        <a class="page-link " href="/petition/content?id=<%=content._id%>&page=1">&laquo;</a>
+                    </li>
+                 <%}%>
+                 <%if(info.startPage==1) {%>
+                    <li class="page-item disabled">
+                        <a class="page-link" href="/petition/content?id=<%=content._id%>&page=<%=info.startPage-info.limitPage%>">&lt;</a>
+                    </li>
+                 <%} else {%>
+                    <li class="page-item">
+                        <a class="page-link" href="/petition/content?id=<%=content._id%>&page=<%=info.startPage-info.limitPage%>">&lt;</a>
+                    </li>
+                 <%}%>
+                 <%for(var i=info.startPage; i<=info.endPage; i++){%>
+                    <%if(i==info.active) {%>
+                        <li class="page-item active">
+                            <a class="page-link" href="/petition/content?id=<%=content._id%>&page=<%=i%>"><%=i%></a>
+                        </li>
+                    <%} else {%>
+                        <li class="page-item">
+                            <a class="page-link" href="/petition/content?id=<%=content._id%>&page=<%=i%>"><%=i%></a>
+                        </li>
+                
+                    <%}%>
+                 <%}%>
+                 <%if(info.endPage==info.pagination) {%>
+                    <li class="page-item disabled">
+                        <a class="page-link" href="/petition/content?id=<%=content._id%>&page=<%=info.startPage-(-info.limitPage)%>">&gt;</a>
+                    </li>
+                 <%} else {%>
+                    <li class="page-item">
+                        <a class="page-link" href="/petition/content?id=<%=content._id%>&page=<%=info.startPage-(-info.limitPage)%>">&gt;</a>
+                    </li>
+                 <%}%>
+                 <%if(info.active==info.pagination) {%>
+                    <li class="page-item disabled">
+                        <a class="page-link" href="/petition/content?id=<%=content._id%>&page=<%=info.pagination%>">&raquo;</a>
+                    </li>
+                 <%} else {%>
+                    <li class="page-item">
+                        <a class="page-link " href="/petition/content?id=<%=content._id%>&page=<%=info.pagination%>">&raquo;</a>
+                    </li>
+                 <%}%>
+                </ul>
+            </div>
+        </div>
+        <br>
+        <hr/>
+        <!-- Footer -->
+        <% include ./footer.html %>
+
+        <!-- Bootstrap core JavaScript -->
+        <script src="vendor/jquery/jquery.min.js"></script>
+        <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+
+        <!-- Custom scripts for this template -->
+        <script src="js/clean-blog.min.js"></script>      
+    </body>
+</html>

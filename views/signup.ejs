@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <% include ./head.html %>
+		<title>회원가입 화면</title>
+	</head>
+	<body>     
+        <!-- Navigation -->
+        <% include ./user_navigation.html %>
+        <br><br><br><br>
+        
+		<div class="container">
+			<div class="col-lg-8 col-md-10 mx-auto">
+			    <h1><span class="fa fa-sign-in"></span> 회원가입</h1>
+			    <form action="/users/signup" method="post" >
+			        <div class="form-group">
+                        <h6>이메일</h6>
+			            <input type="text" class="form-control" name="email">
+			        </div>
+			        <div class="form-group">
+			            <h6>비밀번호</h6>
+			            <input type="password" class="form-control" name="password">
+			        </div>
+                    <div class="form-group">
+                        <h6>이름</h6>
+			            <input type="text" class="form-control" name="name">
+			        </div>
+                    <div class="form-group">
+                        <h6>대학</h6>
+			            <input type="text" class="form-control" name="university">
+			        </div>
+                    <div class="form-group">
+                        <h6>전공</h6>
+			            <input type="text" class="form-control" name="major">
+			        </div>
+                    <div class="form-group">
+                        <h6>별명</h6>
+			            <input type="text" class="form-control" name="nickname">
+			        </div>
+                    <div class="form-group">
+                        <h6>입학날짜</h6>
+			            <input type="text" class="form-control" name="year">
+			        </div>
+                    <button type="submit" class="btn btn-danger">회원가입</button>
+			    </form>
+			    <hr/><br>
+			    <h6>이미 계정이 있으신가요? </h6>
+                <button type="button" onclick="location.href='/users/login'" class="btn btn-primary btn-sm">로그인하기</button>
+                <button type="button" onclick="location.href='/'" class="btn btn-primary btn-sm">홈으로</button>
+			</div>
+		</div>
+        <br><hr/>
+        <!-- Footer -->
+        <% include ./footer.html %>
+
+        <!-- Bootstrap core JavaScript -->
+        <script src="vendor/jquery/jquery.min.js"></script>
+        <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+
+        <!-- Custom scripts for this template -->
+        <script src="js/clean-blog.min.js"></script>
+    </body>
+</html>
