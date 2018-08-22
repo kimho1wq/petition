@@ -1,17 +1,26 @@
 <style>
-    .mylink { font-size: 30px; color: #9a9a9a; }
-    .mylink:hover { color: #003c70; padding: 15px; border-bottom: 5px solid #003c70; text-decoration:none;}
-    .mylink:active { color: #003c70; padding: 15px; border-bottom: 5px solid #003c70; text-decoration:none;}
+    .mylink { font-size: 1.9rem; color: #9a9a9a; }
+    .mylink:hover { color: #003c70; padding: 0.5rem; border-bottom: 0.2rem solid #003c70; text-decoration:none;}
+    .mylink:active { color: #003c70; padding: 0.5rem; border-bottom: 0.2rem solid #003c70; text-decoration:none;}
+    .apost {font-size: 1.6rem; padding: 0.8rem 1.2rem; border: 0.16rem solid #dedede; font-weight: bold; color: #dedede;}
+    .apost:hover { padding-right: 2.1rem; color: #bcbcbc; text-decoration:none;}
+    .apost:active { padding-right: 2.1rem; color: #bcbcbc; text-decoration:none; }
 </style>
 
-<header class="masthead" style="background-image: url('img/image2.jpg')">
-    <div class="overlay"></div> 
+<div style="margin: 6em 0;">  
+    <h1 class="text-center" style="font-size:4rem;" >Siri-B</h1>
+    <h1 class="text-center"><font color="black"><b>학생청원 및 제안</b></font></h2>
+</div>
+
+<header class="masthead" style="background-image: url('img/uos.jpg')" id="uosimage">
+    <div class="overlay"></div>
     <div class="container">
         <div class="row">
             <div class="col-lg-8 col-md-10 mx-auto">
                 <div class="site-heading">
-                    <h1>Petition</h1>
-                    <span class="subheading">A Blog Theme by Petition</span>
+                    <h2 style="font-size: 3rem">서울시립대학교 학생 청원</h2><br>
+                    <span class="subheading" style="font-size: 1.7rem">30일 동안 200명 이상의 학생들이 추천한 청원에 대해서는 학교 및 관계자가 답하겠습니다.</span><br><br>
+                    <span><a class="apost" href="/petition/post">지금 청원하기 &raquo;</a></span>
                 </div>
             </div>
         </div>
@@ -25,44 +34,44 @@
         </button>
 
         <div class="collapse navbar-collapse" id="navbarColor02">
-            <ul class="navbar-nav ml-auto" style="padding: 20px; overflow: hidden; background-color: #f8f9fa;">
+            <ul class="navbar-nav ml-auto" style="padding: 0.9rem; overflow: hidden; background-color: #f8f9fa;">
                 <%if(title=="index") {%>
-                    <li class="nav-item" style="border-left: 1px solid #9a9a9a; border-right: 1px solid #9a9a9a;">
-                        <a class="mylink" style="color: #003c70; margin-right: 15px; margin-left: 15px;     padding-right: 20px; padding-left: 20px; padding-bottom: 15px; border-bottom: 5px solid #003c70;" href="/"><strong>홈페이지</strong></a>
+                    <li class="nav-item" style="border-left: 0.1em solid #9a9a9a; border-right: 0.08em solid #9a9a9a;">
+                        <a class="mylink" href="/" style="color: #003c70; margin: 0 0.7rem; padding: 0 1rem 0.5rem 1rem; border-bottom: 0.2rem solid #003c70;"><strong>홈페이지</strong></a>
                     </li>
                 <%} else {%>
-                    <li class="nav-item" style="border-left: 1px solid #9a9a9a; border-right: 1px solid #9a9a9a;">
-                        <a class="mylink" href="/" style="margin-right: 15px; margin-left: 15px; padding-right: 20px; padding-left: 20px; padding-bottom: 15px;"><strong>홈페이지</strong></a>
+                    <li class="nav-item" style="border-left: 0.1em solid #9a9a9a; border-right: 0.08em solid #9a9a9a;">
+                        <a class="mylink" href="/" style="margin: 0 0.7rem; padding: 0 1rem 0.5rem 1rem;"><strong>홈페이지</strong></a>
                     </li>
                 <%}%>
                 
                 <%if(title=="list" || title=="content") {%>
-                    <li class="nav-item" style="border-left: 1px solid #9a9a9a; border-right: 1px solid #9a9a9a;">
-                        <a class="mylink" style="color: #003c70; margin-right: 12px; margin-left: 12px;     padding-right: 20px; padding-left: 20px; padding-bottom: 15px; border-bottom: 5px solid #003c70;" href="/petition/list"><strong>청원 목록</strong></a>
+                    <li class="nav-item" style="border-right: 0.1em solid #9a9a9a;">
+                        <a class="mylink" style="color: #003c70; margin: 0 0.7rem; padding: 0 1rem 0.5rem 1rem; border-bottom: 0.2rem solid #003c70;" href="/petition/list"><strong>청원 목록</strong></a>
                     </li>
                 <%} else {%>
-                    <li class="nav-item" style="border-left: 1px solid #9a9a9a; border-right: 1px solid #9a9a9a;">
-                        <a class="mylink" href="/petition/list" style="margin-right: 12px; margin-left: 12px; padding-right: 20px; padding-left: 20px; padding-bottom: 15px;"><strong>청원 목록</strong></a>
+                    <li class="nav-item" style="border-right: 0.1em solid #9a9a9a;">
+                        <a class="mylink" href="/petition/list" style="margin: 0 0.7rem; padding: 0 1rem 0.5rem 1rem;"><strong>청원 목록</strong></a>
                     </li>
                 <%}%>
                     
                 <%if(title=="post") {%>
-                    <li class="nav-item" style="border-left: 1px solid #9a9a9a; border-right: 1px solid #9a9a9a;">
-                        <a class="mylink" style="color: #003c70; margin-right: 5px; margin-left: 5px;     padding-right: 20px; padding-left: 20px; padding-bottom: 15px; border-bottom: 5px solid #003c70;" href="/petition/post"><strong>청원 작성하기</strong></a>
+                    <li class="nav-item" style="border-right: 0.1em solid #9a9a9a;">
+                        <a class="mylink" style="color: #003c70; margin: 0 0.7rem; padding: 0 1rem 0.5rem 1rem; border-bottom: 0.2rem solid #003c70;" href="/petition/post"><strong>청원 작성하기</strong></a>
                     </li>
                 <%} else {%>
-                    <li class="nav-item" style="border-left: 1px solid #9a9a9a; border-right: 1px solid #9a9a9a;">
-                        <a class="mylink" href="/petition/post" style="margin-right: 5px; margin-left: 5px; padding-right: 20px; padding-left: 20px; padding-bottom: 15px;"><strong>청원 작성하기</strong></a>
+                    <li class="nav-item" style="border-right: 0.1em solid #9a9a9a;">
+                        <a class="mylink" href="/petition/post" style="margin: 0 0.7rem; padding: 0 1rem 0.5rem 1rem;"><strong>청원 작성하기</strong></a>
                     </li>
                 <%}%>
                     
                 <%if(title=="reply" || title=="reply_post") {%>
-                    <li class="nav-item" style="border-left: 1px solid #9a9a9a; border-right: 1px solid #9a9a9a;">
-                        <a class="mylink" style="color: #003c70; margin-right: 12px; margin-left: 12px;     padding-right: 20px; padding-left: 20px; padding-bottom: 15px; border-bottom: 5px solid #003c70;" href="/petition/reply"><strong>답변된 청원</strong></a>
+                    <li class="nav-item" style="border-right: 0.1em solid #9a9a9a;">
+                        <a class="mylink" style="color: #003c70; margin: 0 0.7rem; padding: 0 1rem 0.5rem 1rem; border-bottom: 0.2rem solid #003c70;" href="/petition/reply"><strong>답변된 청원</strong></a>
                     </li>
                 <%} else {%>
-                    <li class="nav-item" style="border-left: 1px solid #9a9a9a; border-right: 1px solid #9a9a9a;">
-                        <a class="mylink" href="/petition/reply" style="margin-right: 12px; margin-left: 12px; padding-right: 20px; padding-left: 20px; padding-bottom: 15px;"><strong>답변된 청원</strong></a>
+                    <li class="nav-item" style="border-right: 0.1em solid #9a9a9a;">
+                        <a class="mylink" href="/petition/reply" style="margin: 0 0.7rem; padding: 0 1rem 0.5rem 1rem;"><strong>답변된 청원</strong></a>
                     </li>
                 <%}%>
             </ul>
@@ -70,3 +79,19 @@
                     </div>
     </nav>
 </header>
+                    
+<script type="text/javascript">
+    var interval=5000;
+    var n=0;
+    var imgs = new Array("img/uos.jpg","img/uos1.jpg","img/uos2.jpg");
+    window.onload = function(){
+        document.getElementById("uosimage").style.backgroundImage = "url("+imgs[n]+")";
+        (n==(imgs.length-1))?n=0:n++;
+        setTimeout("rotate()",interval);
+    }
+    function rotate() {
+        document.getElementById("uosimage").style.backgroundImage="url("+imgs[n]+")";
+        (n==(imgs.length-1))?n=0:n++;
+        setTimeout("rotate()",interval);
+    }
+</script>

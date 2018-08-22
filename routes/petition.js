@@ -1428,6 +1428,7 @@ router.post('/comment', function(req, res){
     }
 });
 
+
 router.get('/reply', function(req, res) {
     console.log('/petition/reply get 패스 요청됨.'); 
     reply();
@@ -1436,6 +1437,7 @@ router.get('/reply', function(req, res) {
         
         var fs = require('fs');
         var files = fs.readdirSync("public/petition/uploads"); // 디렉토리를 읽어온다 
+       
         var filenames = [];
         var contents = [];
         var count = 0;

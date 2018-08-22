@@ -7,7 +7,6 @@ Schema.createSchema = function(mongoose) {
         type: {type:String, trim:true, 'default':''},
         contents: {type:String, trim:true, 'default':''},
         nickname: {type:String, 'default':''},
-        tagFlag: {type:Number, default: 0}, 
         writer: {type:String, 'default':''},
         count: {type:Number, default: 0},
         created_at: {type:Date, index:{unique:false}, 'default':Date.now},
@@ -24,5 +23,4 @@ Schema.createSchema = function(mongoose) {
 
 //module.exports에 UserSchema 객체 직접 할당
 module.exports = Schema;
-    
     
