@@ -2,7 +2,7 @@
 <html lang="en">
     <head>
         <style>
-            .my-table { font-size: 30px; color: #787878;}
+            .my-table { font-size: 1.3rem; color: #787878;}
             .my-table:hover { color: #003c70; background-color: #93DAFF; text-decoration:none; }
             .my-table:active { color: #003c70; background-color: #93DAFF; text-decoration:none; }
             .my-box {color: #787878; }
@@ -19,130 +19,129 @@
         <!-- Page Header -->
         <% include ./header.html %>
     
-        <div class="container" style="max-width: 75rem;">
-            <br>
-            <p align="center"><strong class="text-dark" style="font-size: 40px"><span style="color: #003c70">&laquo;</span> 청원 목록</strong> </p>
+        <div class="container" style="max-width: 70rem;">
             
             <div class="container border-light mb-4" style="max-width: 70rem;">
-                <p><strong class="text-dark" style="font-size: 35px"><span style="color: #003c70"> ● </span>청원 그룹별 보기</strong></p>
+                <p><strong class="text-dark" style="font-size: 1.8rem"><span style="color: #003c70"> ● </span>청원 그룹별 보기</strong></p>
             </div>
-            <div class="container" style="padding: 20px; margin-bottom: 50px; border: 4px solid #003c70; max-width: 65rem;">
-                <table class="container border-light" cellspacing="20px">
+            <br>
+            <div class="container" style="padding: 1.3rem; border: 0.25rem solid #003c70; max-width: 65rem;">
+                <table class="container border-light" cellspacing="1.2rem">
                     <tr>
                         <%if(info.type=="All") {%>
-                            <th style="padding: 15px; "><a class="my-table" href="/petition/list?sort=created_at&type=All&deadlineFlag=<%=info.deadlineFlag%>" style="padding: 15px; color: #003c70; background-color: #93DAFF;"><strong>전체</strong></a></th>
+                            <th style="padding: 1rem; "><a class="my-table" href="/petition/list?sort=created_at&type=All&deadlineFlag=<%=info.deadlineFlag%>" style="padding: 1rem; color: #003c70; background-color: #93DAFF;"><strong>전체</strong></a></th>
                         <%} else {%>
-                            <th style="padding: 15px; "><a class="my-table" href="/petition/list?sort=created_at&type=All&deadlineFlag=<%=info.deadlineFlag%>" style="padding: 15px; "><strong>전체</strong></a></th>
+                            <th style="padding: 1rem; "><a class="my-table" href="/petition/list?sort=created_at&type=All&deadlineFlag=<%=info.deadlineFlag%>" style="padding: 1rem; "><strong>전체</strong></a></th>
                         <%}%>
                         <%if(info.type=="총학생회") {%>
-                            <th style="padding: 15px; "><a class="my-table" href="/petition/list?sort=created_at&type=총학생회&deadlineFlag=<%=info.deadlineFlag%>" style="padding: 15px; color: #003c70; background-color: #93DAFF;"><strong>총학생회</strong></a></th>
+                            <th style="padding: 1rem; "><a class="my-table" href="/petition/list?sort=created_at&type=총학생회&deadlineFlag=<%=info.deadlineFlag%>" style="padding: 1rem; color: #003c70; background-color: #93DAFF;"><strong>총학생회</strong></a></th>
                         <%} else {%>
-                            <th style="padding: 15px; "><a class="my-table" href="/petition/list?sort=created_at&type=총학생회&deadlineFlag=<%=info.deadlineFlag%>" style="padding: 15px; "><strong>총학생회</strong></a></th>
+                            <th style="padding: 1rem; "><a class="my-table" href="/petition/list?sort=created_at&type=총학생회&deadlineFlag=<%=info.deadlineFlag%>" style="padding: 1rem; "><strong>총학생회</strong></a></th>
                         <%}%>
                         <%if(info.type=="경영대학") {%>
-                            <th style="padding: 15px; "><a class="my-table" href="/petition/list?sort=created_at&type=경영대학&deadlineFlag=<%=info.deadlineFlag%>" style="padding: 15px; color: #003c70; background-color: #93DAFF;"><strong>경영대학</strong></a></th>
+                            <th style="padding: 1rem; "><a class="my-table" href="/petition/list?sort=created_at&type=경영대학&deadlineFlag=<%=info.deadlineFlag%>" style="padding: 1rem; color: #003c70; background-color: #93DAFF;"><strong>경영대학</strong></a></th>
                         <%} else {%>
-                            <th style="padding: 15px; "><a class="my-table" href="/petition/list?sort=created_at&type=경영대학&deadlineFlag=<%=info.deadlineFlag%>" style="padding: 15px; "><strong>경영대학</strong></a></th>
+                            <th style="padding: 1rem; "><a class="my-table" href="/petition/list?sort=created_at&type=경영대학&deadlineFlag=<%=info.deadlineFlag%>" style="padding: 1rem; "><strong>경영대학</strong></a></th>
                         <%}%>
                         <%if(info.type=="공과대학") {%>
-                            <th style="padding: 15px; "><a class="my-table" href="/petition/list?sort=created_at&type=공과대학&deadlineFlag=<%=info.deadlineFlag%>" style="padding: 15px; color: #003c70; background-color: #93DAFF;"><strong>공과대학</strong></a></th>
+                            <th style="padding: 1rem; "><a class="my-table" href="/petition/list?sort=created_at&type=공과대학&deadlineFlag=<%=info.deadlineFlag%>" style="padding: 1rem; color: #003c70; background-color: #93DAFF;"><strong>공과대학</strong></a></th>
                         <%} else {%>
-                            <th style="padding: 15px; "><a class="my-table" href="/petition/list?sort=created_at&type=공과대학&deadlineFlag=<%=info.deadlineFlag%>" style="padding: 15px; "><strong>공과대학</strong></a></th>
+                            <th style="padding: 1rem; "><a class="my-table" href="/petition/list?sort=created_at&type=공과대학&deadlineFlag=<%=info.deadlineFlag%>" style="padding: 1rem; "><strong>공과대학</strong></a></th>
                         <%}%>
                     </tr>
                     <tr>
                         <%if(info.type=="도시과학대학") {%>
-                            <th style="padding: 15px; "><a class="my-table" href="/petition/list?sort=created_at&type=도시과학대학&deadlineFlag=<%=info.deadlineFlag%>" style="padding: 15px; color: #003c70; background-color: #93DAFF;"><strong>도시과학대학</strong></a></th>
+                            <th style="padding: 1rem; "><a class="my-table" href="/petition/list?sort=created_at&type=도시과학대학&deadlineFlag=<%=info.deadlineFlag%>" style="padding: 1rem; color: #003c70; background-color: #93DAFF;"><strong>도시과학대학</strong></a></th>
                         <%} else {%>
-                            <th style="padding: 15px; "><a class="my-table" href="/petition/list?sort=created_at&type=도시과학대학&deadlineFlag=<%=info.deadlineFlag%>" style="padding: 15px; "><strong>도시과학대학</strong></a></th>
+                            <th style="padding: 1rem; "><a class="my-table" href="/petition/list?sort=created_at&type=도시과학대학&deadlineFlag=<%=info.deadlineFlag%>" style="padding: 1rem; "><strong>도시과학대학</strong></a></th>
                         <%}%>
                         <%if(info.type=="예술체육대학") {%>
-                            <th style="padding: 15px; "><a class="my-table" href="/petition/list?sort=created_at&type=예술체육대학&deadlineFlag=<%=info.deadlineFlag%>" style="padding: 15px; color: #003c70; background-color: #93DAFF;"><strong>예술체육대학</strong></a></th>
+                            <th style="padding: 1rem; "><a class="my-table" href="/petition/list?sort=created_at&type=예술체육대학&deadlineFlag=<%=info.deadlineFlag%>" style="padding: 1rem; color: #003c70; background-color: #93DAFF;"><strong>예술체육대학</strong></a></th>
                         <%} else {%>
-                            <th style="padding: 15px; "><a class="my-table" href="/petition/list?sort=created_at&type=예술체육대학&deadlineFlag=<%=info.deadlineFlag%>" style="padding: 15px; "><strong>예술체육대학</strong></a></th>
+                            <th style="padding: 1rem; "><a class="my-table" href="/petition/list?sort=created_at&type=예술체육대학&deadlineFlag=<%=info.deadlineFlag%>" style="padding: 1rem; "><strong>예술체육대학</strong></a></th>
                         <%}%>
                         <%if(info.type=="인문대학") {%>
-                            <th style="padding: 15px; "><a class="my-table" href="/petition/list?sort=created_at&type=인문대학&deadlineFlag=<%=info.deadlineFlag%>" style="padding: 15px; color: #003c70; background-color: #93DAFF;"><strong>인문대학</strong></a></th>
+                            <th style="padding: 1rem; "><a class="my-table" href="/petition/list?sort=created_at&type=인문대학&deadlineFlag=<%=info.deadlineFlag%>" style="padding: 1rem; color: #003c70; background-color: #93DAFF;"><strong>인문대학</strong></a></th>
                         <%} else {%>
-                            <th style="padding: 15px; "><a class="my-table" href="/petition/list?sort=created_at&type=인문대학&deadlineFlag=<%=info.deadlineFlag%>" style="padding: 15px; "><strong>인문대학</strong></a></th>
+                            <th style="padding: 1rem; "><a class="my-table" href="/petition/list?sort=created_at&type=인문대학&deadlineFlag=<%=info.deadlineFlag%>" style="padding: 1rem; "><strong>인문대학</strong></a></th>
                         <%}%>
                         <%if(info.type=="자연과학대학") {%>
-                            <th style="padding: 15px; "><a class="my-table" href="/petition/list?sort=created_at&type=자연과학대학&deadlineFlag=<%=info.deadlineFlag%>" style="padding: 15px; color: #003c70; background-color: #93DAFF;"><strong>자연과학대학</strong></a></th>
+                            <th style="padding: 1rem; "><a class="my-table" href="/petition/list?sort=created_at&type=자연과학대학&deadlineFlag=<%=info.deadlineFlag%>" style="padding: 1rem; color: #003c70; background-color: #93DAFF;"><strong>자연과학대학</strong></a></th>
                         <%} else {%>
-                            <th style="padding: 15px; "><a class="my-table" href="/petition/list?sort=created_at&type=자연과학대학&deadlineFlag=<%=info.deadlineFlag%>" style="padding: 15px; "><strong>자연과학대학</strong></a></th>
+                            <th style="padding: 1rem; "><a class="my-table" href="/petition/list?sort=created_at&type=자연과학대학&deadlineFlag=<%=info.deadlineFlag%>" style="padding: 1rem; "><strong>자연과학대학</strong></a></th>
                         <%}%>
                     </tr>
                     <tr>
                         <%if(info.type=="정경대학") {%>
-                            <th style="padding: 15px; "><a class="my-table" href="/petition/list?sort=created_at&type=정경대학&deadlineFlag=<%=info.deadlineFlag%>" style="padding: 15px; color: #003c70; background-color: #93DAFF;"><strong>정경대학</strong></a></th>
+                            <th style="padding: 1rem; "><a class="my-table" href="/petition/list?sort=created_at&type=정경대학&deadlineFlag=<%=info.deadlineFlag%>" style="padding: 1rem; color: #003c70; background-color: #93DAFF;"><strong>정경대학</strong></a></th>
                         <%} else {%>
-                            <th style="padding: 15px; "><a class="my-table" href="/petition/list?sort=created_at&type=정경대학&deadlineFlag=<%=info.deadlineFlag%>" style="padding: 15px; "><strong>정경대학</strong></a></th>
+                            <th style="padding: 1rem; "><a class="my-table" href="/petition/list?sort=created_at&type=정경대학&deadlineFlag=<%=info.deadlineFlag%>" style="padding: 1rem; "><strong>정경대학</strong></a></th>
                         <%}%>
                         <%if(info.type=="자유융합대학") {%>
-                            <th style="padding: 15px; "><a class="my-table" href="/petition/list?sort=created_at&type=자유융합대학&deadlineFlag=<%=info.deadlineFlag%>" style="padding: 15px; color: #003c70; background-color: #93DAFF;"><strong>자유융합대학</strong></a></th>
+                            <th style="padding: 1rem; "><a class="my-table" href="/petition/list?sort=created_at&type=자유융합대학&deadlineFlag=<%=info.deadlineFlag%>" style="padding: 1rem; color: #003c70; background-color: #93DAFF;"><strong>자유융합대학</strong></a></th>
                         <%} else {%>
-                            <th style="padding: 15px; "><a class="my-table" href="/petition/list?sort=created_at&type=자유융합대학&deadlineFlag=<%=info.deadlineFlag%>" style="padding: 15px; "><strong>자유융합대학</strong></a></th>
+                            <th style="padding: 1rem; "><a class="my-table" href="/petition/list?sort=created_at&type=자유융합대학&deadlineFlag=<%=info.deadlineFlag%>" style="padding: 1rem; "><strong>자유융합대학</strong></a></th>
                         <%}%>
                          <%if(info.type=="기타") {%>
-                            <th style="padding: 15px; "><a class="my-table" href="/petition/list?sort=created_at&type=기타&deadlineFlag=<%=info.deadlineFlag%>" style="padding: 15px; color: #003c70; background-color: #93DAFF;"><strong>기타</strong></a></th>
+                            <th style="padding: 1rem; "><a class="my-table" href="/petition/list?sort=created_at&type=기타&deadlineFlag=<%=info.deadlineFlag%>" style="padding: 1rem; color: #003c70; background-color: #93DAFF;"><strong>기타</strong></a></th>
                         <%} else {%>
-                            <th style="padding: 15px; "><a class="my-table" href="/petition/list?sort=created_at&type=기타&deadlineFlag=<%=info.deadlineFlag%>" style="padding: 15px; "><strong>기타</strong></a></th>
+                            <th style="padding: 1rem; "><a class="my-table" href="/petition/list?sort=created_at&type=기타&deadlineFlag=<%=info.deadlineFlag%>" style="padding: 1rem; "><strong>기타</strong></a></th>
                         <%}%>
                     </tr>
                 </table>
             </div>
             <br><br><br><br><br><br>
             
-            <div class="container" style="max-width: 75rem;">
-                <table class="container border-light" style="text-align: center; max-width: 90rem;" cellspacing="3px">
+            <div class="container" style="max-width: 70rem;">
+                <table class="container border-light" style="text-align: center; max-width: 90rem;" cellspacing="0.1rem">
                     <tr>
                         <%if(info.deadlineFlag==1) {%>
-                            <th style="padding: 10px;  border-top: 4px solid #003c70; border-right: 2px solid #003c70; border-left: 2px solid #003c70;"><a href="/petition/list?sort=<%=info.sort%>&type=<%=info.type%>&word=<%=info.word%>&deadlineFlag=1" class="my-box"><h4 style="color: #003c70;">진행중인 청원</h4></a></th>
-                            <th style="padding: 10px;  border: 1px solid #bcbcbc; background-color: #cdcdcd;"><a href="/petition/list?sort=<%=info.sort%>&type=<%=info.type%>&word=<%=info.word%>&deadlineFlag=0" class="my-box"><h4>　만료된 청원</h4></a></th>
+                            <th style="padding: 0.6rem;  border-top: 0.25rem solid #003c70; border-right: 0.15rem solid #003c70; border-left: 0.15rem solid #003c70;"><a href="/petition/list?sort=<%=info.sort%>&type=<%=info.type%>&word=<%=info.word%>&deadlineFlag=1" class="my-box"><span style="color: #003c70; font-weight: bold; font-size: 1.5rem;">진행중인 청원</span></a></th>
+                            <th style="padding: 0.6rem;  border: 0.1rem solid #bcbcbc; background-color: #cdcdcd;"><a href="/petition/list?sort=<%=info.sort%>&type=<%=info.type%>&word=<%=info.word%>&deadlineFlag=0" class="my-box"><span style="font-weight: bold; font-size: 1.5rem;">　만료된 청원</span></a></th>
                         <%} else {%>
-                            <th style="padding: 10px; border-top: 1px solid #bcbcbc; border-bottom: 1px solid #bcbcbc; background-color: #cdcdcd;"><a href="/petition/list?sort=<%=info.sort%>&type=<%=info.type%>&word=<%=info.word%>&deadlineFlag=1" class="my-box"><h4>진행중인 청원</h4></a></th>
-                            <th style="padding: 10px;  border-top: 4px solid #003c70; border-right: 2px solid #003c70; border-left: 2px solid #003c70;"><a href="/petition/list?sort=<%=info.sort%>&type=<%=info.type%>&word=<%=info.word%>&deadlineFlag=0" class="my-box"><h4 style="color: #003c70;">　만료된 청원</h4></a></th>
+                            <th style="padding: 0.6rem; border-top: 0.1rem solid #bcbcbc; border-bottom: 0.1rem solid #bcbcbc; background-color: #cdcdcd;"><a href="/petition/list?sort=<%=info.sort%>&type=<%=info.type%>&word=<%=info.word%>&deadlineFlag=1" class="my-box"><span style="font-weight: bold; font-size: 1.5rem;">진행중인 청원</span></a></th>
+                            <th style="padding: 0.6rem;  border-top: 0.25rem solid #003c70; border-right: 0.15rem solid #003c70; border-left: 0.15rem solid #003c70;"><a href="/petition/list?sort=<%=info.sort%>&type=<%=info.type%>&word=<%=info.word%>&deadlineFlag=0" class="my-box"><span style="color: #003c70; font-weight: bold; font-size: 1.5rem;">　만료된 청원</span></a></th>
                         <%}%>
                     </tr>
                 </table>
             </div>
             <br><br>
             
-            <div class="container border-light mb-4" style="max-width: 70rem;">
-                <p><strong class="text-dark" style="font-size: 35px"><span style="color: #003c70"> ● </span>전체 목록</strong></p>
+            <div class="container border-light mb-4" style="max-width: 65rem;">
+                <p><strong class="text-dark" style="font-size: 1.8rem"><span style="color: #003c70"> ● </span>전체 목록</strong></p>
             </div>
-            <ul class="nav nav-tabs" style="padding-left: 30px;">
+            <ul class="nav nav-tabs" style="padding-left: 0.3rem;">
                 <%if(info.sort=="created_at") {%>
-                    <li style="padding: 15px;" class="nav-item">
-                        <a class="nav-link" style="padding: 10px; color: #ffffff; border: 3px solid #003c70; background-color: #003c70;" href="/petition/list?sort=created_at&type=<%=info.type%>&word=<%=info.word%>&deadlineFlag=<%=info.deadlineFlag%>"><h4>　최신순　</h4></a>
+                    <li style="padding: 0.9rem;" class="nav-item">
+                        <a class="nav-link" style="padding: 0.6rem; color: #ffffff; border: 0.2rem solid #003c70; background-color: #003c70;" href="/petition/list?sort=created_at&type=<%=info.type%>&word=<%=info.word%>&deadlineFlag=<%=info.deadlineFlag%>"><span style="font-weight: bold; font-size:1.3rem;">　최신순　</span></a>
                     </li>
                 <%} else {%>
-                    <li style="padding: 15px;" class="nav-item">
-                        <a class="nav-link"  style="padding: 10px; color: #787878; border: 3px solid #787878;"  href="/petition/list?sort=created_at&type=<%=info.type%>&word=<%=info.word%>&deadlineFlag=<%=info.deadlineFlag%>"><h4 class="my-box">　최신순　</h4></a>
+                    <li style="padding: 0.9rem;" class="nav-item">
+                        <a class="nav-link"  style="padding: 0.6rem; color: #787878; border: 0.2rem solid #787878;"  href="/petition/list?sort=created_at&type=<%=info.type%>&word=<%=info.word%>&deadlineFlag=<%=info.deadlineFlag%>"><span style="font-weight: bold; font-size:1.3rem;" class="my-box">　최신순　</span></a>
                     </li>
                 <%}%>
                  <%if(info.sort=="count") {%>
-                    <li style="padding: 15px;" class="nav-item">
-                        <a class="nav-link" style="padding: 10px; color: #ffffff; border: 3px solid #003c70; background-color: #003c70;"  href="/petition/list?sort=count&type=<%=info.type%>&word=<%=info.word%>&deadlineFlag=<%=info.deadlineFlag%>"><h4>　추천순　</h4></a>
+                    <li style="padding: 0.9rem;" class="nav-item">
+                        <a class="nav-link" style="padding: 0.6rem; color: #ffffff; border: 0.2rem solid #003c70; background-color: #003c70;"  href="/petition/list?sort=count&type=<%=info.type%>&word=<%=info.word%>&deadlineFlag=<%=info.deadlineFlag%>"><span style="font-weight: bold; font-size:1.3rem;">　추천순　</span></a>
                     </li>
                 <%} else {%>
-                    <li style="padding: 15px;" class="nav-item">
-                        <a class="nav-link " style="padding: 10px; color: #787878; border: 3px solid #787878;"  href="/petition/list?sort=count&type=<%=info.type%>&word=<%=info.word%>&deadlineFlag=<%=info.deadlineFlag%>"><h4 class="my-box">　추천순　</h4></a>
+                    <li style="padding: 0.9rem;" class="nav-item">
+                        <a class="nav-link " style="padding: 0.6rem; color: #787878; border: 0.2rem solid #787878;"  href="/petition/list?sort=count&type=<%=info.type%>&word=<%=info.word%>&deadlineFlag=<%=info.deadlineFlag%>"><span style="font-weight: bold; font-size:1.3rem;" class="my-box">　추천순　</span></a>
                     </li>
                 <%}%>
             </ul>
              
             <div class="row">
-                <div class="col-lg-24 col-md-12" style="max-width: 75rem;">
-                    <table class="table table-hover" style="text-align: center;" cellspacing="10px">
+                <div class="col-lg-24 col-md-12" style="max-width: 70rem;">
+                    <table class="table table-hover" style="text-align: center;" cellspacing="0.6rem">
                         <thead>
-                            <tr style="border-top: 3px solid #003c70;">
-                                <th style="font-size: 21px; padding: 15px 5px; background-color: #003c70; color: #ffffff" scope="col">번호</th>
-                                <th style="font-size: 21px; padding: 15px 5px; background-color: #003c70; color: #ffffff" scope="col">분류</th>
-                                <th style="font-size: 21px; padding: 15px 5px; background-color: #003c70; color: #ffffff" scope="col">제목</th>
-                                <th style="font-size: 21px; padding: 15px 5px 5pxpx; background-color: #003c70; color: #ffffff" scope="col">별명</th>
-                                <th style="font-size: 21px; padding: 15px 5px; background-color: #003c70; color: #ffffff" scope="col">기간</th>
-                                <th style="font-size: 18px; padding: 15px 5px; background-color: #003c70; color: #ffffff" scope="col">참여인원</th>
+                            <tr style="border-top: 0.2rem solid #003c70;">
+                                <th style="font-size: 1.2rem; padding: 0.9rem 0.28rem; background-color: #003c70; color: #ffffff" scope="col">번호</th>
+                                <th style="font-size: 1.2rem; padding: 0.9rem 0.28rem; background-color: #003c70; color: #ffffff" scope="col">분류</th>
+                                <th style="font-size: 1.2rem; padding: 0.9rem 0.28rem; background-color: #003c70; color: #ffffff" scope="col">제목</th>
+                                <th style="font-size: 1.2rem; padding: 0.9rem 0.28rem; background-color: #003c70; color: #ffffff" scope="col">별명</th>
+                                <th style="font-size: 1.2rem; padding: 0.9rem 0.28rem; background-color: #003c70; color: #ffffff" scope="col">기간</th>
+                                <th style="font-size: 1.1rem; padding: 0.9rem 0.28rem; background-color: #003c70; color: #ffffff" scope="col">참여인원</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -150,25 +149,25 @@
                                 <%var i = info.no + 1;%>
                                 <%contents.forEach(function(item){%>
                                     <%i--;%>
-                                    <tr style="padding: 15px 5px; font-size: 18px" class="table-light">
-                                        <th style="padding: 15px 5px;" scope="row"><%=i%></th>
-                                        <td style="padding: 15px 5px;" ><strong class="text-primary"><%=item.type%></strong></td>
+                                    <tr style="padding: 0.9rem 0.28rem; font-size: 1.1rem" class="table-light">
+                                        <th style="padding: 0.9rem 0.28rem;" scope="row"><%=i%></th>
+                                        <td style="padding: 0.9rem 0.28rem;" ><strong class="text-primary"><%=item.type%></strong></td>
                                         <%if(item.title.length >= 38) {%>
                                             <%var txt = " ";%>
                                             <%for(var j = 0; j < 38; j++) {%>
                                                 <%txt += item.title[j];%>
                                             <%}%>
                                             <%txt += "...";%>
-                                            <td style="padding: 15px 5px; font-size: 19px; text-align: left;"><strong class="text-muted"><a href="/petition/content?id=<%=item._id%>"><%=txt%></a></strong></td>
+                                            <td style="padding: 0.9rem 0.28rem; font-size: 1rem; text-align: left;"><strong class="text-muted"><a href="/petition/content?id=<%=item._id%>"><%=txt%></a></strong></td>
                                         <%} else {%>
-                                            <td style="padding: 15px 5px; font-size: 19px; text-align: left;"><strong class="text-muted"><a href="/petition/content?id=<%=item._id%>"><%=item.title%></a></strong></td>
+                                            <td style="padding: 0.9rem 0.28rem; font-size: 1rem; text-align: left;"><strong class="text-muted"><a href="/petition/content?id=<%=item._id%>"><%=item.title%></a></strong></td>
                                         <%}%>
-                                        <td style="padding: 15px 5px;"><strong class="text-dark"><%=item.nickname%></strong></td>
-                                        <td style="padding: 15px 5px;"><strong class="text-muted" style="font-size: 17px"><%=item.startDay%> ~ <%=item.endDay%></strong></td>
+                                        <td style="padding: 0.9rem 0.28rem;"><strong class="text-dark" style="font-size: 1rem;"><%=item.nickname%></strong></td>
+                                        <td style="padding: 0.9rem 0.28rem;"><strong class="text-muted" style="font-size: 0.9rem"><%=item.startDay%> ~ <%=item.endDay%></strong></td>
                                         <%if(item.count > 10) {%>
-                                            <td style="padding: 15px 5px;"><strong class="text-primary"><%=item.count%>명</strong></td>
+                                            <td style="padding: 0.9rem 0.28rem;"><strong class="text-primary"><%=item.count%>명</strong></td>
                                         <%} else {%>
-                                            <td style="padding: 15px 5px;"><strong class="text-muted"><%=item.count%>명</strong></td>
+                                            <td style="padding: 0.9rem 0.28rem;"><strong class="text-muted"><%=item.count%>명</strong></td>
                                         <%}%>
                                         
                                     </tr>

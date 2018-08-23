@@ -11,38 +11,36 @@
         <!-- Page Header -->
         <% include ./header.html %>
         
-        <div class="container" style="max-width: 70rem;">
+        <div class="container" style="max-width: 73rem;">
             <br>
-            <p align="center"><strong class="text-dark" style="font-size: 40px"><span style="color: #003c70">&laquo;</span> 내용 자세히</strong> </p>
-            <br><br>
-            
-            <div class="container card mb-10" style="padding: 10px; border: 2px solid #003c70; max-width: 70rem;">
+            <div class="container card mb-10" style="padding: 0.6rem; border: 0.15rem solid #003c70; max-width: 75rem;">
                 <br>
                 <div class="container border-light mb-5" style="max-width: 65rem;">
                     <div class="card-body">
                         <%if(content.dayFlag==1) {%>
-                            <p align="center" class="text-muted" style="font-size: 25px"><strong>&#91; 청원 진행중 &#93;</strong></p>
+                            <p align="center" class="text-muted" style="font-size: 1.5rem"><strong>&#91; 청원 진행중 &#93;</strong></p>
                         <%} else {%>
-                            <p align="center" class="text-muted" style="font-size: 25px"><strong>&#91; 청원 종료 &#93;</strong></p>
+                            <p align="center" class="text-muted" style="font-size: 1.5rem"><strong>&#91; 청원 종료 &#93;</strong></p>
                         <%}%>
-                        <p align="center"><strong style="font-size: 42px"><%=content.title%></strong></p>
-                        <p align="center"><strong style="font-size: 30px">참여인원 : [<strong class="text-primary"><%=content.count%></strong>명]</strong></p>
+                        <p align="center"><strong style="font-size: 2.6rem"><%=content.title%></strong></p>
+                        <p align="center"><strong style="font-size: 1.8rem">참여인원 : [<strong class="text-primary"><%=content.count%></strong>명]</strong></p>
                 
                     </div>
                 </div>
-                <div class="container border-secondary mb-5" style="max-width: 55rem;">
+                <div class="container border-secondary mb-5" style="max-width: 60rem;">
                     <div class="card-header">
-                        <p align="center" style="font-size: 25px">분류 : <strong><%=content.type%></strong>　　　청원인 : <strong><%=content.nickname%></strong></p>
-                        <p align="center" style="font-size: 25px">청원시작 : <strong><%=content.startDay%></strong>　　　청원종료 : <strong><%=content.endDay%></strong></p>
+                        <p align="center" style="font-size: 1.5rem">분류 : <strong><%=content.type%></strong>　　　청원인 : <strong><%=content.nickname%></strong></p>
+                        <p align="center" style="font-size: 1.5rem">청원시작 : <strong><%=content.startDay%></strong>　~　청원종료 : <strong><%=content.endDay%></strong></p>
                     </div>
                 </div>
                 <br><br>
                 
-                <div class="container border-light mb-5" style="max-width: 63rem;">
-                    <p><strong class="text-dark" style="font-size: 35px"><span style="color: #003c70"> ●     </span>청원 개요</strong></p>
+                <div class="container border-light mb-5" style="max-width: 65rem;">
+                    <hr>
+                    <p style="margin : 2rem 0 0 0.5rem;"><strong class="text-dark" style="font-size: 1.8rem"><span style="color: #003c70"> ●     </span>청원 개요</strong></p>
                 </div>
                 <div class="container border-light mb-5" style="max-width: 65rem;">
-                    <p><strong style="font-size: 20px">
+                    <p><strong style="font-size: 1.2rem">
                         <%var lines = content.contents.split("\n");%>
                         <%lines.forEach(function(item) {%>
                         <%=item%><br/><%})%>
@@ -52,16 +50,14 @@
                 <div class="navbar navbar-expand-lg">
                             <div class="collapse navbar-collapse" id="navbarColor02">
                                 <ul class="mr-auto"></ul>
-                               
-                                    <form action="/petition/reply_post" method="get" class="form-inline my-2 my-lg-0" style="margin-left: 20px;margin-right: 20px;">
+                                    <form action="/petition/reply_post" method="get" class="form-inline my-2 my-lg-0" style="margin: 0 1.2rem">
                                         <input type="hidden" name="id" value="<%=content._id%>">
-                                        <button class="btn btn-secondary my-2 my-sm-0" type="submit"><h5>　답변하기　</h5></button>
+                                        <button class="btn btn-secondary my-2 my-sm-0" type="submit"><h6>　답변하기　</h6></button>
                                     </form>
-                                    <form action="/petition/delete" method="get" class="form-inline my-2 my-lg-0" style="margin-left: 20px;margin-right: 20px;">
+                                    <form action="/petition/delete" method="get" class="form-inline my-2 my-lg-0" style="margin: 0 1.2rem">
                                         <input type="hidden" name="id" value="<%=content._id%>">
-                                        <button class="btn  my-2 my-sm-0" type="submit"><h5>　글 삭제하기　</h5></button>
+                                        <button class="btn  my-2 my-sm-0" type="submit"><h6>　글 삭제하기　</h6></button>
                                     </form>
-                                
                             </div>
                 </div>
                 <%if(login) {%>
@@ -73,14 +69,14 @@
             <br><br>
             
             <div class="container border-light mb-5" style="max-width: 65rem;">
-                <p><strong class="text-dark" style="font-size: 35px"><span style="color: #003c70"> ●     </span>청원 동의</strong></p>
+                <p><strong class="text-dark" style="font-size: 1.8rem"><span style="color: #003c70"> ●     </span>청원 동의</strong></p>
             </div>
-            <div style="max-width: 65rem; margin-left: 20px; background-color: #f3f3f3; border: 2px solid #dedede;">
-                <div style="padding-top: 20px; padding-bottom: 20px; overflow: hidden;">
+            <div style="max-width: 65rem; margin-left: 2rem; background-color: #f3f3f3; border: 0.15rem solid #dedede;">
+                <div style="padding: 1.4rem 0; overflow: hidden;">
                     <form action="/petition/comment" method="post" class="form-inline container my-5 my-lg-0">
                         <input type="hidden" name="id" value="<%=content._id%>">
-                        <textarea style="margin: 0px; width: 700px; height: 80px;" required="" placeholder="동의합니다." class="form-control mr-sm-5" name="contents">동의합니다.</textarea>
-                        <button style="float: right; background-color: #003c70; border: 2px solid #003c70" class="btn btn-primary my-5 my-sm-0" type="submit"><h5>　SUBMIT　</h5></button>
+                        <textarea style="margin: 0; width: 42rem; height: 5rem;" required="" placeholder="동의합니다." class="form-control mr-sm-5" name="contents">동의합니다.</textarea>
+                        <button style="float: right; background-color: #003c70; border: 0.15rem solid #003c70" class="btn btn-primary my-5 my-sm-0" type="submit"><h6>　SUBMIT　</h6></button>
                     </form>
                 </div>
             </div>
@@ -88,19 +84,19 @@
           
             
             <div class="row">
-                <div class="col-lg-20 col-md-12" style="margin-left: 20px; max-width: 65rem;">
+                <div class="col-lg-20 col-md-12" style="margin-left: 2rem; max-width: 65rem;">
                     <table class="table table-hover">
                         <tbody> 
                             <%if(content.comments.length>0){%>
                                 <%var commentsList = content.comments;%>
                                 <%commentsList.forEach(function(item){%>
-                                    <tr style="font-size: 17px" class="table-light">
+                                    <tr style="font-size: 0.9rem" class="table-light">
                                         <td><strong class="text-dark"><%=item.writer%></strong>
                                             <p><%=item.contents%></p></td>
                                     </tr>
                                 <%})%>
                             <%} else {%>  
-                                <tr style="font-size: 17px" class="table-light">
+                                <tr style="font-size: 0.9rem" class="table-light">
                                     <td><strong class="text-dark">댓글이 없습니다.</strong></td>
                                 </tr>
                             <%}%>

@@ -156,1029 +156,7 @@ router.get('/list',function(req, res) {
                 });   
             }
             break;
-        case "총학생회" :
-            if(deadlineFlag==1) {
-                console.log("총학생회");
-                mongodb.PetitionModel.count({$and:[{'created_at':{"$gte":(new Date()).setDate(now.getDate()-limitDay)}},{"type":"총학생회"}]},function(err, max){
-                    if(err) {throw err;}
-                    console.log("총학생회");
-                    var pageNum = Math.ceil(max/limitSize);
-                    var num = max-((page - 1)*limitSize); 
-                    var startPage = (Math.floor((page-1)/limitPage)*limitPage)+1;
-                    var endPage = startPage + limitPage - 1;
-                    if(endPage > pageNum) { endPage = pageNum; }
        
-                   if((page > pageNum || page < 1 ) && max != 0) {
-                        console.log("잘못된 페이지");
-                        res.send('<script type="text/javascript">alert("잘못된 페이지입니다.");window.location.href = "/petition/list";</script>');
-                    } else if(max == 0) {
-                        console.log("list가 없다"); 
-                        var info = { startPage: 1, endPage: 1,  limitPage: limitPage, word:word, active: 1, sort: sortType, type: type, pagination: 1, no: 0, deadlineFlag: deadlineFlag };
-                        
-                        res.render('list', { title:"list", info: info, contents: [], login:req.session.user});
-                    } else { 
-                        switch(sortType) {
-                            case "created_at":
-                                mongodb.PetitionModel.find({$and:[{'created_at':{"$gte":(new Date()).setDate(now.getDate()-limitDay)}},{"type":"총학생회"}]}).sort({'created_at':-1}).skip(skipSize).limit(limitSize).exec(function(err, pageContents) {
-                                    if(err) {throw err;}
-                                    for(var i=0; i<pageContents.length; i++) {
-                                        pageContents[i].startDay =  pageContents[i].created_at.toISOString().substr(2,8);
-                                        var tmp = new Date(); tmp.setDate(pageContents[i].created_at.getDate() + limitDay);
-                                        pageContents[i].endDay = tmp.toISOString().substr(2,8);
-                                    }
-                                    var info = {startPage: startPage, endPage: endPage, limitPage: limitPage, word:word, active: page, sort: sortType, type: type, pagination: pageNum, no: num, deadlineFlag: deadlineFlag };
-                                   
-                                    res.render('list', { title:"list", info: info, contents: pageContents, login:req.session.user});
-
-                                });
-                                break;
-                            case "count":
-                                mongodb.PetitionModel.find({$and:[{'created_at':{"$gte":(new Date()).setDate(now.getDate()-limitDay)}},{"type":"총학생회"}]}).sort({'count':-1,'created_at':-1}).skip(skipSize).limit(limitSize).exec(function(err, pageContents) {
-                                    if(err) {throw err;}
-                                    for(var i=0; i<pageContents.length; i++) {
-                                        pageContents[i].startDay =  pageContents[i].created_at.toISOString().substr(2,8);
-                                        var tmp = new Date(); tmp.setDate(pageContents[i].created_at.getDate() + limitDay);
-                                        pageContents[i].endDay = tmp.toISOString().substr(2,8);
-                                    }
-                                    var info = {startPage: startPage, endPage: endPage, limitPage: limitPage, word:word, active: page, sort: sortType, type: type, pagination: pageNum, no: num, deadlineFlag: deadlineFlag };
-                                    
-                                    res.render('list', { title:"list", info: info, contents: pageContents, login:req.session.user});
-                                });
-                                break;
-                        }
-                    }     
-                });   
-            } else {
-                mongodb.PetitionModel.count({$and:[{'created_at':{"$lt":(new Date()).setDate(now.getDate()-limitDay)}},{"type":"총학생회"}]},function(err, max){
-                    if(err) {throw err;}
-                    
-                    var pageNum = Math.ceil(max/limitSize);
-                    var num = max-((page - 1)*limitSize); 
-                    var startPage = (Math.floor((page-1)/limitPage)*limitPage)+1;
-                    var endPage = startPage + limitPage - 1;
-                    if(endPage > pageNum) { endPage = pageNum; }
-       
-                    if((page > pageNum || page < 1 ) && max != 0) {
-                        console.log("잘못된 페이지");
-                        res.send('<script type="text/javascript">alert("잘못된 페이지입니다.");window.location.href = "/petition/list";</script>');
-                    } else if(max == 0) {
-                        console.log("list가 없다"); 
-                        var info = { startPage: 1, endPage: 1,  limitPage: limitPage, word:word, active: 1, sort: sortType, type: type, pagination: 1, no: 0, deadlineFlag: deadlineFlag };
-                        
-                        res.render('list', { title:"list", info: info, contents: [], login:req.session.user});
-                    } else { 
-                        switch(sortType) {
-                            case "created_at":
-                                mongodb.PetitionModel.find({$and:[{'created_at':{"$lt":(new Date()).setDate(now.getDate()-limitDay)}},{"type":"총학생회"}]}).sort({'created_at':-1}).skip(skipSize).limit(limitSize).exec(function(err, pageContents) {
-                                    if(err) {throw err;}
-                                    for(var i=0; i<pageContents.length; i++) {
-                                        pageContents[i].startDay =  pageContents[i].created_at.toISOString().substr(2,8);
-                                        var tmp = new Date(); tmp.setDate(pageContents[i].created_at.getDate() + limitDay);
-                                        pageContents[i].endDay = tmp.toISOString().substr(2,8);
-                                    }
-                                    var info = {startPage: startPage, endPage: endPage, limitPage: limitPage, word:word, active: page, sort: sortType, type: type, pagination: pageNum, no: num, deadlineFlag: deadlineFlag };
-                                   
-                                    res.render('list', { title:"list", info: info, contents: pageContents, login:req.session.user});
-                                });
-                                break;
-                            case "count":
-                                mongodb.PetitionModel.find({$and:[{'created_at':{"$lt":(new Date()).setDate(now.getDate()-limitDay)}},{"type":"총학생회"}]}).sort({'count':-1,'created_at':-1}).skip(skipSize).limit(limitSize).exec(function(err, pageContents) {
-                                    if(err) {throw err;}
-                                    for(var i=0; i<pageContents.length; i++) {
-                                        pageContents[i].startDay =  pageContents[i].created_at.toISOString().substr(2,8);
-                                        var tmp = new Date(); tmp.setDate(pageContents[i].created_at.getDate() + limitDay);
-                                        pageContents[i].endDay = tmp.toISOString().substr(2,8);
-                                    }
-                                    var info = {startPage: startPage, endPage: endPage, limitPage: limitPage, word:word, active: page, sort: sortType, type: type, pagination: pageNum, no: num, deadlineFlag: deadlineFlag };
-                                   
-                                    res.render('list', { title:"list", info: info, contents: pageContents, login:req.session.user});
-                                });
-                                break;
-                        }
-                    }     
-                });   
-            }
-            break;
-        case "경영대학" :
-            if(deadlineFlag==1) {
-                mongodb.PetitionModel.count({$and:[{'created_at':{"$gte":(new Date()).setDate(now.getDate()-limitDay)}},{"type":"경영대학"}]},function(err, max){
-                    if(err) {throw err;}
-                    
-                    var pageNum = Math.ceil(max/limitSize);
-                    var num = max-((page - 1)*limitSize); 
-                    var startPage = (Math.floor((page-1)/limitPage)*limitPage)+1;
-                    var endPage = startPage + limitPage - 1;
-                    if(endPage > pageNum) { endPage = pageNum; }
-       
-                    if((page > pageNum || page < 1 ) && max != 0) {
-                        console.log("잘못된 페이지");
-                        res.send('<script type="text/javascript">alert("잘못된 페이지입니다.");window.location.href = "/petition/list";</script>');
-                    } else if(max == 0) {
-                        console.log("list가 없다"); 
-                        var info = { startPage: 1, endPage: 1,  limitPage: limitPage, word:word, active: 1, sort: sortType, type: type, pagination: 1, no: 0, deadlineFlag: deadlineFlag };
-                        
-                        res.render('list', { title:"list", info: info, contents: [], login:req.session.user});
-                    } else { 
-                        switch(sortType) {
-                            case "created_at":
-                                mongodb.PetitionModel.find({$and:[{'created_at':{"$gte":(new Date()).setDate(now.getDate()-limitDay)}},{"type":"경영대학"}]}).sort({'created_at':-1}).skip(skipSize).limit(limitSize).exec(function(err, pageContents) {
-                                    if(err) {throw err;}
-                                    for(var i=0; i<pageContents.length; i++) {
-                                        pageContents[i].startDay =  pageContents[i].created_at.toISOString().substr(2,8);
-                                        var tmp = new Date(); tmp.setDate(pageContents[i].created_at.getDate() + limitDay);
-                                        pageContents[i].endDay = tmp.toISOString().substr(2,8);
-                                    }
-                                    var info = {startPage: startPage, endPage: endPage, limitPage: limitPage, word:word, active: page, sort: sortType, type: type, pagination: pageNum, no: num, deadlineFlag: deadlineFlag };
-                                   
-                                    res.render('list', { title:"list", info: info, contents: pageContents, login:req.session.user});
-
-                                });
-                                break;
-                            case "count":
-                                mongodb.PetitionModel.find({$and:[{'created_at':{"$gte":(new Date()).setDate(now.getDate()-limitDay)}},{"type":"경영대학"}]}).sort({'count':-1,'created_at':-1}).skip(skipSize).limit(limitSize).exec(function(err, pageContents) {
-                                    if(err) {throw err;}
-                                    for(var i=0; i<pageContents.length; i++) {
-                                        pageContents[i].startDay =  pageContents[i].created_at.toISOString().substr(2,8);
-                                        var tmp = new Date(); tmp.setDate(pageContents[i].created_at.getDate() + limitDay);
-                                        pageContents[i].endDay = tmp.toISOString().substr(2,8);
-                                    }
-                                    var info = {startPage: startPage, endPage: endPage, limitPage: limitPage, word:word, active: page, sort: sortType, type: type, pagination: pageNum, no: num, deadlineFlag: deadlineFlag };
-                                    
-                                    res.render('list', { title:"list", info: info, contents: pageContents, login:req.session.user});
-                                });
-                                break;
-                        }
-                    }     
-                });   
-            } else {
-                mongodb.PetitionModel.count({$and:[{'created_at':{"$lt":(new Date()).setDate(now.getDate()-limitDay)}},{"type":"경영대학"}]},function(err, max){
-                    if(err) {throw err;}
-                    
-                    var pageNum = Math.ceil(max/limitSize);
-                    var num = max-((page - 1)*limitSize); 
-                    var startPage = (Math.floor((page-1)/limitPage)*limitPage)+1;
-                    var endPage = startPage + limitPage - 1;
-                    if(endPage > pageNum) { endPage = pageNum; }
-       
-                    if((page > pageNum || page < 1 ) && max != 0) {
-                        console.log("잘못된 페이지");
-                        res.send('<script type="text/javascript">alert("잘못된 페이지입니다.");window.location.href = "/petition/list";</script>');
-                    } else if(max == 0) {
-                        console.log("list가 없다"); 
-                        var info = { startPage: 1, endPage: 1,  limitPage: limitPage, word:word, active: 1, sort: sortType, type: type, pagination: 1, no: 0, deadlineFlag: deadlineFlag };
-                        
-                        res.render('list', { title:"list", info: info, contents: [], login:req.session.user});
-                    } else { 
-                        switch(sortType) {
-                            case "created_at":
-                                mongodb.PetitionModel.find({$and:[{'created_at':{"$lt":(new Date()).setDate(now.getDate()-limitDay)}},{"type":"경영대학"}]}).sort({'created_at':-1}).skip(skipSize).limit(limitSize).exec(function(err, pageContents) {
-                                    if(err) {throw err;}
-                                    for(var i=0; i<pageContents.length; i++) {
-                                        pageContents[i].startDay =  pageContents[i].created_at.toISOString().substr(2,8);
-                                        var tmp = new Date(); tmp.setDate(pageContents[i].created_at.getDate() + limitDay);
-                                        pageContents[i].endDay = tmp.toISOString().substr(2,8);
-                                    }
-                                    var info = {startPage: startPage, endPage: endPage, limitPage: limitPage, word:word, active: page, sort: sortType, type: type, pagination: pageNum, no: num, deadlineFlag: deadlineFlag };
-                                   
-                                    res.render('list', { title:"list", info: info, contents: pageContents, login:req.session.user});
-                                });
-                                break;
-                            case "count":
-                                mongodb.PetitionModel.find({$and:[{'created_at':{"$lt":(new Date()).setDate(now.getDate()-limitDay)}},{"type":"경영대학"}]}).sort({'count':-1,'created_at':-1}).skip(skipSize).limit(limitSize).exec(function(err, pageContents) {
-                                    if(err) {throw err;}
-                                    for(var i=0; i<pageContents.length; i++) {
-                                        pageContents[i].startDay =  pageContents[i].created_at.toISOString().substr(2,8);
-                                        var tmp = new Date(); tmp.setDate(pageContents[i].created_at.getDate() + limitDay);
-                                        pageContents[i].endDay = tmp.toISOString().substr(2,8);
-                                    }
-                                    var info = {startPage: startPage, endPage: endPage, limitPage: limitPage, word:word, active: page, sort: sortType, type: type, pagination: pageNum, no: num, deadlineFlag: deadlineFlag };
-                                   
-                                    res.render('list', { title:"list", info: info, contents: pageContents, login:req.session.user});
-                                });
-                                break;
-                        }
-                    }     
-                });   
-            }
-            break;
-        case "공과대학" :
-            if(deadlineFlag==1) {
-                mongodb.PetitionModel.count({$and:[{'created_at':{"$gte":(new Date()).setDate(now.getDate()-limitDay)}},{"type":"공과대학"}]},function(err, max){
-                    if(err) {throw err;}
-                    
-                    var pageNum = Math.ceil(max/limitSize);
-                    var num = max-((page - 1)*limitSize); 
-                    var startPage = (Math.floor((page-1)/limitPage)*limitPage)+1;
-                    var endPage = startPage + limitPage - 1;
-                    if(endPage > pageNum) { endPage = pageNum; }
-       
-                    if((page > pageNum || page < 1 ) && max != 0) {
-                        console.log("잘못된 페이지");
-                        res.send('<script type="text/javascript">alert("잘못된 페이지입니다.");window.location.href = "/petition/list";</script>');
-                    } else if(max == 0) {
-                        console.log("list가 없다"); 
-                        var info = { startPage: 1, endPage: 1,  limitPage: limitPage, word:word, active: 1, sort: sortType, type: type, pagination: 1, no: 0, deadlineFlag: deadlineFlag };
-                        
-                        res.render('list', { title:"list", info: info, contents: [], login:req.session.user});
-                    } else { 
-                        switch(sortType) {
-                            case "created_at":
-                                mongodb.PetitionModel.find({$and:[{'created_at':{"$gte":(new Date()).setDate(now.getDate()-limitDay)}},{"type":"공과대학"}]}).sort({'created_at':-1}).skip(skipSize).limit(limitSize).exec(function(err, pageContents) {
-                                    if(err) {throw err;}
-                                    for(var i=0; i<pageContents.length; i++) {
-                                        pageContents[i].startDay =  pageContents[i].created_at.toISOString().substr(2,8);
-                                        var tmp = new Date(); tmp.setDate(pageContents[i].created_at.getDate() + limitDay);
-                                        pageContents[i].endDay = tmp.toISOString().substr(2,8);
-                                    }
-                                    var info = {startPage: startPage, endPage: endPage, limitPage: limitPage, word:word, active: page, sort: sortType, type: type, pagination: pageNum, no: num, deadlineFlag: deadlineFlag };
-                                   
-                                    res.render('list', { title:"list", info: info, contents: pageContents, login:req.session.user});
-
-                                });
-                                break;
-                            case "count":
-                                mongodb.PetitionModel.find({$and:[{'created_at':{"$gte":(new Date()).setDate(now.getDate()-limitDay)}},{"type":"공과대학"}]}).sort({'count':-1,'created_at':-1}).skip(skipSize).limit(limitSize).exec(function(err, pageContents) {
-                                    if(err) {throw err;}
-                                    for(var i=0; i<pageContents.length; i++) {
-                                        pageContents[i].startDay =  pageContents[i].created_at.toISOString().substr(2,8);
-                                        var tmp = new Date(); tmp.setDate(pageContents[i].created_at.getDate() + limitDay);
-                                        pageContents[i].endDay = tmp.toISOString().substr(2,8);
-                                    }
-                                    var info = {startPage: startPage, endPage: endPage, limitPage: limitPage, word:word, active: page, sort: sortType, type: type, pagination: pageNum, no: num, deadlineFlag: deadlineFlag };
-                                    
-                                    res.render('list', { title:"list", info: info, contents: pageContents, login:req.session.user});
-                                });
-                                break;
-                        }
-                    }     
-                });   
-            } else {
-                mongodb.PetitionModel.count({$and:[{'created_at':{"$lt":(new Date()).setDate(now.getDate()-limitDay)}},{"type":"공과대학"}]},function(err, max){
-                    if(err) {throw err;}
-                    
-                    var pageNum = Math.ceil(max/limitSize);
-                    var num = max-((page - 1)*limitSize); 
-                    var startPage = (Math.floor((page-1)/limitPage)*limitPage)+1;
-                    var endPage = startPage + limitPage - 1;
-                    if(endPage > pageNum) { endPage = pageNum; }
-       
-                    if((page > pageNum || page < 1 ) && max != 0) {
-                        console.log("잘못된 페이지");
-                        res.send('<script type="text/javascript">alert("잘못된 페이지입니다.");window.location.href = "/petition/list";</script>');
-                    } else if(max == 0) {
-                        console.log("list가 없다"); 
-                        var info = { startPage: 1, endPage: 1,  limitPage: limitPage, word:word, active: 1, sort: sortType, type: type, pagination: 1, no: 0, deadlineFlag: deadlineFlag };
-                        
-                        res.render('list', { title:"list", info: info, contents: [], login:req.session.user});
-                    } else { 
-                        switch(sortType) {
-                            case "created_at":
-                                mongodb.PetitionModel.find({$and:[{'created_at':{"$lt":(new Date()).setDate(now.getDate()-limitDay)}},{"type":"공과대학"}]}).sort({'created_at':-1}).skip(skipSize).limit(limitSize).exec(function(err, pageContents) {
-                                    if(err) {throw err;}
-                                    for(var i=0; i<pageContents.length; i++) {
-                                        pageContents[i].startDay =  pageContents[i].created_at.toISOString().substr(2,8);
-                                        var tmp = new Date(); tmp.setDate(pageContents[i].created_at.getDate() + limitDay);
-                                        pageContents[i].endDay = tmp.toISOString().substr(2,8);
-                                    }
-                                    var info = {startPage: startPage, endPage: endPage, limitPage: limitPage, word:word, active: page, sort: sortType, type: type, pagination: pageNum, no: num, deadlineFlag: deadlineFlag };
-                                   
-                                    res.render('list', { title:"list", info: info, contents: pageContents, login:req.session.user});
-                                });
-                                break;
-                            case "count":
-                                mongodb.PetitionModel.find({$and:[{'created_at':{"$lt":(new Date()).setDate(now.getDate()-limitDay)}},{"type":"공과대학"}]}).sort({'count':-1,'created_at':-1}).skip(skipSize).limit(limitSize).exec(function(err, pageContents) {
-                                    if(err) {throw err;}
-                                    for(var i=0; i<pageContents.length; i++) {
-                                        pageContents[i].startDay =  pageContents[i].created_at.toISOString().substr(2,8);
-                                        var tmp = new Date(); tmp.setDate(pageContents[i].created_at.getDate() + limitDay);
-                                        pageContents[i].endDay = tmp.toISOString().substr(2,8);
-                                    }
-                                    var info = {startPage: startPage, endPage: endPage, limitPage: limitPage, word:word, active: page, sort: sortType, type: type, pagination: pageNum, no: num, deadlineFlag: deadlineFlag };
-                                   
-                                    res.render('list', { title:"list", info: info, contents: pageContents, login:req.session.user});
-                                });
-                                break;
-                        }
-                    }     
-                });   
-            }
-            break;
-        case "도시과학대학" :
-            if(deadlineFlag==1) {
-                mongodb.PetitionModel.count({$and:[{'created_at':{"$gte":(new Date()).setDate(now.getDate()-limitDay)}},{"type":"도시과학대학"}]},function(err, max){
-                    if(err) {throw err;}
-                    
-                    var pageNum = Math.ceil(max/limitSize);
-                    var num = max-((page - 1)*limitSize); 
-                    var startPage = (Math.floor((page-1)/limitPage)*limitPage)+1;
-                    var endPage = startPage + limitPage - 1;
-                    if(endPage > pageNum) { endPage = pageNum; }
-                    console.log("max: " + max +" page: "+page+" pageNum: "+pageNum);
-                    
-                    if((page > pageNum || page < 1 ) && max != 0) {
-                        console.log("잘못된 페이지");
-                        res.send('<script type="text/javascript">alert("잘못된 페이지입니다.");window.location.href = "/petition/list";</script>');
-                    } else if(max == 0) {
-                        console.log("list가 없다"); 
-                        var info = { startPage: 1, endPage: 1,  limitPage: limitPage, word:word, active: 1, sort: sortType, type: type, pagination: 1, no: 0, deadlineFlag: deadlineFlag };
-                        
-                        res.render('list', { title:"list", info: info, contents: [], login:req.session.user});
-                    } else { 
-                        switch(sortType) {
-                            case "created_at":
-                                mongodb.PetitionModel.find({$and:[{'created_at':{"$gte":(new Date()).setDate(now.getDate()-limitDay)}},{"type":"도시과학대학"}]}).sort({'created_at':-1}).skip(skipSize).limit(limitSize).exec(function(err, pageContents) {
-                                    if(err) {throw err;}
-                                    for(var i=0; i<pageContents.length; i++) {
-                                        pageContents[i].startDay =  pageContents[i].created_at.toISOString().substr(2,8);
-                                        var tmp = new Date(); tmp.setDate(pageContents[i].created_at.getDate() + limitDay);
-                                        pageContents[i].endDay = tmp.toISOString().substr(2,8);
-                                    }
-                                    var info = {startPage: startPage, endPage: endPage, limitPage: limitPage, word:word, active: page, sort: sortType, type: type, pagination: pageNum, no: num, deadlineFlag: deadlineFlag };
-                                   
-                                    res.render('list', { title:"list", info: info, contents: pageContents, login:req.session.user});
-
-                                });
-                                break;
-                            case "count":
-                                mongodb.PetitionModel.find({$and:[{'created_at':{"$gte":(new Date()).setDate(now.getDate()-limitDay)}},{"type":"도시과학대학"}]}).sort({'count':-1,'created_at':-1}).skip(skipSize).limit(limitSize).exec(function(err, pageContents) {
-                                    if(err) {throw err;}
-                                    for(var i=0; i<pageContents.length; i++) {
-                                        pageContents[i].startDay =  pageContents[i].created_at.toISOString().substr(2,8);
-                                        var tmp = new Date(); tmp.setDate(pageContents[i].created_at.getDate() + limitDay);
-                                        pageContents[i].endDay = tmp.toISOString().substr(2,8);
-                                    }
-                                    var info = {startPage: startPage, endPage: endPage, limitPage: limitPage, word:word, active: page, sort: sortType, type: type, pagination: pageNum, no: num, deadlineFlag: deadlineFlag };
-                                    
-                                    res.render('list', { title:"list", info: info, contents: pageContents, login:req.session.user});
-                                });
-                                break;
-                        }
-                    }     
-                });   
-            } else {
-                mongodb.PetitionModel.count({$and:[{'created_at':{"$lt":(new Date()).setDate(now.getDate()-limitDay)}},{"type":"도시과학대학"}]},function(err, max){
-                    if(err) {throw err;}
-                    
-                    var pageNum = Math.ceil(max/limitSize);
-                    var num = max-((page - 1)*limitSize); 
-                    var startPage = (Math.floor((page-1)/limitPage)*limitPage)+1;
-                    var endPage = startPage + limitPage - 1;
-                    if(endPage > pageNum) { endPage = pageNum; }
-       
-                    if((page > pageNum || page < 1 ) && max != 0) {
-                        console.log("잘못된 페이지");
-                        res.send('<script type="text/javascript">alert("잘못된 페이지입니다.");window.location.href = "/petition/list";</script>');
-                    } else if(max == 0) {
-                        console.log("list가 없다"); 
-                        var info = { startPage: 1, endPage: 1,  limitPage: limitPage, word:word, active: 1, sort: sortType, type: type, pagination: 1, no: 0, deadlineFlag: deadlineFlag };
-                        
-                        res.render('list', { title:"list", info: info, contents: [], login:req.session.user});
-                    } else { 
-                        switch(sortType) {
-                            case "created_at":
-                                mongodb.PetitionModel.find({$and:[{'created_at':{"$lt":(new Date()).setDate(now.getDate()-limitDay)}},{"type":"도시과학대학"}]}).sort({'created_at':-1}).skip(skipSize).limit(limitSize).exec(function(err, pageContents) {
-                                    if(err) {throw err;}
-                                    for(var i=0; i<pageContents.length; i++) {
-                                        pageContents[i].startDay =  pageContents[i].created_at.toISOString().substr(2,8);
-                                        var tmp = new Date(); tmp.setDate(pageContents[i].created_at.getDate() + limitDay);
-                                        pageContents[i].endDay = tmp.toISOString().substr(2,8);
-                                    }
-                                    var info = {startPage: startPage, endPage: endPage, limitPage: limitPage, word:word, active: page, sort: sortType, type: type, pagination: pageNum, no: num, deadlineFlag: deadlineFlag };
-                                   
-                                    res.render('list', { title:"list", info: info, contents: pageContents, login:req.session.user});
-                                });
-                                break;
-                            case "count":
-                                mongodb.PetitionModel.find({$and:[{'created_at':{"$lt":(new Date()).setDate(now.getDate()-limitDay)}},{"type":"도시과학대학"}]}).sort({'count':-1,'created_at':-1}).skip(skipSize).limit(limitSize).exec(function(err, pageContents) {
-                                    if(err) {throw err;}
-                                    for(var i=0; i<pageContents.length; i++) {
-                                        pageContents[i].startDay =  pageContents[i].created_at.toISOString().substr(2,8);
-                                        var tmp = new Date(); tmp.setDate(pageContents[i].created_at.getDate() + limitDay);
-                                        pageContents[i].endDay = tmp.toISOString().substr(2,8);
-                                    }
-                                    var info = {startPage: startPage, endPage: endPage, limitPage: limitPage, word:word, active: page, sort: sortType, type: type, pagination: pageNum, no: num, deadlineFlag: deadlineFlag };
-                                   
-                                    res.render('list', { title:"list", info: info, contents: pageContents, login:req.session.user});
-                                });
-                                break;
-                        }
-                    }     
-                });   
-            }
-            break;
-        case "예술체육대학" :
-            if(deadlineFlag==1) {
-                mongodb.PetitionModel.count({$and:[{'created_at':{"$gte":(new Date()).setDate(now.getDate()-limitDay)}},{"type":"예술체육대학"}]},function(err, max){
-                    if(err) {throw err;}
-                    
-                    var pageNum = Math.ceil(max/limitSize);
-                    var num = max-((page - 1)*limitSize); 
-                    var startPage = (Math.floor((page-1)/limitPage)*limitPage)+1;
-                    var endPage = startPage + limitPage - 1;
-                    if(endPage > pageNum) { endPage = pageNum; }
-       
-                    if((page > pageNum || page < 1 ) && max != 0) {
-                        console.log("잘못된 페이지");
-                        res.send('<script type="text/javascript">alert("잘못된 페이지입니다.");window.location.href = "/petition/list";</script>');
-                    } else if(max == 0) {
-                        console.log("list가 없다"); 
-                        var info = { startPage: 1, endPage: 1,  limitPage: limitPage, word:word, active: 1, sort: sortType, type: type, pagination: 1, no: 0, deadlineFlag: deadlineFlag };
-                        
-                        res.render('list', { title:"list", info: info, contents: [], login:req.session.user});
-                    } else { 
-                        switch(sortType) {
-                            case "created_at":
-                                mongodb.PetitionModel.find({$and:[{'created_at':{"$gte":(new Date()).setDate(now.getDate()-limitDay)}},{"type":"예술체육대학"}]}).sort({'created_at':-1}).skip(skipSize).limit(limitSize).exec(function(err, pageContents) {
-                                    if(err) {throw err;}
-                                    for(var i=0; i<pageContents.length; i++) {
-                                        pageContents[i].startDay =  pageContents[i].created_at.toISOString().substr(2,8);
-                                        var tmp = new Date(); tmp.setDate(pageContents[i].created_at.getDate() + limitDay);
-                                        pageContents[i].endDay = tmp.toISOString().substr(2,8);
-                                    }
-                                    var info = {startPage: startPage, endPage: endPage, limitPage: limitPage, word:word, active: page, sort: sortType, type: type, pagination: pageNum, no: num, deadlineFlag: deadlineFlag };
-                                   
-                                    res.render('list', { title:"list", info: info, contents: pageContents, login:req.session.user});
-
-                                });
-                                break;
-                            case "count":
-                                mongodb.PetitionModel.find({$and:[{'created_at':{"$gte":(new Date()).setDate(now.getDate()-limitDay)}},{"type":"예술체육대학"}]}).sort({'count':-1,'created_at':-1}).skip(skipSize).limit(limitSize).exec(function(err, pageContents) {
-                                    if(err) {throw err;}
-                                    for(var i=0; i<pageContents.length; i++) {
-                                        pageContents[i].startDay =  pageContents[i].created_at.toISOString().substr(2,8);
-                                        var tmp = new Date(); tmp.setDate(pageContents[i].created_at.getDate() + limitDay);
-                                        pageContents[i].endDay = tmp.toISOString().substr(2,8);
-                                    }
-                                    var info = {startPage: startPage, endPage: endPage, limitPage: limitPage, word:word, active: page, sort: sortType, type: type, pagination: pageNum, no: num, deadlineFlag: deadlineFlag };
-                                    
-                                    res.render('list', { title:"list", info: info, contents: pageContents, login:req.session.user});
-                                });
-                                break;
-                        }
-                    }     
-                });   
-            } else {
-                mongodb.PetitionModel.count({$and:[{'created_at':{"$lt":(new Date()).setDate(now.getDate()-limitDay)}},{"type":"예술체육대학"}]},function(err, max){
-                    if(err) {throw err;}
-                    
-                    var pageNum = Math.ceil(max/limitSize);
-                    var num = max-((page - 1)*limitSize); 
-                    var startPage = (Math.floor((page-1)/limitPage)*limitPage)+1;
-                    var endPage = startPage + limitPage - 1;
-                    if(endPage > pageNum) { endPage = pageNum; }
-       
-                    if((page > pageNum || page < 1 ) && max != 0) {
-                        console.log("잘못된 페이지");
-                        res.send('<script type="text/javascript">alert("잘못된 페이지입니다.");window.location.href = "/petition/list";</script>');
-                    } else if(max == 0) {
-                        console.log("list가 없다"); 
-                        var info = { startPage: 1, endPage: 1,  limitPage: limitPage, word:word, active: 1, sort: sortType, type: type, pagination: 1, no: 0, deadlineFlag: deadlineFlag };
-                        
-                        res.render('list', { title:"list", info: info, contents: [], login:req.session.user});
-                    } else { 
-                        switch(sortType) {
-                            case "created_at":
-                                mongodb.PetitionModel.find({$and:[{'created_at':{"$lt":(new Date()).setDate(now.getDate()-limitDay)}},{"type":"예술체육대학"}]}).sort({'created_at':-1}).skip(skipSize).limit(limitSize).exec(function(err, pageContents) {
-                                    if(err) {throw err;}
-                                    for(var i=0; i<pageContents.length; i++) {
-                                        pageContents[i].startDay =  pageContents[i].created_at.toISOString().substr(2,8);
-                                        var tmp = new Date(); tmp.setDate(pageContents[i].created_at.getDate() + limitDay);
-                                        pageContents[i].endDay = tmp.toISOString().substr(2,8);
-                                    }
-                                    var info = {startPage: startPage, endPage: endPage, limitPage: limitPage, word:word, active: page, sort: sortType, type: type, pagination: pageNum, no: num, deadlineFlag: deadlineFlag };
-                                   
-                                    res.render('list', { title:"list", info: info, contents: pageContents, login:req.session.user});
-                                });
-                                break;
-                            case "count":
-                                mongodb.PetitionModel.find({$and:[{'created_at':{"$lt":(new Date()).setDate(now.getDate()-limitDay)}},{"type":"예술체육대학"}]}).sort({'count':-1,'created_at':-1}).skip(skipSize).limit(limitSize).exec(function(err, pageContents) {
-                                    if(err) {throw err;}
-                                    for(var i=0; i<pageContents.length; i++) {
-                                        pageContents[i].startDay =  pageContents[i].created_at.toISOString().substr(2,8);
-                                        var tmp = new Date(); tmp.setDate(pageContents[i].created_at.getDate() + limitDay);
-                                        pageContents[i].endDay = tmp.toISOString().substr(2,8);
-                                    }
-                                    var info = {startPage: startPage, endPage: endPage, limitPage: limitPage, word:word, active: page, sort: sortType, type: type, pagination: pageNum, no: num, deadlineFlag: deadlineFlag };
-                                   
-                                    res.render('list', { title:"list", info: info, contents: pageContents, login:req.session.user});
-                                });
-                                break;
-                        }
-                    }     
-                });   
-            }
-            break;
-        case "인문대학" :
-            if(deadlineFlag==1) {
-                mongodb.PetitionModel.count({$and:[{'created_at':{"$gte":(new Date()).setDate(now.getDate()-limitDay)}},{"type":"인문대학"}]},function(err, max){
-                    if(err) {throw err;}
-                    
-                    var pageNum = Math.ceil(max/limitSize);
-                    var num = max-((page - 1)*limitSize); 
-                    var startPage = (Math.floor((page-1)/limitPage)*limitPage)+1;
-                    var endPage = startPage + limitPage - 1;
-                    if(endPage > pageNum) { endPage = pageNum; }
-       
-                    if((page > pageNum || page < 1 ) && max != 0) {
-                        console.log("잘못된 페이지");
-                        res.send('<script type="text/javascript">alert("잘못된 페이지입니다.");window.location.href = "/petition/list";</script>');
-                    } else if(max == 0) {
-                        console.log("list가 없다"); 
-                        var info = { startPage: 1, endPage: 1,  limitPage: limitPage, word:word, active: 1, sort: sortType, type: type, pagination: 1, no: 0, deadlineFlag: deadlineFlag };
-                        
-                        res.render('list', { title:"list", info: info, contents: [], login:req.session.user});
-                    } else { 
-                        switch(sortType) {
-                            case "created_at":
-                                mongodb.PetitionModel.find({$and:[{'created_at':{"$gte":(new Date()).setDate(now.getDate()-limitDay)}},{"type":"인문대학"}]}).sort({'created_at':-1}).skip(skipSize).limit(limitSize).exec(function(err, pageContents) {
-                                    if(err) {throw err;}
-                                    for(var i=0; i<pageContents.length; i++) {
-                                        pageContents[i].startDay =  pageContents[i].created_at.toISOString().substr(2,8);
-                                        var tmp = new Date(); tmp.setDate(pageContents[i].created_at.getDate() + limitDay);
-                                        pageContents[i].endDay = tmp.toISOString().substr(2,8);
-                                    }
-                                    var info = {startPage: startPage, endPage: endPage, limitPage: limitPage, word:word, active: page, sort: sortType, type: type, pagination: pageNum, no: num, deadlineFlag: deadlineFlag };
-                                   
-                                    res.render('list', { title:"list", info: info, contents: pageContents, login:req.session.user});
-
-                                });
-                                break;
-                            case "count":
-                                mongodb.PetitionModel.find({$and:[{'created_at':{"$gte":(new Date()).setDate(now.getDate()-limitDay)}},{"type":"인문대학"}]}).sort({'count':-1,'created_at':-1}).skip(skipSize).limit(limitSize).exec(function(err, pageContents) {
-                                    if(err) {throw err;}
-                                    for(var i=0; i<pageContents.length; i++) {
-                                        pageContents[i].startDay =  pageContents[i].created_at.toISOString().substr(2,8);
-                                        var tmp = new Date(); tmp.setDate(pageContents[i].created_at.getDate() + limitDay);
-                                        pageContents[i].endDay = tmp.toISOString().substr(2,8);
-                                    }
-                                    var info = {startPage: startPage, endPage: endPage, limitPage: limitPage, word:word, active: page, sort: sortType, type: type, pagination: pageNum, no: num, deadlineFlag: deadlineFlag };
-                                    
-                                    res.render('list', { title:"list", info: info, contents: pageContents, login:req.session.user});
-                                });
-                                break;
-                        }
-                    }     
-                });   
-            } else {
-                mongodb.PetitionModel.count({$and:[{'created_at':{"$lt":(new Date()).setDate(now.getDate()-limitDay)}},{"type":"인문대학"}]},function(err, max){
-                    if(err) {throw err;}
-                    
-                    var pageNum = Math.ceil(max/limitSize);
-                    var num = max-((page - 1)*limitSize); 
-                    var startPage = (Math.floor((page-1)/limitPage)*limitPage)+1;
-                    var endPage = startPage + limitPage - 1;
-                    if(endPage > pageNum) { endPage = pageNum; }
-       
-                    if((page > pageNum || page < 1 ) && max != 0) {
-                        console.log("잘못된 페이지");
-                        res.send('<script type="text/javascript">alert("잘못된 페이지입니다.");window.location.href = "/petition/list";</script>');
-                    } else if(max == 0) {
-                        console.log("list가 없다"); 
-                        var info = { startPage: 1, endPage: 1,  limitPage: limitPage, word:word, active: 1, sort: sortType, type: type, pagination: 1, no: 0, deadlineFlag: deadlineFlag };
-                        
-                        res.render('list', { title:"list", info: info, contents: [], login:req.session.user});
-                    } else { 
-                        switch(sortType) {
-                            case "created_at":
-                                mongodb.PetitionModel.find({$and:[{'created_at':{"$lt":(new Date()).setDate(now.getDate()-limitDay)}},{"type":"인문대학"}]}).sort({'created_at':-1}).skip(skipSize).limit(limitSize).exec(function(err, pageContents) {
-                                    if(err) {throw err;}
-                                    for(var i=0; i<pageContents.length; i++) {
-                                        pageContents[i].startDay =  pageContents[i].created_at.toISOString().substr(2,8);
-                                        var tmp = new Date(); tmp.setDate(pageContents[i].created_at.getDate() + limitDay);
-                                        pageContents[i].endDay = tmp.toISOString().substr(2,8);
-                                    }
-                                    var info = {startPage: startPage, endPage: endPage, limitPage: limitPage, word:word, active: page, sort: sortType, type: type, pagination: pageNum, no: num, deadlineFlag: deadlineFlag };
-                                   
-                                    res.render('list', { title:"list", info: info, contents: pageContents, login:req.session.user});
-                                });
-                                break;
-                            case "count":
-                                mongodb.PetitionModel.find({$and:[{'created_at':{"$lt":(new Date()).setDate(now.getDate()-limitDay)}},{"type":"인문대학"}]}).sort({'count':-1,'created_at':-1}).skip(skipSize).limit(limitSize).exec(function(err, pageContents) {
-                                    if(err) {throw err;}
-                                    for(var i=0; i<pageContents.length; i++) {
-                                        pageContents[i].startDay =  pageContents[i].created_at.toISOString().substr(2,8);
-                                        var tmp = new Date(); tmp.setDate(pageContents[i].created_at.getDate() + limitDay);
-                                        pageContents[i].endDay = tmp.toISOString().substr(2,8);
-                                    }
-                                    var info = {startPage: startPage, endPage: endPage, limitPage: limitPage, word:word, active: page, sort: sortType, type: type, pagination: pageNum, no: num, deadlineFlag: deadlineFlag };
-                                   
-                                    res.render('list', { title:"list", info: info, contents: pageContents, login:req.session.user});
-                                });
-                                break;
-                        }
-                    }     
-                });   
-            }
-            break;
-        case "자연과학대학" :
-            if(deadlineFlag==1) {
-                mongodb.PetitionModel.count({$and:[{'created_at':{"$gte":(new Date()).setDate(now.getDate()-limitDay)}},{"type":"자연과학대학"}]},function(err, max){
-                    if(err) {throw err;}
-                    
-                    var pageNum = Math.ceil(max/limitSize);
-                    var num = max-((page - 1)*limitSize); 
-                    var startPage = (Math.floor((page-1)/limitPage)*limitPage)+1;
-                    var endPage = startPage + limitPage - 1;
-                    if(endPage > pageNum) { endPage = pageNum; }
-       
-                    if((page > pageNum || page < 1 ) && max != 0) {
-                        console.log("잘못된 페이지");
-                        res.send('<script type="text/javascript">alert("잘못된 페이지입니다.");window.location.href = "/petition/list";</script>');
-                    } else if(max == 0) {
-                        console.log("list가 없다"); 
-                        var info = { startPage: 1, endPage: 1,  limitPage: limitPage, word:word, active: 1, sort: sortType, type: type, pagination: 1, no: 0, deadlineFlag: deadlineFlag };
-                        
-                        res.render('list', { title:"list", info: info, contents: [], login:req.session.user});
-                    } else { 
-                        switch(sortType) {
-                            case "created_at":
-                                mongodb.PetitionModel.find({$and:[{'created_at':{"$gte":(new Date()).setDate(now.getDate()-limitDay)}},{"type":"자연과학대학"}]}).sort({'created_at':-1}).skip(skipSize).limit(limitSize).exec(function(err, pageContents) {
-                                    if(err) {throw err;}
-                                    for(var i=0; i<pageContents.length; i++) {
-                                        pageContents[i].startDay =  pageContents[i].created_at.toISOString().substr(2,8);
-                                        var tmp = new Date(); tmp.setDate(pageContents[i].created_at.getDate() + limitDay);
-                                        pageContents[i].endDay = tmp.toISOString().substr(2,8);
-                                    }
-                                    var info = {startPage: startPage, endPage: endPage, limitPage: limitPage, word:word, active: page, sort: sortType, type: type, pagination: pageNum, no: num, deadlineFlag: deadlineFlag };
-                                   
-                                    res.render('list', { title:"list", info: info, contents: pageContents, login:req.session.user});
-
-                                });
-                                break;
-                            case "count":
-                                mongodb.PetitionModel.find({$and:[{'created_at':{"$gte":(new Date()).setDate(now.getDate()-limitDay)}},{"type":"자연과학대학"}]}).sort({'count':-1,'created_at':-1}).skip(skipSize).limit(limitSize).exec(function(err, pageContents) {
-                                    if(err) {throw err;}
-                                    for(var i=0; i<pageContents.length; i++) {
-                                        pageContents[i].startDay =  pageContents[i].created_at.toISOString().substr(2,8);
-                                        var tmp = new Date(); tmp.setDate(pageContents[i].created_at.getDate() + limitDay);
-                                        pageContents[i].endDay = tmp.toISOString().substr(2,8);
-                                    }
-                                    var info = {startPage: startPage, endPage: endPage, limitPage: limitPage, word:word, active: page, sort: sortType, type: type, pagination: pageNum, no: num, deadlineFlag: deadlineFlag };
-                                    
-                                    res.render('list', { title:"list", info: info, contents: pageContents, login:req.session.user});
-                                });
-                                break;
-                        }
-                    }     
-                });   
-            } else {
-                mongodb.PetitionModel.count({$and:[{'created_at':{"$lt":(new Date()).setDate(now.getDate()-limitDay)}},{"type":"자연과학대학"}]},function(err, max){
-                    if(err) {throw err;}
-                    
-                    var pageNum = Math.ceil(max/limitSize);
-                    var num = max-((page - 1)*limitSize); 
-                    var startPage = (Math.floor((page-1)/limitPage)*limitPage)+1;
-                    var endPage = startPage + limitPage - 1;
-                    if(endPage > pageNum) { endPage = pageNum; }
-       
-                    if((page > pageNum || page < 1 ) && max != 0) {
-                        console.log("잘못된 페이지");
-                        res.send('<script type="text/javascript">alert("잘못된 페이지입니다.");window.location.href = "/petition/list";</script>');
-                    } else if(max == 0) {
-                        console.log("list가 없다"); 
-                        var info = { startPage: 1, endPage: 1,  limitPage: limitPage, word:word, active: 1, sort: sortType, type: type, pagination: 1, no: 0, deadlineFlag: deadlineFlag };
-                        
-                        res.render('list', { title:"list", info: info, contents: [], login:req.session.user});
-                    } else { 
-                        switch(sortType) {
-                            case "created_at":
-                                mongodb.PetitionModel.find({$and:[{'created_at':{"$lt":(new Date()).setDate(now.getDate()-limitDay)}},{"type":"자연과학대학"}]}).sort({'created_at':-1}).skip(skipSize).limit(limitSize).exec(function(err, pageContents) {
-                                    if(err) {throw err;}
-                                    for(var i=0; i<pageContents.length; i++) {
-                                        pageContents[i].startDay =  pageContents[i].created_at.toISOString().substr(2,8);
-                                        var tmp = new Date(); tmp.setDate(pageContents[i].created_at.getDate() + limitDay);
-                                        pageContents[i].endDay = tmp.toISOString().substr(2,8);
-                                    }
-                                    var info = {startPage: startPage, endPage: endPage, limitPage: limitPage, word:word, active: page, sort: sortType, type: type, pagination: pageNum, no: num, deadlineFlag: deadlineFlag };
-                                   
-                                    res.render('list', { title:"list", info: info, contents: pageContents, login:req.session.user});
-                                });
-                                break;
-                            case "count":
-                                mongodb.PetitionModel.find({$and:[{'created_at':{"$lt":(new Date()).setDate(now.getDate()-limitDay)}},{"type":"자연과학대학"}]}).sort({'count':-1,'created_at':-1}).skip(skipSize).limit(limitSize).exec(function(err, pageContents) {
-                                    if(err) {throw err;}
-                                    for(var i=0; i<pageContents.length; i++) {
-                                        pageContents[i].startDay =  pageContents[i].created_at.toISOString().substr(2,8);
-                                        var tmp = new Date(); tmp.setDate(pageContents[i].created_at.getDate() + limitDay);
-                                        pageContents[i].endDay = tmp.toISOString().substr(2,8);
-                                    }
-                                    var info = {startPage: startPage, endPage: endPage, limitPage: limitPage, word:word, active: page, sort: sortType, type: type, pagination: pageNum, no: num, deadlineFlag: deadlineFlag };
-                                   
-                                    res.render('list', { title:"list", info: info, contents: pageContents, login:req.session.user});
-                                });
-                                break;
-                        }
-                    }     
-                });   
-            }
-            break;
-        case "정경대학" :
-            if(deadlineFlag==1) {
-                mongodb.PetitionModel.count({$and:[{'created_at':{"$gte":(new Date()).setDate(now.getDate()-limitDay)}},{"type":"정경대학"}]},function(err, max){
-                    if(err) {throw err;}
-                    
-                    var pageNum = Math.ceil(max/limitSize);
-                    var num = max-((page - 1)*limitSize); 
-                    var startPage = (Math.floor((page-1)/limitPage)*limitPage)+1;
-                    var endPage = startPage + limitPage - 1;
-                    if(endPage > pageNum) { endPage = pageNum; }
-       
-                    if((page > pageNum || page < 1 ) && max != 0) {
-                        console.log("잘못된 페이지");
-                        res.send('<script type="text/javascript">alert("잘못된 페이지입니다.");window.location.href = "/petition/list";</script>');
-                    } else if(max == 0) {
-                        console.log("list가 없다"); 
-                        var info = { startPage: 1, endPage: 1,  limitPage: limitPage, word:word, active: 1, sort: sortType, type: type, pagination: 1, no: 0, deadlineFlag: deadlineFlag };
-                        
-                        res.render('list', { title:"list", info: info, contents: [], login:req.session.user});
-                    } else { 
-                        switch(sortType) {
-                            case "created_at":
-                                mongodb.PetitionModel.find({$and:[{'created_at':{"$gte":(new Date()).setDate(now.getDate()-limitDay)}},{"type":"정경대학"}]}).sort({'created_at':-1}).skip(skipSize).limit(limitSize).exec(function(err, pageContents) {
-                                    if(err) {throw err;}
-                                    for(var i=0; i<pageContents.length; i++) {
-                                        pageContents[i].startDay =  pageContents[i].created_at.toISOString().substr(2,8);
-                                        var tmp = new Date(); tmp.setDate(pageContents[i].created_at.getDate() + limitDay);
-                                        pageContents[i].endDay = tmp.toISOString().substr(2,8);
-                                    }
-                                    var info = {startPage: startPage, endPage: endPage, limitPage: limitPage, word:word, active: page, sort: sortType, type: type, pagination: pageNum, no: num, deadlineFlag: deadlineFlag };
-                                   
-                                    res.render('list', { title:"list", info: info, contents: pageContents, login:req.session.user});
-
-                                });
-                                break;
-                            case "count":
-                                mongodb.PetitionModel.find({$and:[{'created_at':{"$gte":(new Date()).setDate(now.getDate()-limitDay)}},{"type":"정경대학"}]}).sort({'count':-1,'created_at':-1}).skip(skipSize).limit(limitSize).exec(function(err, pageContents) {
-                                    if(err) {throw err;}
-                                    for(var i=0; i<pageContents.length; i++) {
-                                        pageContents[i].startDay =  pageContents[i].created_at.toISOString().substr(2,8);
-                                        var tmp = new Date(); tmp.setDate(pageContents[i].created_at.getDate() + limitDay);
-                                        pageContents[i].endDay = tmp.toISOString().substr(2,8);
-                                    }
-                                    var info = {startPage: startPage, endPage: endPage, limitPage: limitPage, word:word, active: page, sort: sortType, type: type, pagination: pageNum, no: num, deadlineFlag: deadlineFlag };
-                                    
-                                    res.render('list', { title:"list", info: info, contents: pageContents, login:req.session.user});
-                                });
-                                break;
-                        }
-                    }     
-                });   
-            } else {
-                mongodb.PetitionModel.count({$and:[{'created_at':{"$lt":(new Date()).setDate(now.getDate()-limitDay)}},{"type":"정경대학"}]},function(err, max){
-                    if(err) {throw err;}
-                    
-                    var pageNum = Math.ceil(max/limitSize);
-                    var num = max-((page - 1)*limitSize); 
-                    var startPage = (Math.floor((page-1)/limitPage)*limitPage)+1;
-                    var endPage = startPage + limitPage - 1;
-                    if(endPage > pageNum) { endPage = pageNum; }
-       
-                    if((page > pageNum || page < 1 ) && max != 0) {
-                        console.log("잘못된 페이지");
-                        res.send('<script type="text/javascript">alert("잘못된 페이지입니다.");window.location.href = "/petition/list";</script>');
-                    } else if(max == 0) {
-                        console.log("list가 없다"); 
-                        var info = { startPage: 1, endPage: 1,  limitPage: limitPage, word:word, active: 1, sort: sortType, type: type, pagination: 1, no: 0, deadlineFlag: deadlineFlag };
-                        
-                        res.render('list', { title:"list", info: info, contents: [], login:req.session.user});
-                    } else { 
-                        switch(sortType) {
-                            case "created_at":
-                                mongodb.PetitionModel.find({$and:[{'created_at':{"$lt":(new Date()).setDate(now.getDate()-limitDay)}},{"type":"정경대학"}]}).sort({'created_at':-1}).skip(skipSize).limit(limitSize).exec(function(err, pageContents) {
-                                    if(err) {throw err;}
-                                    for(var i=0; i<pageContents.length; i++) {
-                                        pageContents[i].startDay =  pageContents[i].created_at.toISOString().substr(2,8);
-                                        var tmp = new Date(); tmp.setDate(pageContents[i].created_at.getDate() + limitDay);
-                                        pageContents[i].endDay = tmp.toISOString().substr(2,8);
-                                    }
-                                    var info = {startPage: startPage, endPage: endPage, limitPage: limitPage, word:word, active: page, sort: sortType, type: type, pagination: pageNum, no: num, deadlineFlag: deadlineFlag };
-                                   
-                                    res.render('list', { title:"list", info: info, contents: pageContents, login:req.session.user});
-                                });
-                                break;
-                            case "count":
-                                mongodb.PetitionModel.find({$and:[{'created_at':{"$lt":(new Date()).setDate(now.getDate()-limitDay)}},{"type":"정경대학"}]}).sort({'count':-1,'created_at':-1}).skip(skipSize).limit(limitSize).exec(function(err, pageContents) {
-                                    if(err) {throw err;}
-                                    for(var i=0; i<pageContents.length; i++) {
-                                        pageContents[i].startDay =  pageContents[i].created_at.toISOString().substr(2,8);
-                                        var tmp = new Date(); tmp.setDate(pageContents[i].created_at.getDate() + limitDay);
-                                        pageContents[i].endDay = tmp.toISOString().substr(2,8);
-                                    }
-                                    var info = {startPage: startPage, endPage: endPage, limitPage: limitPage, word:word, active: page, sort: sortType, type: type, pagination: pageNum, no: num, deadlineFlag: deadlineFlag };
-                                   
-                                    res.render('list', { title:"list", info: info, contents: pageContents, login:req.session.user});
-                                });
-                                break;
-                        }
-                    }     
-                });   
-            }
-            break;
-        case "자유융합대학" :
-            if(deadlineFlag==1) {
-                mongodb.PetitionModel.count({$and:[{'created_at':{"$gte":(new Date()).setDate(now.getDate()-limitDay)}},{"type":"자유융합대학"}]},function(err, max){
-                    if(err) {throw err;}
-                    
-                    var pageNum = Math.ceil(max/limitSize);
-                    var num = max-((page - 1)*limitSize); 
-                    var startPage = (Math.floor((page-1)/limitPage)*limitPage)+1;
-                    var endPage = startPage + limitPage - 1;
-                    if(endPage > pageNum) { endPage = pageNum; }
-       
-                    if((page > pageNum || page < 1 ) && max != 0) {
-                        console.log("잘못된 페이지");
-                        res.send('<script type="text/javascript">alert("잘못된 페이지입니다.");window.location.href = "/petition/list";</script>');
-                    } else if(max == 0) {
-                        console.log("list가 없다"); 
-                        var info = { startPage: 1, endPage: 1,  limitPage: limitPage, word:word, active: 1, sort: sortType, type: type, pagination: 1, no: 0, deadlineFlag: deadlineFlag };
-                        
-                        res.render('list', { title:"list", info: info, contents: [], login:req.session.user});
-                    } else { 
-                        switch(sortType) {
-                            case "created_at":
-                                mongodb.PetitionModel.find({$and:[{'created_at':{"$gte":(new Date()).setDate(now.getDate()-limitDay)}},{"type":"자유융합대학"}]}).sort({'created_at':-1}).skip(skipSize).limit(limitSize).exec(function(err, pageContents) {
-                                    if(err) {throw err;}
-                                    for(var i=0; i<pageContents.length; i++) {
-                                        pageContents[i].startDay =  pageContents[i].created_at.toISOString().substr(2,8);
-                                        var tmp = new Date(); tmp.setDate(pageContents[i].created_at.getDate() + limitDay);
-                                        pageContents[i].endDay = tmp.toISOString().substr(2,8);
-                                    }
-                                    var info = {startPage: startPage, endPage: endPage, limitPage: limitPage, word:word, active: page, sort: sortType, type: type, pagination: pageNum, no: num, deadlineFlag: deadlineFlag };
-                                   
-                                    res.render('list', { title:"list", info: info, contents: pageContents, login:req.session.user});
-
-                                });
-                                break;
-                            case "count":
-                                mongodb.PetitionModel.find({$and:[{'created_at':{"$gte":(new Date()).setDate(now.getDate()-limitDay)}},{"type":"자유융합대학"}]}).sort({'count':-1,'created_at':-1}).skip(skipSize).limit(limitSize).exec(function(err, pageContents) {
-                                    if(err) {throw err;}
-                                    for(var i=0; i<pageContents.length; i++) {
-                                        pageContents[i].startDay =  pageContents[i].created_at.toISOString().substr(2,8);
-                                        var tmp = new Date(); tmp.setDate(pageContents[i].created_at.getDate() + limitDay);
-                                        pageContents[i].endDay = tmp.toISOString().substr(2,8);
-                                    }
-                                    var info = {startPage: startPage, endPage: endPage, limitPage: limitPage, word:word, active: page, sort: sortType, type: type, pagination: pageNum, no: num, deadlineFlag: deadlineFlag };
-                                    
-                                    res.render('list', { title:"list", info: info, contents: pageContents, login:req.session.user});
-                                });
-                                break;
-                        }
-                    }     
-                });   
-            } else {
-                mongodb.PetitionModel.count({$and:[{'created_at':{"$lt":(new Date()).setDate(now.getDate()-limitDay)}},{"type":"자유융합대학"}]},function(err, max){
-                    if(err) {throw err;}
-                    
-                    var pageNum = Math.ceil(max/limitSize);
-                    var num = max-((page - 1)*limitSize); 
-                    var startPage = (Math.floor((page-1)/limitPage)*limitPage)+1;
-                    var endPage = startPage + limitPage - 1;
-                    if(endPage > pageNum) { endPage = pageNum; }
-       
-                    if((page > pageNum || page < 1 ) && max != 0) {
-                        console.log("잘못된 페이지");
-                        res.send('<script type="text/javascript">alert("잘못된 페이지입니다.");window.location.href = "/petition/list";</script>');
-                    } else if(max == 0) {
-                        console.log("list가 없다"); 
-                        var info = { startPage: 1, endPage: 1,  limitPage: limitPage, word:word, active: 1, sort: sortType, type: type, pagination: 1, no: 0, deadlineFlag: deadlineFlag };
-                        
-                        res.render('list', { title:"list", info: info, contents: [], login:req.session.user});
-                    } else { 
-                        switch(sortType) {
-                            case "created_at":
-                                mongodb.PetitionModel.find({$and:[{'created_at':{"$lt":(new Date()).setDate(now.getDate()-limitDay)}},{"type":"자유융합대학"}]}).sort({'created_at':-1}).skip(skipSize).limit(limitSize).exec(function(err, pageContents) {
-                                    if(err) {throw err;}
-                                    for(var i=0; i<pageContents.length; i++) {
-                                        pageContents[i].startDay =  pageContents[i].created_at.toISOString().substr(2,8);
-                                        var tmp = new Date(); tmp.setDate(pageContents[i].created_at.getDate() + limitDay);
-                                        pageContents[i].endDay = tmp.toISOString().substr(2,8);
-                                    }
-                                    var info = {startPage: startPage, endPage: endPage, limitPage: limitPage, word:word, active: page, sort: sortType, type: type, pagination: pageNum, no: num, deadlineFlag: deadlineFlag };
-                                   
-                                    res.render('list', { title:"list", info: info, contents: pageContents, login:req.session.user});
-                                });
-                                break;
-                            case "count":
-                                mongodb.PetitionModel.find({$and:[{'created_at':{"$lt":(new Date()).setDate(now.getDate()-limitDay)}},{"type":"자유융합대학"}]}).sort({'count':-1,'created_at':-1}).skip(skipSize).limit(limitSize).exec(function(err, pageContents) {
-                                    if(err) {throw err;}
-                                    for(var i=0; i<pageContents.length; i++) {
-                                        pageContents[i].startDay =  pageContents[i].created_at.toISOString().substr(2,8);
-                                        var tmp = new Date(); tmp.setDate(pageContents[i].created_at.getDate() + limitDay);
-                                        pageContents[i].endDay = tmp.toISOString().substr(2,8);
-                                    }
-                                    var info = {startPage: startPage, endPage: endPage, limitPage: limitPage, word:word, active: page, sort: sortType, type: type, pagination: pageNum, no: num, deadlineFlag: deadlineFlag };
-                                   
-                                    res.render('list', { title:"list", info: info, contents: pageContents, login:req.session.user});
-                                });
-                                break;
-                        }
-                    }     
-                });   
-            }
-            break;
-        case "기타" :
-            if(deadlineFlag==1) {
-                mongodb.PetitionModel.count({$and:[{'created_at':{"$gte":(new Date()).setDate(now.getDate()-limitDay)}},{"type":"기타"}]},function(err, max){
-                    if(err) {throw err;}
-                    
-                    var pageNum = Math.ceil(max/limitSize);
-                    var num = max-((page - 1)*limitSize); 
-                    var startPage = (Math.floor((page-1)/limitPage)*limitPage)+1;
-                    var endPage = startPage + limitPage - 1;
-                    if(endPage > pageNum) { endPage = pageNum; }
-       
-                    if((page > pageNum || page < 1 ) && max != 0) {
-                        console.log("잘못된 페이지");
-                        res.send('<script type="text/javascript">alert("잘못된 페이지입니다.");window.location.href = "/petition/list";</script>');
-                    } else if(max == 0) {
-                        console.log("list가 없다"); 
-                        var info = { startPage: 1, endPage: 1,  limitPage: limitPage, word:word, active: 1, sort: sortType, type: type, pagination: 1, no: 0, deadlineFlag: deadlineFlag };
-                        
-                        res.render('list', { title:"list", info: info, contents: [], login:req.session.user});
-                    } else { 
-                        switch(sortType) {
-                            case "created_at":
-                                mongodb.PetitionModel.find({$and:[{'created_at':{"$gte":(new Date()).setDate(now.getDate()-limitDay)}},{"type":"기타"}]}).sort({'created_at':-1}).skip(skipSize).limit(limitSize).exec(function(err, pageContents) {
-                                    if(err) {throw err;}
-                                    for(var i=0; i<pageContents.length; i++) {
-                                        pageContents[i].startDay =  pageContents[i].created_at.toISOString().substr(2,8);
-                                        var tmp = new Date(); tmp.setDate(pageContents[i].created_at.getDate() + limitDay);
-                                        pageContents[i].endDay = tmp.toISOString().substr(2,8);
-                                    }
-                                    var info = {startPage: startPage, endPage: endPage, limitPage: limitPage, word:word, active: page, sort: sortType, type: type, pagination: pageNum, no: num, deadlineFlag: deadlineFlag };
-                                   
-                                    res.render('list', { title:"list", info: info, contents: pageContents, login:req.session.user});
-
-                                });
-                                break;
-                            case "count":
-                                mongodb.PetitionModel.find({$and:[{'created_at':{"$gte":(new Date()).setDate(now.getDate()-limitDay)}},{"type":"기타"}]}).sort({'count':-1,'created_at':-1}).skip(skipSize).limit(limitSize).exec(function(err, pageContents) {
-                                    if(err) {throw err;}
-                                    for(var i=0; i<pageContents.length; i++) {
-                                        pageContents[i].startDay =  pageContents[i].created_at.toISOString().substr(2,8);
-                                        var tmp = new Date(); tmp.setDate(pageContents[i].created_at.getDate() + limitDay);
-                                        pageContents[i].endDay = tmp.toISOString().substr(2,8);
-                                    }
-                                    var info = {startPage: startPage, endPage: endPage, limitPage: limitPage, word:word, active: page, sort: sortType, type: type, pagination: pageNum, no: num, deadlineFlag: deadlineFlag };
-                                    
-                                    res.render('list', { title:"list", info: info, contents: pageContents, login:req.session.user});
-                                });
-                                break;
-                        }
-                    }     
-                });   
-            } else {
-                mongodb.PetitionModel.count({$and:[{'created_at':{"$lt":(new Date()).setDate(now.getDate()-limitDay)}},{"type":"기타"}]},function(err, max){
-                    if(err) {throw err;}
-                    
-                    var pageNum = Math.ceil(max/limitSize);
-                    var num = max-((page - 1)*limitSize); 
-                    var startPage = (Math.floor((page-1)/limitPage)*limitPage)+1;
-                    var endPage = startPage + limitPage - 1;
-                    if(endPage > pageNum) { endPage = pageNum; }
-       
-                    if((page > pageNum || page < 1 ) && max != 0) {
-                        console.log("잘못된 페이지");
-                        res.send('<script type="text/javascript">alert("잘못된 페이지입니다.");window.location.href = "/petition/list";</script>');
-                    } else if(max == 0) {
-                        console.log("list가 없다"); 
-                        var info = { startPage: 1, endPage: 1,  limitPage: limitPage, word:word, active: 1, sort: sortType, type: type, pagination: 1, no: 0, deadlineFlag: deadlineFlag };
-                        
-                        res.render('list', { title:"list", info: info, contents: [], login:req.session.user});
-                    } else { 
-                        switch(sortType) {
-                            case "created_at":
-                                mongodb.PetitionModel.find({$and:[{'created_at':{"$lt":(new Date()).setDate(now.getDate()-limitDay)}},{"type":"기타"}]}).sort({'created_at':-1}).skip(skipSize).limit(limitSize).exec(function(err, pageContents) {
-                                    if(err) {throw err;}
-                                    for(var i=0; i<pageContents.length; i++) {
-                                        pageContents[i].startDay =  pageContents[i].created_at.toISOString().substr(2,8);
-                                        var tmp = new Date(); tmp.setDate(pageContents[i].created_at.getDate() + limitDay);
-                                        pageContents[i].endDay = tmp.toISOString().substr(2,8);
-                                    }
-                                    var info = {startPage: startPage, endPage: endPage, limitPage: limitPage, word:word, active: page, sort: sortType, type: type, pagination: pageNum, no: num, deadlineFlag: deadlineFlag };
-                                   
-                                    res.render('list', { title:"list", info: info, contents: pageContents, login:req.session.user});
-                                });
-                                break;
-                            case "count":
-                                mongodb.PetitionModel.find({$and:[{'created_at':{"$lt":(new Date()).setDate(now.getDate()-limitDay)}},{"type":"기타"}]}).sort({'count':-1,'created_at':-1}).skip(skipSize).limit(limitSize).exec(function(err, pageContents) {
-                                    if(err) {throw err;}
-                                    for(var i=0; i<pageContents.length; i++) {
-                                        pageContents[i].startDay =  pageContents[i].created_at.toISOString().substr(2,8);
-                                        var tmp = new Date(); tmp.setDate(pageContents[i].created_at.getDate() + limitDay);
-                                        pageContents[i].endDay = tmp.toISOString().substr(2,8);
-                                    }
-                                    var info = {startPage: startPage, endPage: endPage, limitPage: limitPage, word:word, active: page, sort: sortType, type: type, pagination: pageNum, no: num, deadlineFlag: deadlineFlag };
-                                   
-                                    res.render('list', { title:"list", info: info, contents: pageContents, login:req.session.user});
-                                });
-                                break;
-                        }
-                    }     
-                });   
-            }
-            break;
-            
         case "search" :
             var searchCondition = {$regex:word};
             if(deadlineFlag==1) {
@@ -1266,6 +244,110 @@ router.get('/list',function(req, res) {
                                 break;
                             case "count":
                                 mongodb.PetitionModel.find({$and:[{'created_at':{"$lt":(new Date()).setDate(now.getDate()-limitDay)}},{$or:[{title:searchCondition},{contents:searchCondition},     {nickname:searchCondition}]}]}).sort({'count':-1,'created_at':-1}).skip(skipSize).limit(limitSize).exec(function(err, pageContents) {
+                                    if(err) {throw err;}
+                                    for(var i=0; i<pageContents.length; i++) {
+                                        pageContents[i].startDay =  pageContents[i].created_at.toISOString().substr(2,8);
+                                        var tmp = new Date(); tmp.setDate(pageContents[i].created_at.getDate() + limitDay);
+                                        pageContents[i].endDay = tmp.toISOString().substr(2,8);
+                                    }
+                                    var info = {startPage: startPage, endPage: endPage, limitPage: limitPage, word:word, active: page, sort: sortType, type: type, pagination: pageNum, no: num, deadlineFlag: deadlineFlag };
+                                   
+                                    res.render('list', { title:"list", info: info, contents: pageContents, login:req.session.user});
+                                });
+                                break;
+                        }
+                    }     
+                });   
+            }
+            break;
+       
+        default :
+            var searchType = {$regex:type};
+            if(deadlineFlag==1) {
+                console.log(type);
+                mongodb.PetitionModel.count({$and:[{'created_at':{"$gte":(new Date()).setDate(now.getDate()-limitDay)}},{"type":searchType}]},function(err, max){
+                    if(err) {throw err;}
+                    var pageNum = Math.ceil(max/limitSize);
+                    var num = max-((page - 1)*limitSize); 
+                    var startPage = (Math.floor((page-1)/limitPage)*limitPage)+1;
+                    var endPage = startPage + limitPage - 1;
+                    if(endPage > pageNum) { endPage = pageNum; }
+       
+                   if((page > pageNum || page < 1 ) && max != 0) {
+                        console.log("잘못된 페이지");
+                        res.send('<script type="text/javascript">alert("잘못된 페이지입니다.");window.location.href = "/petition/list";</script>');
+                    } else if(max == 0) {
+                        console.log("list가 없다"); 
+                        var info = { startPage: 1, endPage: 1,  limitPage: limitPage, word:word, active: 1, sort: sortType, type: type, pagination: 1, no: 0, deadlineFlag: deadlineFlag };
+                        
+                        res.render('list', { title:"list", info: info, contents: [], login:req.session.user});
+                    } else { 
+                        switch(sortType) {
+                            case "created_at":
+                                mongodb.PetitionModel.find({$and:[{'created_at':{"$gte":(new Date()).setDate(now.getDate()-limitDay)}},{"type":searchType}]}).sort({'created_at':-1}).skip(skipSize).limit(limitSize).exec(function(err, pageContents) {
+                                    if(err) {throw err;}
+                                    for(var i=0; i<pageContents.length; i++) {
+                                        pageContents[i].startDay =  pageContents[i].created_at.toISOString().substr(2,8);
+                                        var tmp = new Date(); tmp.setDate(pageContents[i].created_at.getDate() + limitDay);
+                                        pageContents[i].endDay = tmp.toISOString().substr(2,8);
+                                    }
+                                    var info = {startPage: startPage, endPage: endPage, limitPage: limitPage, word:word, active: page, sort: sortType, type: type, pagination: pageNum, no: num, deadlineFlag: deadlineFlag };
+                                   
+                                    res.render('list', { title:"list", info: info, contents: pageContents, login:req.session.user});
+
+                                });
+                                break;
+                            case "count":
+                                mongodb.PetitionModel.find({$and:[{'created_at':{"$gte":(new Date()).setDate(now.getDate()-limitDay)}},{"type":searchType}]}).sort({'count':-1,'created_at':-1}).skip(skipSize).limit(limitSize).exec(function(err, pageContents) {
+                                    if(err) {throw err;}
+                                    for(var i=0; i<pageContents.length; i++) {
+                                        pageContents[i].startDay =  pageContents[i].created_at.toISOString().substr(2,8);
+                                        var tmp = new Date(); tmp.setDate(pageContents[i].created_at.getDate() + limitDay);
+                                        pageContents[i].endDay = tmp.toISOString().substr(2,8);
+                                    }
+                                    var info = {startPage: startPage, endPage: endPage, limitPage: limitPage, word:word, active: page, sort: sortType, type: type, pagination: pageNum, no: num, deadlineFlag: deadlineFlag };
+                                    
+                                    res.render('list', { title:"list", info: info, contents: pageContents, login:req.session.user});
+                                });
+                                break;
+                        }
+                    }     
+                });   
+            } else {
+                mongodb.PetitionModel.count({$and:[{'created_at':{"$lt":(new Date()).setDate(now.getDate()-limitDay)}},{"type":searchType}]},function(err, max){
+                    if(err) {throw err;}
+                    
+                    var pageNum = Math.ceil(max/limitSize);
+                    var num = max-((page - 1)*limitSize); 
+                    var startPage = (Math.floor((page-1)/limitPage)*limitPage)+1;
+                    var endPage = startPage + limitPage - 1;
+                    if(endPage > pageNum) { endPage = pageNum; }
+       
+                    if((page > pageNum || page < 1 ) && max != 0) {
+                        console.log("잘못된 페이지");
+                        res.send('<script type="text/javascript">alert("잘못된 페이지입니다.");window.location.href = "/petition/list";</script>');
+                    } else if(max == 0) {
+                        console.log("list가 없다"); 
+                        var info = { startPage: 1, endPage: 1,  limitPage: limitPage, word:word, active: 1, sort: sortType, type: type, pagination: 1, no: 0, deadlineFlag: deadlineFlag };
+                        
+                        res.render('list', { title:"list", info: info, contents: [], login:req.session.user});
+                    } else { 
+                        switch(sortType) {
+                            case "created_at":
+                                mongodb.PetitionModel.find({$and:[{'created_at':{"$lt":(new Date()).setDate(now.getDate()-limitDay)}},{"type":searchType}]}).sort({'created_at':-1}).skip(skipSize).limit(limitSize).exec(function(err, pageContents) {
+                                    if(err) {throw err;}
+                                    for(var i=0; i<pageContents.length; i++) {
+                                        pageContents[i].startDay =  pageContents[i].created_at.toISOString().substr(2,8);
+                                        var tmp = new Date(); tmp.setDate(pageContents[i].created_at.getDate() + limitDay);
+                                        pageContents[i].endDay = tmp.toISOString().substr(2,8);
+                                    }
+                                    var info = {startPage: startPage, endPage: endPage, limitPage: limitPage, word:word, active: page, sort: sortType, type: type, pagination: pageNum, no: num, deadlineFlag: deadlineFlag };
+                                   
+                                    res.render('list', { title:"list", info: info, contents: pageContents, login:req.session.user});
+                                });
+                                break;
+                            case "count":
+                                mongodb.PetitionModel.find({$and:[{'created_at':{"$lt":(new Date()).setDate(now.getDate()-limitDay)}},{"type":searchType}]}).sort({'count':-1,'created_at':-1}).skip(skipSize).limit(limitSize).exec(function(err, pageContents) {
                                     if(err) {throw err;}
                                     for(var i=0; i<pageContents.length; i++) {
                                         pageContents[i].startDay =  pageContents[i].created_at.toISOString().substr(2,8);
@@ -1434,15 +516,12 @@ router.get('/reply', function(req, res) {
     reply();
    
     async function reply() {
-        
-        var fs = require('fs');
-        var files = fs.readdirSync("public/petition/uploads"); // 디렉토리를 읽어온다 
        
         var filenames = [];
         var contents = [];
         var count = 0;
         
-        for(var i = 0; i < files.length; i++){
+        /*for(var i = 0; i < files.length; i++){
             var id = files[i].split('.')[0];
             var ext = files[i].split('.')[1];
             if (ext === 'mp4'){
@@ -1454,7 +533,7 @@ router.get('/reply', function(req, res) {
                     count = count + 1;
                 });
             }
-        }
+        }*/
         
         var page = req.param('page');
         if(page == null) {page = 1;}
@@ -1507,22 +586,9 @@ router.get('/reply_post', function(req, res) {
 });
 
 
-
-var multer  = require('multer');
-var _storage = multer.diskStorage({
-    destination: function (req, file, callback) {
-        callback(null, 'public/petition/uploads/');
-    },
-    filename: function(req, file, callback) {
-        callback(null, req.param('id')+'.'+file.mimetype.split('/')[1]);
-    }
-});
-var upload = multer({ storage: _storage});
-
-router.post('/reply_post', upload.single("inputFile"), function(req, res) {
+router.post('/reply_post', function(req, res) {
     console.log('/petition/reply_post post 패스 요청됨.');
     
-    console.log(req.file);
     res.redirect('/petition/reply');
 });
 
