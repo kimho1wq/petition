@@ -1,6 +1,20 @@
 <!DOCTYPE html>
 <html lang="en">
     <head>
+        <style media = "all and (min-width: 769px)">
+            .title { font-size: 1.8rem; margin:2rem 1rem 0;}
+            .title_center{ text-align:center; font-size: 2.1rem; margin:2rem 1rem 0;}
+            .card-header h4{font-size: 1.4rem;}
+            .card-header h5{font-size: 1.2rem;}
+            
+        </style>
+        <style media = "all and (max-width: 768px)">
+            .title { font-size: 1.5rem; margin:2rem 1rem 0;}
+            .title_center{ text-align:center; font-size: 1.8rem; margin:2rem 1rem 0;}
+            .card-header h4{font-size: 1.2rem;}
+            .card-header h5{font-size: 0.9rem;}
+            
+        </style>
         <% include ./head.html %>
         <title>Siri-b Petition</title>
     </head>
@@ -12,14 +26,15 @@
         <% include ./header.html %>
         
         <div class="container" style="max-width: 70rem;">
+           <br>
+            <p class="title_center"><span style="color: #003c70;"> &laquo; </span><strong>청원 답변하기</strong></p>
             <br>
-            <p align="center"><strong class="text-dark" style="font-size: 2.2rem"><span style="color: #003c70">&laquo;</span> 청원 답변하기</strong> </p>
-            <br>
-              
+            
             <div class="container border-secondary mb-4" style="max-width: 67rem;">
-                <div class="card-header" style=" padding: 2.4rem;"><h4>학생청원 홈페이지 운영 원칙</h4>
+                <div class="card-header" style=" padding: 2.4rem;">
+                    <h4>학생청원 홈페이지 운영 원칙</h4>
                     <br>
-                    <h5 class="text-muted">  ·  학생청원은 사상과 표현의 다양성을 존중합니다. 동시에 타인의 권리를 침해 하거나 명예를 훼손하는 내용은 제한합니다. 방송통신심 의위원회의 '정보통신에 관한 심의 규정', 한국인터넷자율정책기구의 '정책규정' 등을 기반으로 문제 게시물은 삭제될 수 있습니다. 자극적이고 혐오스러운 내용, 비속어, 폭력적 내용, 특정 대상을 비하하거나 차별을 조장하는 내용, 개인정보 유출을 비롯해 타인의 권리를 침해하는 내용, 반복되는 내용 등은 제재될 수 있습니다.</h5>
+                    <h5 class="text-muted">  ·  학생청원은 사상과 표현의 다양성을 존중합니다. 동시에 타인의 권리를 침해하거나 명예를 훼손하는 내용은 제한합니다. 방송통신 심의위원회의 '정보통신에 관한 심의 규정', 한국인터넷자율정책기구의 '정책규정' 등을 기반으로 문제 게시물은 삭제될 수 있습니다. 자극적이고 혐오스러운 내용, 비속어, 폭력적 내용, 특정 대상을 비하하거나 차별을 조장하는 내용, 개인정보 유출을 비롯해 타인의 권리를 침해하는 내용, 반복되는 내용 등은 제재될 수 있습니다.</h5>
                     <h5 class="text-muted">  ·  청원기간은 <strong class="text-primary">30일</strong> 입니다.</h5>
                     <h5 class="text-muted">  ·  한번 작성된 청원은 <strong class="text-primary">수정 및 삭제가 불가능합니다.</strong>  최초 청원취지와 다른내용으로 변경되는 것을 방지하여 청원참여자의 의견을 보호하기 위한 조치이니 신중하게 작성하여 주시기 바랍니다.</h5>
                 </div>
@@ -27,7 +42,7 @@
             </div>
             
             <div class="container border-light mb-5" style="max-width: 65rem;">
-                <p><strong class="text-dark" style="font-size: 1.8rem"><span style="color: #003c70"> ● </span>청원 작성하기</strong></p>
+                <p class="title"><span style="color: #003c70;"> &laquo; </span><strong>청원 작성하기</strong></p>
             </div>      
         
             <div class="container col-lg-9 col-md-12" style="max-width: 60rem;">

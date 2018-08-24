@@ -101,7 +101,7 @@ router.post('/signup', function(req, res, next) {
                         console.error("Error writing document: ", error);
                     });
                     
-                    pool.getConnection(function(err, conn) {
+                    /*pool.getConnection(function(err, conn) {
                         if(err) {
                             if(conn) conn.release();
                             return;
@@ -118,7 +118,7 @@ router.post('/signup', function(req, res, next) {
                                 return;
                             }
                         })
-                    })
+                    })*/
                         
                     if(!user.emailVerified){
 						user.sendEmailVerification().then(function() {

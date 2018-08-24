@@ -1,9 +1,13 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <style>
-            
-        
+        <style media = "all and (min-width: 769px)">
+            .title { font-size: 1.8rem; margin:2rem 1rem 0;}
+            .title_center{ text-align:center; font-size: 2.1rem; margin:2rem 1rem 0;}
+        </style>
+        <style media = "all and (max-width: 768px)">
+            .title { font-size: 1.5rem; margin:2rem 1rem 0;}
+            .title_center{ text-align:center; font-size: 1.8rem; margin:2rem 1rem 0;}
         </style>
         <% include ./head.html %>
         <title>Siri-b Petition</title>
@@ -18,50 +22,10 @@
         <div class="container" style="max-width: 70rem;">
             <br>
             <div class="container border-light mb-5" style="max-width: 70rem;">
-                <p><strong class="text-dark" style="font-size: 1.8rem"><span style="color: #003c70"> ● </span>답변된 청원</strong></p>
+                 <p class="title"><span style="color: #003c70;"> ● </span><strong>답변된 청원</strong></p>
             </div>  
-           
-    
-            <%if(contents.length > 0) {%>
-                <%for(var i = 0; i < contents.length; i++) {%>
-                    <br><hr><br>
-                    <div class="container" style="max-width: 75rem;">
-                        <button style=" background-color: #003c70; border: 0.15rem solid #003c70" class="btn btn-primary my-5 my-sm-0" type="submit"><h5>답변청원　<%=(i+1)%>호</h5></button>
-                    </div>  
-                    <div class="container" style="max-width: 75rem;">      
-                        <div style="display: inline-block;">
-                            <video src="uploads/<%=filenames[i]%>" width="500px" height="350px" controls></video>
-                        </div>
-                        <div style="display: inline-block; max-width: 37rem; margin-left: 1.8rem">
-                            <h5 style="margin-left: 0.6rem; font-size:1.6rem; color: #003c70;"><%=contents[i].title%></h5>
-                            <br>
-                            <ul style="list-style: none; ">
-                                <li style="display: inline-block; margin: 0 0.6rem; text-align: center;" >
-                                    <img src="img/clock.jpg" width="65em" height="65em">
-                                    <p style="font-size:1.2rem; color: #003c70; margin: 0 0.3rem; font-weight: bold;">청원시작</p>
-                                    <p style="font-size:1.1rem; color: #003c70; margin: 0 0.3rem;">[ <span style="font-weight: bold;"><%=contents[i].startDay%></span> ]</p>
-                                </li>
-                                <li style="display: inline-block; margin: 0px 0.6rem; text-align: center;" >
-                                    <img src="img/clock.jpg" width="65em" height="65em">
-                                    <p style="font-size:1.2rem; color: #003c70; margin: 0 0.3rem; font-weight: bold;">청원종료</p>
-                                    <p style="font-size:1.1rem; color: #003c70; margin: 0 0.3rem;">[ <span style="font-weight: bold;"><%=contents[i].endDay%></span> ]</p>
-                                </li>
-                                <li style="display: inline-block; margin: 0px 0.6rem; text-align: center;">
-                                    <img src="img/clock.jpg" width="65em" height="65em">
-                                    <p style="font-size:1.2rem; color: #003c70; margin: 0 0.3rem; font-weight: bold;">참여인원</p>
-                                    <p style="font-size:1.1rem; color: #003c70; margin: 0 0.3rem;">[ <span style="font-weight: bold;"><%=contents[i].count%>명</span> ]</p>
-                                </li>
-                            </ul>
-                            <br><br>
-                        </div>
-                    </div>
-                <%}%>  
-            <%} else {%>
-                <br><hr><br>
-                <div class="container" style="max-width: 65rem;">
-                    <p align="center"><strong class="text-dark" style="font-size: 1.9rem">답변된 청원이 없습니다.</strong> </p>
-                </div>
-            <%}%>
+        
+            <p align="center"><strong class="text-dark">답변된 청원이 없습니다.</strong></p>
             <br><br><br>
             
             <div class="container border-light mb-5" style="max-width: 21rem;">
