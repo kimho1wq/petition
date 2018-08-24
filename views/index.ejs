@@ -2,28 +2,15 @@
 <html>
     <head>
         <style media = "all and (min-width: 769px)">
-            .card-content{
-                margin-bottom:0.4rem;background:no-repeat center center;background-color:#ffffff;background-attachment:scroll;position:relative;-webkit-background-size:cover;-moz-background-size:cover;-o-background-size:cover;background-size:cover;
-                background-image: url('img/contentImage.jpg');
-            }
-            .card-header{
-                font-size: 1rem; margin-left:1.5rem;
-            }
-            .title {
-                font-size: 1.8rem; margin-left:1rem;
-            }
-            
-            .numbering {
-                font-size: 1.4rem; padding: 0 1rem;
-            }
-            .card-title {
-                 font-size: 1.5rem;
-            }
-             .card-text { font-size: 1rem; font-weight: bold; }
-             .card-mtext { display:none; }
-            .card-subtext{
-                font-size: 1rem; margin : 0.25rem 0;
-            }
+            .card-content{margin-bottom:0.4rem;background:no-repeat center center;background-color:#ffffff;background-attachment:scroll;position:relative;-webkit-background-size:cover;-moz-background-size:cover;-o-background-size:cover;background-size:cover;
+                background-image: url('img/contentImage.jpg');}
+            .card-header{font-size: 1rem; margin-left:1.5rem;}
+            .title { font-size: 1.8rem; margin-left:1rem;}
+            .numbering {font-size: 1.4rem; padding: 0 1rem;}
+            .card-title {font-size: 1.5rem;}
+            .card-text { font-size: 1rem; font-weight: bold; }
+            .card-mtext { display:none; }
+            .card-subtext{font-size: 1rem; margin : 0.25rem 0;}
             .card-button{margin: 0; text-align: right}
             .post-button{margin: 1rem; text-align: left}
             .table-text{font-size: 1rem; padding: 0.9rem 0.28rem;}
@@ -31,37 +18,27 @@
             .info-content{text-align:left;}
         </style>
         <style media = "all and (max-width: 768px)">
-            .card-content{
-                margin-bottom:0.4rem;background:no-repeat center center;background-color:#ffffff;background-attachment:scroll;position:relative;-webkit-background-size:cover;-moz-background-size:cover;-o-background-size:cover;background-size:cover;
-                background-image: url('img/mcontentImage.jpg');
-            }
-            .card-header{
-                font-size: 0.8rem;
-            }
-            .title {
-                font-size: 1.5rem; margin-left:0.2rem;
-            }
-            .numbering {
-                font-size: 0.9rem; padding: 0 0.7rem;
-            }
+            .card-content{ margin-bottom:0.4rem;background:no-repeat center center;background-color:#ffffff;background-attachment:scroll;position:relative;-webkit-background-size:cover;-moz-background-size:cover;-o-background-size:cover;background-size:cover;
+                background-image: url('img/mcontentImage.jpg');}
+            .card-header{font-size: 0.8rem;}
+            .title {font-size: 1.5rem; margin-left:0.2rem;}
+            .info-content p{text-align:center; margin-right:1.2rem; font-size:1.5rem;}
+            .info-content h5{text-align:center; font-size:1.1rem;}
+            .numbering { font-size: 0.9rem; padding: 0 0.7rem;}
             .card-title {font-size: 1.3rem;}
             .card-text { display:none;}
             .card-mtext { font-size: 1rem; font-weight: bold;}
-            .card-subtext{
-                font-size: 0.8rem; margin : 0.1rem 0;
-            }
-             .card-button{margin: 1rem 0 0 0; text-align: center}
-             .post-button{margin: 1rem; text-align: center}
+            .card-subtext{font-size: 0.8rem; margin : 0.1rem 0;}
+            .card-button{margin: 1rem 0 0 0; text-align: center}
+            .post-button{margin: 1rem; text-align: center}
             thead{display:none;}
             .table-text{display:none}
-            .table-mtext{text-align: left; font-size: 1.1rem; margin: 0; padding:0.5rem;  border-top: 0.01rem solid #000000;  }
+            .table-mtext{text-align: left; font-size: 1.05rem; margin: 0; padding:0.5rem;  border-top: 0.1rem solid #003c70;  }
             .table-mtext a { text-decoration:none;}
             .table-mtext a:hover {  text-decoration:none;}
             .table-mtext a:active {  text-decoration:none;}
-            .info-content p{text-align:center; margin-right:1.2rem; font-size:1.5rem;}
-            .info-content h5{text-align:center; font-size:1.2rem;}
-            .alert-content h3{font-size:1.5rem;}
-            .alert-content h5{font-size:1.2rem;}
+            .alert-content h3{font-size:1.3rem;}
+            .alert-content h5{font-size:1.0rem;}
         </style>
         <% include ./head.html %>
         <title>Siri-b Petition</title>
@@ -159,14 +136,26 @@
                                             <td class="table-text" style="text-align: left;"><strong class="text-dark"><a href="/petition/content?id=<%=item._id%>"><%=txt%></a></strong></td>
                                         
                                             <div class="table-mtext">
-                                                <p style="margin:0.7rem 0"><%=item.startDay%> ~ <%=item.endDay%></p><p style="font-size: 1.25rem; margin:0.7rem 0"><strong class="text-dark"><a href="/petition/content?id=<%=item._id%>"><%=txt%></a></strong></p><p style="margin:0.7rem 0"><strong class="text-primary"><%=item.type%></strong>, <strong class="text-primary"><%=item.count%>명</strong></p>
+                                                <p style="display: inline-block; width:49%; margin:0.7rem 0;"><span style="background-color:#003c70; color: #ffffff">　답변대기　</span></p>
+                                                <p style="display: inline-block; text-align:right; width:49%; margin:0.4rem 0;"><strong class="text-primary"><%=item.type%></strong></p>
+                                    
+                                                <p style="font-size: 1.2rem; margin:0.7rem 0"><strong class="text-dark"><a href="/petition/content?id=<%=item._id%>"><%=txt%></a></strong></p>
+                                                
+                                                <p style="display: inline-block; width:49%; margin:0.1rem 0; "><%=item.startDay%> ~ <%=item.endDay%></p>
+                                                <p style="display: inline-block; text-align:right; width:49%; margin:0.2rem 0 0.5rem;"><strong class="text-primary"><%=item.count%>명</strong></p> 
                                             </div>
                                         
                                         <%} else {%>
                                             <td class="table-text" style="text-align: left;"><strong class="text-dark"><a href="/petition/content?id=<%=item._id%>"><%=item.title%></a></strong></td>
                                         
                                             <div class="table-mtext">
-                                                <p style="margin:0.7rem 0" class="text-muted"><%=item.startDay%> ~ <%=item.endDay%></p><p style="font-size: 1.25rem; margin:0.7rem 0"><strong class="text-dark"><a href="/petition/content?id=<%=item._id%>"><%=item.title%></a></strong></p><p style="margin:0.7rem 0"><strong class="text-primary"><%=item.type%></strong>, <strong class="text-primary"><%=item.count%>명</strong></p>
+                                                <p style="display: inline-block; width:49%; margin:0.7rem 0;"><span style="background-color:#003c70; color: #ffffff">　답변대기　</span></p>
+                                                <p style="display: inline-block; text-align:right; width:49%; margin:0.4rem 0;"><strong class="text-primary"><%=item.type%></strong></p>
+                                    
+                                                <p style="font-size: 1.2rem; margin:0.7rem 0"><strong class="text-dark"><a href="/petition/content?id=<%=item._id%>"><%=item.title%></a></strong></p>
+                                                
+                                                <p style="display: inline-block; width:49%; margin:0.1rem 0; "><%=item.startDay%> ~ <%=item.endDay%></p>
+                                                <p style="display: inline-block; text-align:right; width:49%; margin:0.2rem 0 0.5rem;"><strong class="text-primary"><%=item.count%>명</strong></p>
                                             </div>
                                         <%}%>
                                         <td class="table-text"><strong class="text-dark"><%=item.nickname%></strong></td>
