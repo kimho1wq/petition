@@ -74,7 +74,7 @@
                     <div class="container" style="max-width: 70rem;">
                         <hr><br>
                         <div class="re_vedio" style="text-align:center;">  
-                            <iframe src="<%=content.answer_video%>" frameborder="0" allow="encrypted-media" allowfullscreen></iframe>        
+                            <iframe src="<%=answer.video%>" frameborder="0" allow="encrypted-media" allowfullscreen></iframe>        
                         </div>
                         <br>
                     </div>
@@ -98,7 +98,7 @@
                         <div class="card-header" style="padding: 1.2rem;">
                             <p class="title"><span style="color: #003c70;"> ● </span><strong>답변원고</strong></p>
                             <p class="answer"><strong>
-                                <%var answer_lines = content.answer_contents.split("\n");%>
+                                <%var answer_lines = answer.contents.split("\n");%>
                                 <%lines.forEach(function(item) {%>
                                     <%=item%><br/>
                                 <%})%>

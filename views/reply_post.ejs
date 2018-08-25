@@ -82,14 +82,23 @@
                         <h6 style="display: inline-block; width: 30%;"><strong class="text-primary"><%=content.endDay%></strong></h6>
                     </div>
                     <br>
-                    
+                    <div class="form-group" style="width: 80%;">
+                        <h5>이미 작성된 답변 선택</h5>
+                        <select class="form-control" name="answer_list_select" id="answer_list_select" onchange="answer_select()">
+                            <option value="없음">해당사항 없음</option>
+                            <%if(answer_list){%>
+                            <%answer_list.forEach(function(answer){%>
+                            <option value="<%=answer.answer%>"><%=answer.title%></option>
+                            <%})}%>
+                        </select>
+                    </div>
                     <div class="form-group" style="width: 80%;">
                         <h5>&rarr; 답변 동영상 링크</h5>
-                        <input type="text" class="form-control" name="link">
+                        <input type="text" class="form-control" name="link" id="link">
                     </div>
                     <div class="form-group">
                         <h5>답변 내용</h5>
-                        <textarea class="form-control" name="contents" rows="15"></textarea>
+                        <textarea class="form-control" name="content" rows="15" id="content"></textarea>
                     </div>
                     <p align="right"><button type="submit" class="btn btn-primary" style="margin-right: 20px;background-color: #003c70; border: 2px solid #003c70"><h5>　SUBMIT　</h5></button></p>
                 </form> 
@@ -104,5 +113,26 @@
         <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
         <!-- Custom scripts for this template -->
         <script src="js/clean-blog.min.js"></script>
+        <script>
+            function answer_select(){
+                var langSelect = document.getElementById("answer_list_select");
+     
+                // select element에서 선택된 option의 value가 저장된다.
+                var selectValue = langSelect.options[langSelect.selectedIndex].value;
+                if(selectValue != "없음"){
+                    document.getElementById('link').value = '이미 작성된 답변 사용';
+                    document.getElementById('content').value = '이미 작성된 답변 사용';
+                    
+                    document.getElementById('link').disabled = true ;
+                    document.getElementById('content').disabled = true ;
+                }else{
+                    document.getElementById('link').value = '';
+                    document.getElementById('content').value = '';
+                    
+                    document.getElementById('link').disabled = false ;
+                    document.getElementById('content').disabled = false ;
+                }
+            }
+        </script>    
     </body>
 </html>

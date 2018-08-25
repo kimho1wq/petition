@@ -26,16 +26,30 @@ mongodb.init = function() {
 };
 
 function createSchema() {
+    try{
+        var AnswerSchema = require('./petition_ans_schema').createSchema(mongoose);
+        var AnswerModel = mongoose.model('answers', AnswerSchema);
+        
+        mongodb['AnswerSchema'] = AnswerSchema;
+        mongodb['AnswerModel'] = AnswerModel;
+    }
+    catch(exception){
+        console.log("mongodb answer init 실패")
+    }
+
+    try{
+        var PetitionSchema = require('./petition_schema').createSchema(mongoose);    
+        var PetitionModel = mongoose.model('users', PetitionSchema); 
+        
+        mongodb['PetitionSchema'] = PetitionSchema;
+        mongodb['PetitionModel'] = PetitionModel;
     
-    var PetitionSchema = require('./petition_schema').createSchema(mongoose);
-    
-    var PetitionModel = mongoose.model('users', PetitionSchema);
-    
-    mongodb['PetitionSchema'] = PetitionSchema;
-    mongodb['PetitionModel'] = PetitionModel;
-    
-    console.log('mongodb init() 완료');
+        console.log('mongodb init() 완료');
+
+    }
+    catch(exception){
+        console.log("mongodb petition init 실패")
+    }
 
 }
-
 module.exports = mongodb;
