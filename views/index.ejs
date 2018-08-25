@@ -54,12 +54,13 @@
         <% include ./header.html %>
 
         <div class="container" style="max-width: 70rem;">
+            
             <div class="info-content">
                 <p class="title"><span style="color: #003c70;"> ● </span><strong>최다 추천 청원</strong></p>
             </div>      
                 
             <%var contentCount=0;%>
-            <%for(var i = 0; i < contents.length; i++) {%>
+            <%for(var i=0; i < contents.length; i++) {%>
                 <%if(contentCount==2) break;%>
                 <%if( (contents[i].dayFlag == 1) && (contents[i].count > 0) ) {%>
                     <%contentCount++;%>
@@ -97,16 +98,17 @@
                     </div>
                     <br>
                 <%}%>    
-                <%if( (i==contents.length-1) && (contentCount==0) ) {%>
-                    <div class="container border-light mb-5" style="max-width: 65rem;">
-                        <p><strong class="text-dark" style="font-size: 2rem; margin-left: 3rem;"><span style="color: #003c70"> &#91; </span>최다 추천 청원이 없습니다.<span style="color: #003c70"> &#93; </span></strong></p>
-                    </div>
-                    <br><br>
-                <%}%>
             <%}%>      
+            <%if(contentCount==0) {%>
+                <div style="max-width: 70rem; text-align: center;">
+                    <hr>
+                    <h5> 추천 청원이 없습니다.</h5>
+                </div> 
+                <br><br>
+            <%}%>
             <br>
         
-            <div class="container border-light mb-5" style="max-width: 70rem;">
+            <div class="info-content">
                 <p class="title"><span style="color: #003c70;"> ● </span><strong>답변 대기 중인 청원</strong></p>
             </div>
           
@@ -166,12 +168,13 @@
                                        
                                     </tr>
                                 <%})%>
-                            <%} else {%>
-                                <tr><td><h6>답변 대기중인 청원이 없습니다.</h6></td></tr>
+                                <tr class="table-text"><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+                                <div class="table-mtext">
+                                </div>
+                            <%} else {%> 
+                                <tr><th colspan="6"><h5>　답변대기 청원이 없습니다.　</h5></th></tr>
                             <%}%>
-                            <tr class="table-text"><td></td><td></td><td></td><td></td><td></td><td></td></tr>
-                            <div class="table-mtext">
-                            </div>
+                            
                         </tbody>
                     </table> 
                    

@@ -33,7 +33,7 @@
     <h1 class="myhead-subtext" align="middle">학생청원 및 제안</h1>
 </div>
 
-<header class="masthead" style="background-image: url('img/uos.jpg')" id="uosimage">
+<header class="masthead" style="transition: 0.6s; background-image: url('img/uos.jpg')" id="uosimage">
     <div class="overlay"></div>
     <div class="container">
         <div class="row">
@@ -102,12 +102,11 @@
 </header>
                     
 <script type="text/javascript">
-    var interval=5000;
+    var interval=6000;
     var n=0;
     var imgs = new Array("img/uos.jpg","img/uos1.jpg","img/uos2.jpg");
     var mimgs = new Array("img/muos.jpg","img/muos1.jpg","img/muos2.jpg")
     window.onload = function(){
-       
         var mql = window.matchMedia("screen and (max-width: 768px)");
         if (mql.matches) {
              document.getElementById("uosimage").style.backgroundImage = "url("+mimgs[n]+")";

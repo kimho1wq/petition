@@ -6,14 +6,22 @@
             .title_center{ text-align:center; font-size: 2.1rem; margin:2rem 1rem 0;}
             .card-header h4{font-size: 1.4rem;}
             .card-header h5{font-size: 1.2rem;}
-            
+            .card-header h6{font-size: 0.9rem;}
+            .custom-control-label{font-weight:bold; font-size:1.3rem;}
+            #form-title{width: 80%;}
+            #form-title p{font-size:1rem;}
+            #mgroup{display: none;}
         </style>
         <style media = "all and (max-width: 768px)">
             .title { font-size: 1.5rem; margin:2rem 1rem 0;}
             .title_center{ text-align:center; font-size: 1.8rem; margin:2rem 1rem 0;}
             .card-header h4{font-size: 1.2rem;}
             .card-header h5{font-size: 0.9rem;}
-            
+            .card-header h6{font-size: 0.8rem;}
+            .custom-control-label{font-weight:bold; font-size:0.9rem;}
+            #form-title{width: 100%;}
+            #form-title p{font-size:0.8rem;}
+            #group{display:none;}
         </style>
         <% include ./head.html %>
         <title>Siri-b Petition</title>
@@ -42,72 +50,48 @@
             </div>
             
             <div class="container border-light mb-5" style="max-width: 65rem;">
-                <p class="title"><span style="color: #003c70;"> &laquo; </span><strong>청원 작성하기</strong></p>
+                <p class="title"><span style="color: #003c70;"> ● </span><strong>청원 답변하기</strong></p>
             </div>      
         
-            <div class="container col-lg-9 col-md-12" style="max-width: 60rem;">
-                <form action="/petition/reply_post" method="post" enctype="multipart/form-data">  
-                    <div class="form-group" style="max-width: 45rem;">
-                        <div class="custom-control custom-radio" style="display: inline-block; margin-left:30px;">
-                            <input type="radio" id="총학생회" name="customRadio" class="custom-control-input">
-                            <label class="custom-control-label" for="총학생회">총학생회</label>
-                        </div>
-                        <div class="custom-control custom-radio" style="display: inline-block; margin-left:70px;">
-                            <input type="radio" id="경영대학" name="customRadio" class="custom-control-input">
-                            <label class="custom-control-label" for="경영대학">경영대학</label>
-                        </div>
-                        <div class="custom-control custom-radio" style="display: inline-block; margin-left:30px;">
-                            <input type="radio" id="공과대학" name="customRadio" class="custom-control-input">
-                            <label class="custom-control-label" for="공과대학">공과대학</label>
-                        </div>
-                        <div class="custom-control custom-radio" style="display: inline-block; margin-left:70px;">
-                            <input type="radio" id="도시과학대학" name="customRadio" class="custom-control-input">
-                            <label class="custom-control-label" for="도시과학대학">도시과학대학</label>
-                        </div>
-                        <div class="custom-control custom-radio" style="display: inline-block; margin-left:30px;">
-                            <input type="radio" id="예술체육대학" name="customRadio" class="custom-control-input">
-                            <label class="custom-control-label" for="예술체육대학">예술체육대학</label>
-                        </div>
-                        <div class="custom-control custom-radio" style="display: inline-block; margin-left:30px;">
-                            <input type="radio" id="인문대학" name="customRadio" class="custom-control-input">
-                            <label class="custom-control-label" for="인문대학">인문대학</label>
-                        </div>
-                        <div class="custom-control custom-radio" style="display: inline-block; margin-left:30px;">
-                            <input type="radio" id="자연과학대학" name="customRadio" class="custom-control-input">
-                            <label class="custom-control-label" for="자연과학대학">자연과학대학</label>
-                        </div>
-                        <div class="custom-control custom-radio" style="display: inline-block; margin-left:30px;">
-                            <input type="radio" id="정경대학" name="customRadio" class="custom-control-input">
-                            <label class="custom-control-label" for="정경대학">정경대학</label>
-                        </div>
-                        <div class="custom-control custom-radio" style="display: inline-block; margin-left:30px;">
-                            <input type="radio" id="자유융합대학" name="customRadio" class="custom-control-input">
-                            <label class="custom-control-label" for="자유융합대학">자유융합대학</label>
-                        </div>
-                        <div class="custom-control custom-radio" style="display: inline-block; margin-left:30px;">
-                            <input type="radio" id="기타" name="customRadio" class="custom-control-input">
-                            <label class="custom-control-label" for="기타">기타</label>
-                        </div>
+            <div class="container col-lg-9 col-md-12" style="max-width: 65rem;">
+                <form class="card-header" action="/petition/reply_post" method="post" >
+                    <input type="hidden" name="id" value="<%=id%>">
+                    <div class="form-group" id="form-title">
+                        <h5>청원제목</h5>
+                        <p class="form-control" style="background-color: #dedede; border 0.1rem solid #efefef;"><%=content.title%></p>
                     </div>
-                    
-                    
                     <div class="form-group">
-                        <select class="custom-select" disable="">
-                            <option selected="">Open this select menu</option>
-                            <option value="1">One</option>
-                            <option value="2">Two</option>
-                            <option value="3">Three</option>
-                        </select>
+                        <h5>분류</h5>   
+                        <div class="custom-control custom-radio" style="margin: 1rem;">
+                            <input type="radio" id="<%=content.type%>" class="custom-control-input" checked="">
+                            <label class="custom-control-label" for="<%=content.type%>"><%=content.type%></label>
+                        </div>
                     </div>
                     
-                    
-                    
-                    <div class="input-group mb-3" style="max-width: 40rem;">
-                        <h4>&rarr; 답변 동영상</h4>
-                        <input type="hidden" name="id" value="<%=id%>">
+                    <div class="form-group" style="width: 65%; margin-left: 1.2rem; padding: 0.3 1rem; background-color: #dedede; border 0.2rem solid #ababab; text-align:center;" id="group">
+                        <h6 style="display: inline-block; width: 32%;">청원인원 : <strong class="text-primary"><%=content.count%>명</strong></h6>
+                        <h6 style="display: inline-block; width: 32%;">청원시작 : <strong class="text-primary"><%=content.startDay%></strong></h6>
+                        <h6 style="display: inline-block; width: 32%;">청원종료 : <strong class="text-primary"><%=content.endDay%></strong></h6>
                     </div>
+                    <div class="form-group" style="text-align:center; padding: 0.3 1rem; background-color: #dedede; border 0.2rem solid #ababab;" id="mgroup">
+                        <h6 style="display: inline-block; width: 30%;">청원인원</h6>
+                        <h6 style="display: inline-block; width: 30%;">청원시작</h6>
+                        <h6 style="display: inline-block; width: 30%;">청원종료</h6>
+                        <h6 style="display: inline-block; width: 30%;"><strong class="text-primary"><%=content.count%>명</strong></h6>
+                        <h6 style="display: inline-block; width: 30%;"><strong class="text-primary"><%=content.startDay%></strong></h6>
+                        <h6 style="display: inline-block; width: 30%;"><strong class="text-primary"><%=content.endDay%></strong></h6>
+                    </div>
+                    <br>
                     
-                    <p align="right"><button type="submit" class="btn btn-primary" style="margin-right: 1.2rem;background-color: #003c70; border: 0.15rem solid #003c70"><h5>　SUBMIT　</h5></button></p>
+                    <div class="form-group" style="width: 80%;">
+                        <h5>&rarr; 답변 동영상 링크</h5>
+                        <input type="text" class="form-control" name="link">
+                    </div>
+                    <div class="form-group">
+                        <h5>답변 내용</h5>
+                        <textarea class="form-control" name="contents" rows="15"></textarea>
+                    </div>
+                    <p align="right"><button type="submit" class="btn btn-primary" style="margin-right: 20px;background-color: #003c70; border: 2px solid #003c70"><h5>　SUBMIT　</h5></button></p>
                 </form> 
             </div>
         </div>

@@ -513,83 +513,143 @@ router.post('/comment', function(req, res){
 
 router.get('/reply', function(req, res) {
     console.log('/petition/reply get 패스 요청됨.'); 
-    reply();
-   
-    async function reply() {
-       
-        var filenames = [];
-        var contents = [];
-        var count = 0;
-        
-        /*for(var i = 0; i < files.length; i++){
-            var id = files[i].split('.')[0];
-            var ext = files[i].split('.')[1];
-            if (ext === 'mp4'){
-                await mongodb.PetitionModel.findOne({_id:id}, function(err, content){
-                    if(err) { throw err; }
-                        
-                    filenames[count] = files[i];
-                    contents[count] = content;
-                    count = count + 1;
-                });
-            }
-        }*/
-        
-        var page = req.param('page');
-        if(page == null) {page = 1;}
-        var limitDay = 10;
-        var limitSize = 5;
-        var limitPage = 5;
-        var now = new Date();
     
+    var page = req.param('page');
+    if(page == null) {page = 1;}
+    var limitDay = 10;
+    var limitSize = 5;
+    var limitPage = 5;
+    var now = new Date();
+    
+    mongodb.PetitionModel.count({answer_flag: true},function(err, max){
+        if(err) {throw err;}
+        var num = max-((page - 1)*limitSize); 
         var skipSize = (page-1)*limitSize;
-        var pageNum = Math.ceil(count/limitSize);
+        var pageNum = Math.ceil(max/limitSize);
         var startPage = (Math.floor((page-1)/limitPage)*limitPage)+1;
         var endPage = startPage + limitPage - 1;
         if(endPage > pageNum) { endPage = pageNum; }
-        if(skipSize + limitSize > count) { limitSize = count - skipSize; }
+        if(skipSize + limitSize > max) { limitSize = max - skipSize; }
 
-        if((page > pageNum || page < 1) && count != 0) {
+        if((page > pageNum || page < 1) && max != 0) {
             console.log("잘못된 페이지");
             res.send('<script type="text/javascript">alert("잘못된 페이지입니다.");window.location.href = "/petition/reply";</script>');
-                
-        } else if(count == 0) {
+        } else if(max == 0) {
             console.log("reply가 없다"); 
-            var info = { startPage: 1, endPage: 1, limitPage: limitPage, active: 1, pagination: 1 };
+            var info = { startPage: 1, endPage: 1, limitPage: limitPage, active: 1, no: 1, pagination: 1 };
                         
-            res.render('reply', { title:"reply", info: info, contents: [], filenames: [], login:req.session.user});
+            res.render('reply', { title:"reply", info: info, contents: [], login:req.session.user});
                 
         } else {
-            var pageContents = [];
-            for(var i=0; i<limitSize; i++){
-                pageContents[i] = contents[i+skipSize];
-            }
-            
-            for(var i=0; i<limitSize; i++) {
-                pageContents[i].startDay = pageContents[i].created_at.toISOString().substr(2,8);
-                var tmp = new Date(); tmp.setDate(pageContents[i].created_at.getDate() + limitDay);
-                pageContents[i].endDay = tmp.toISOString().substr(2,8);
-            }
-            
-            var info = { startPage: startPage, endPage: endPage, limitPage: limitPage, active: page,   pagination: pageNum };
-            res.render('reply', { title:"reply", info: info, contents:pageContents, filenames: filenames, login:req.session.user});
+            mongodb.PetitionModel.find({answer_flag:true}).sort({'updated_at':-1}).skip(skipSize).limit(limitSize).exec(function(err, contents) {
+                if(err) { throw err; }
+                for(var i=0; i<contents.length; i++) {
+                    contents[i].startDay =  contents[i].created_at.toISOString().substr(2,8);
+                    var tmp = new Date(); tmp.setDate(contents[i].created_at.getDate() + limitDay);
+                    contents[i].endDay = tmp.toISOString().substr(2,8);
+                    contents[i].answerDay = contents[i].updated_at.toISOString().substr(2,8);
+                }            
+                var info = { startPage: startPage, endPage: endPage, limitPage: limitPage, no: num, active: page,   pagination: pageNum };
+              
+                res.render('reply', { title:"reply", info: info, contents:contents, login:req.session.user});
+            });
         }
-    }
+    });
 });
 
 
 router.get('/reply_post', function(req, res) {
     console.log('/petition/reply_post get 패스 요청됨.');
+    var id = req.param('id');
+    var now = new Date();
+    var limitDay = 10;
     
-    var contentId = req.param('id');
-    res.render('reply_post', { title:"reply_post", id:contentId, login:req.session.user});
+    mongodb.PetitionModel.findOne({_id:id}, function(err, content){
+        if(err) {throw err;}
+        content.startDay = content.created_at.toISOString().substr(2,8);
+        var tmp = new Date();tmp.setDate(content.created_at.getDate() + limitDay);
+        content.endDay = tmp.toISOString().substr(2,8);
+        if(now < tmp) content.dayFlag = 1;
+        else content.dayFlag = 0;
+        
+        res.render('reply_post', { title:"reply_post", content:content, id:id, login:req.session.user});  
+    });
+    
 });
 
 
 router.post('/reply_post', function(req, res) {
     console.log('/petition/reply_post post 패스 요청됨.');
+
+    var id = req.body.id || req.query.id;
+    var contents = req.body.contents || req.query.contents;
+    var link = req.body.link || req.query.link;
+    var linkstr = link.substr(0,24);
+    var now = new Date();
     
-    res.redirect('/petition/reply');
+    var limitDay = 10;
+    var limitSize = 5;
+    var limitPage = 5;
+    
+    if(!link || !contents) {
+        res.send('<script type="text/javascript">alert("링크와 내용을 입력해야합니다.");</script>');
+    } else if(linkstr != "https://www.youtube.com/") {
+        res.send('<script type="text/javascript">alert("링크의 형식이 잘못되었습니다. [ https://www.youtube.com/ ]");</script>');
+    } else {
+        mongodb.PetitionModel.findOne({_id:id}, function(err, content){
+            if(err) {throw err;}
+            console.log(id+"찾음");
+            var linkstr1 = link.split('=');
+            var linkstr2 = link.substr(24,6);
+
+            if(linkstr1[0] == "https://www.youtube.com/watch?v") {
+                var strtmp = "https://www.youtube.com/embed/" + linkstr1[1];
+                console.log("strtmp : " + strtmp);
+                content.answer_video = strtmp;
+                content.answer_flag = true;
+                content.answer_contents = contents;   
+                content.updated_at = now;
+            } else if(linkstr2 == "embed/") {
+                console.log("link : " + link);
+                content.answer_video = link;
+                content.answer_flag = true;
+                content.answer_contents = contents;   
+                content.updated_at = now;
+            } else {
+                throw err;            
+            } 
+            
+            content.save(function(err){
+                mongodb.PetitionModel.count({answer_flag: true},function(err, max){
+                    if(err) {throw err;}
+                    var num = max; 
+                    var pageNum = Math.ceil(max/limitSize);
+                    var startPage = 1;
+                    var endPage = limitPage;
+                    if(endPage > pageNum) { endPage = pageNum; }
+       
+                    if(max == 0) {
+                        console.log("reply가 없다"); 
+                        var info = { startPage: 1, endPage: 1, limitPage: limitPage, active: 1, no: 1, pagination: 1}
+                        res.render('reply', { title:"reply", info: info, contents:[], login:req.session.user});
+                    } else {  
+                        mongodb.PetitionModel.find({answer_flag: true}).sort({'updated_at':-1}).limit(limitSize).exec(function(err, contents) {
+                            if(err) { throw err; }
+                            for(var i=0; i<contents.length; i++) {
+                                contents[i].startDay =  contents[i].created_at.toISOString().substr(2,8);
+                                var tmp = new Date(); tmp.setDate(contents[i].created_at.getDate() + limitDay);
+                                contents[i].endDay = tmp.toISOString().substr(2,8);
+                                contents[i].answerDay = contents[i].updated_at.toISOString().substr(2,8);
+                            }
+                            
+                            var info = { startPage: startPage, endPage: endPage, limitPage: limitPage, no: num, active: 1, pagination: pageNum  }
+                            res.render('reply', { title:"reply", info: info, contents:contents, login:req.session.user});
+                        });
+                    }   
+                });        
+             });
+        });
+    }      
 });
 
 

@@ -3,11 +3,23 @@
     <head>
         <style media = "all and (min-width: 769px)">
             .title { font-size: 1.8rem; margin:2rem 1rem 0;}
-            .title_center{ text-align:center; font-size: 2.1rem; margin:2rem 1rem 0;}
+            .title_center{text-align:center; font-size: 2.1rem; margin:2rem 1rem 0;}
+            .item_title {padding: 0 2rem; font-size: 1.4rem; font-weight: bold;}
+            .item_title a {text-decoration:none;}
+            .item_title a:hover{text-decoration:none;}    
+            .item_title a:active{ text-decoration:none; }
+            #reply-container p{font-weight: bold;}
+            #mreply-container{display:none;}
         </style>
         <style media = "all and (max-width: 768px)">
             .title { font-size: 1.5rem; margin:2rem 1rem 0;}
             .title_center{ text-align:center; font-size: 1.8rem; margin:2rem 1rem 0;}
+            .item_title {padding: 0 2rem; font-size: 1.2rem; font-weight: bold;}
+            .item_title a {text-decoration:none;}
+            .item_title a:hover{text-decoration:none;}    
+            .item_title a:active{ text-decoration:none; }
+            #reply-container{display:none;}
+            #mreply-container p{font-weight: bold;}
         </style>
         <% include ./head.html %>
         <title>Siri-b Petition</title>
@@ -20,14 +32,84 @@
         <% include ./header.html %>
 
         <div class="container" style="max-width: 70rem;">
-            <br>
             <div class="container border-light mb-5" style="max-width: 70rem;">
-                 <p class="title"><span style="color: #003c70;"> ● </span><strong>답변된 청원</strong></p>
-            </div>  
-        
-            <p align="center"><strong class="text-dark">답변된 청원이 없습니다.</strong></p>
-            <br><br><br>
-            
+                 <p class="title_center"><span style="color: #003c70;"> &laquo; </span><strong>답변된 청원</strong></p>
+            </div>   
+            <br>
+            <%if(contents.length>0){%>
+                <%var i = info.no + 1;%>
+                <%contents.forEach(function(item){%>
+                    <%i--;%>
+                    <div class="container" id="reply-container">
+                        <p style="margin-left: 2rem; width:60%;"><span style="background-color:#003c70; padding: 0.6rem 0; color: #ffffff">　청원답변 <%=i%>번　</span></p>
+                        <div style="display: inline-block; width:60%;">
+                            <p class="item_title"><a href="/petition/content?id=<%=item._id%>"><%=item.title%></a></p>
+                            <ol style="list-style:none; padding: 0 2rem 0 0">
+                                <li style="text-align: center; display: inline-block; width:22%;">
+                                    <img src="img/start.png" width="60px">
+                                    <p style="margin-bottom: 0.5rem;">청원시작</p>
+                                    <p style="margin-top: 0.5rem; color: #145caa;">[<%=item.startDay%>]</p> 
+                                </li>
+                                <li  style="text-align: center; display: inline-block; width:22%;">
+                                    <img src="img/end.png" width="60px">
+                                    <p style="margin-bottom: 0.5rem;">청원마감</p>
+                                    <p style="margin-top: 0.5rem; color: #0064CD;">[<%=item.endDay%>]</p>    
+                                </li>            
+                                <li style="text-align: center; display: inline-block; width:22%;">
+                                    <img src="img/parti.png" width="60px">
+                                    <p style="margin-bottom: 0.5rem;">참여인원</p>
+                                    <p style="margin-top: 0.5rem; color: #0A6ECD;">[<%=item.count%>] 명</p>    
+                                </li>            
+                                <li  style="text-align: center; display: inline-block; width:22%;">
+                                    <img src="img/answer.png" width="60px">
+                                    <p style="margin-bottom: 0.5rem;">답변일</p>
+                                    <p style="margin-top: 0.5rem; color: #1E82CD;">[<%=item.answerDay%>]</p>    
+                                </li>
+                            </ol>
+                        </div>
+                        <div style="display: inline-block; width:35%;">
+                            <iframe width="350px" height="280px" src="<%=item.answer_video%>" frameborder="0" allow="encrypted-media" allowfullscreen></iframe>        
+                        </div>
+                        <br><hr><br>
+                    </div> 
+                    <div class="container" id="mreply-container">
+                        <p style="text-align:center; margin-bottom: 3rem;"><span style="background-color:#003c70; padding: 0.6rem 0; color: #ffffff">　청원답변 <%=i%>번　</span></p>
+                        <p class="item_title" style="text-align: center;" ><a href="/petition/content?id=<%=item._id%>"><%=item.title%></a></p>
+                        <ol style="text-align: center; list-style:none; padding:0;">
+                            <li style="text-align: center; display: inline-block; width:20%;">
+                                <img src="img/start.png" width="40px">
+                                <p style="font-size:0.8rem; margin-bottom: 0.5rem;">청원시작</p>
+                                <p style="font-size:0.8rem; background-color: #efefef; margin-top: 0.5rem; color: #145caa;">[<%=item.startDay%>]</p> 
+                            </li>
+                                <li  style="text-align: center; display: inline-block; width:20%;">
+                                    <img src="img/end.png" width="40px">
+                                    <p style="font-size:0.8rem; margin-bottom: 0.5rem;">청원마감</p>
+                                    <p style="font-size:0.8rem; background-color: #efefef; margin-top: 0.5rem; color: #0064CD;">[<%=item.endDay%>]</p>    
+                                </li>            
+                                <li style="text-align: center; display: inline-block; width:20%;">
+                                    <img src="img/parti.png" width="40px">
+                                    <p style="font-size:0.8rem; margin-bottom: 0.5rem;">참여인원</p>
+                                    <p style="font-size:0.8rem; background-color: #efefef; margin-top: 0.5rem; color: #0A6ECD;">[<%=item.count%>] 명</p>    
+                                </li>            
+                                <li style="text-align: center; display: inline-block; width:20%;">
+                                    <img src="img/answer.png" width="40px">
+                                    <p style="font-size:0.8rem; margin-bottom: 0.5rem;">답변일</p>
+                                    <p style="font-size:0.8rem; background-color: #efefef; margin-top: 0.5rem; color: #1E82CD;">[<%=item.answerDay%>]</p>    
+                                </li>
+                            </ol>
+                            <div style="text-align: center;">
+                                <iframe width="300" height="200" src="<%=item.answer_video%>" frameborder="0" allow="encrypted-media" allowfullscreen></iframe>             
+                            </div>
+                            <br><hr><br>
+                        </div>
+                      
+                    </div>
+                    
+                <%})%>
+            <%} else {%>
+                <p align="center"><strong class="text-dark">답변된 청원이 없습니다.</strong></p>
+                <br><br><br>
+            <%}%>
             <div class="container border-light mb-5" style="max-width: 21rem;">
                 <ul class="pagination">
                     <%if(info.active==1) {%>

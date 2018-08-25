@@ -11,6 +11,9 @@ Schema.createSchema = function(mongoose) {
         count: {type:Number, default: 0},
         created_at: {type:Date, index:{unique:false}, 'default':Date.now},
         updated_at: {type:Date, index:{unique:false}, 'default':Date.now},
+        answer_flag: {type:Boolean, 'default':false},
+        answer_contents: {type:String, trim:true, 'default':''},
+        answer_video: {type:String, trim:true, 'default':''},
         comments: [{
             contents:{type:String, trim:true, 'default':''},
             writer:{type:String, 'default':''},
