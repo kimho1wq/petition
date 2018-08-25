@@ -15,6 +15,8 @@
             .title_center{ font-size: 1.8rem; margin:2rem 1rem 0;}
             .main-text{font-size: 1.1rem;}
             td{font-size:1.0rem;}
+            .re_vedio iframe{text-align:center; width: 700px; height: 500px;}
+            .answer {font-size: 1.2rem;}
         </style>
         <style media = "all and (max-width: 768px)">
             .deadline-text{font-size: 1.2rem;}
@@ -29,6 +31,8 @@
             .title_center{ text-align:center; font-size: 1.5rem; margin:2rem 1rem 0;}
             .main-text{font-size: 1.0rem;}
             td{font-size:0.8rem;}
+            .re_vedio iframe{ width: 300px; height: 200px;}
+             .answer {font-size: 1.0rem;}
         </style>
         <% include ./head.html %>
         <title>Siri-b Petition</title>
@@ -45,13 +49,15 @@
                 <br>
                 <div class="container border-light mb-5" style="max-width: 70rem;">
                     <div class="card-body">
-                        <%if(content.dayFlag==1) {%>
-                            <p align="center" class="text-muted"><strong class="deadline-text">&#91; 청원 진행중 &#93;</strong></p>
+                        <%if(content.dayFlag==1 && !content.answer_flag) {%>
+                            <p align="center" style="color: #003c70;"><strong class="deadline-text">&#91; 청원 진행중 &#93;</strong></p>
+                        <%} else if(content.dayFlag==0 && !content.answer_flag) {%>
+                            <p align="center" style="color: #003c70;"><strong class="deadline-text">&#91; 답변 대기 &#93;</strong></p>
                         <%} else {%>
-                            <p align="center" class="text-muted"><strong class="deadline-text">&#91; 청원 종료 &#93;</strong></p>
+                            <p align="center" style="color: #003c70;"><strong class="deadline-text">&#91; 청원 종료 &#93;</strong></p>
                         <%}%>
                         <p align="center"><strong class="title-text"><%=content.title%></strong></p>
-                        <p align="center" style="margin-bottom: 0;"><strong class="count-text">참여인원 : [<strong class="text-primary"><%=content.count%></strong>명]</strong></p>
+                        <p align="center" style="margin-bottom: 0;"><strong class="count-text">참여인원 : [ <strong class="text-primary"><%=content.count%></strong>명 ]</strong></p>
                     </div>
                 </div>
                 <div class="container border-secondary mb-5" id=info-box>
@@ -64,6 +70,15 @@
                     </div>
                 </div>
                 <br>
+                <%if(content.answer_flag) {%>
+                    <div class="container" style="max-width: 70rem;">
+                        <hr><br>
+                        <div class="re_vedio" style="text-align:center;">  
+                            <iframe src="<%=content.answer_video%>" frameborder="0" allow="encrypted-media" allowfullscreen></iframe>        
+                        </div>
+                        <br>
+                    </div>
+                <%}%>
                 
                 <div class="container border-light mb-5" style="max-width: 70rem;">
                     <hr>
@@ -73,23 +88,41 @@
                     <p class="main-text"><strong>
                         <%var lines = content.contents.split("\n");%>
                         <%lines.forEach(function(item) {%>
-                        <%=item%><br/><%})%>
+                            <%=item%><br/>
+                        <%})%>
                         </strong></p>
                 </div>
                 
-                <div class="navbar navbar-expand-lg">
-                            <div class="collapse navbar-collapse" id="navbarColor02">
-                                <ul class="mr-auto"></ul>
-                                    <form action="/petition/reply_post" method="get" class="form-inline my-2 my-lg-0" style="margin: 0 1.2rem">
-                                        <input type="hidden" name="id" value="<%=content._id%>">
-                                        <button class="btn btn-secondary my-2 my-sm-0" type="submit"><h6>　답변하기　</h6></button>
-                                    </form>
-                                    <form action="/petition/delete" method="get" class="form-inline my-2 my-lg-0" style="margin: 0 1.2rem">
-                                        <input type="hidden" name="id" value="<%=content._id%>">
-                                        <button class="btn  my-2 my-sm-0" type="submit"><h6>　글 삭제하기　</h6></button>
-                                    </form>
-                            </div>
-                </div>
+                <%if(content.answer_flag) {%>
+                    <div class="container border-secondary mb-5">
+                        <div class="card-header" style="padding: 1.2rem;">
+                            <p class="title"><span style="color: #003c70;"> ● </span><strong>답변원고</strong></p>
+                            <p class="answer"><strong>
+                                <%var answer_lines = content.answer_contents.split("\n");%>
+                                <%lines.forEach(function(item) {%>
+                                    <%=item%><br/>
+                                <%})%>
+                            </strong></p>
+                        </div>
+                    </div>
+                <%}%>
+                
+                
+                <%if(!content.answer_flag) {%>
+                    <div class="navbar navbar-expand-lg">
+                        <div class="collapse navbar-collapse" id="navbarColor02">
+                            <ul class="mr-auto"></ul>
+                            <form action="/petition/reply_post" method="get" class="form-inline my-2 my-lg-0" style="margin: 0 1.2rem">
+                                <input type="hidden" name="id" value="<%=content._id%>">
+                                <button class="btn btn-secondary my-2 my-sm-0" type="submit"><h6>　답변하기　</h6></button>
+                            </form>
+                            <form action="/petition/delete" method="get" class="form-inline my-2 my-lg-0" style="margin: 0 1.2rem">
+                                <input type="hidden" name="id" value="<%=content._id%>">
+                                <button class="btn  my-2 my-sm-0" type="submit"><h6>　글 삭제하기　</h6></button>
+                            </form>
+                        </div>
+                    </div>
+                <%}%>
                 <%if(login) {%>
                     <%if(login.uid == "DYYuut6bTfNEkNLbMiFjyDIui1e2") {%>
                     <%}%> 
@@ -99,8 +132,9 @@
             <br><br>
             
             <div class="container" style="max-width: 65rem;">
-                <p class="title_center"><span style="color: #003c70;"> ● </span><strong>청원 동의</strong></p>
+                <p class="title_center"><span style="color: #003c70;"> ● </span><strong>청원 동의　[ <span style="color: #003c70;"><%=content.count%> ]</span> 명</strong></p>
                 <br>
+                <%if(!content.answer_flag) {%>
                 <div class="col-lg-20 col-md-12" style= "max-width: 65rem;">
                     <form action="/petition/comment" method="post">
                         <div id=submit-mdiv style="text-align:right;">
@@ -109,15 +143,18 @@
                         <div style="background-color: #f3f3f3; border: 0.15rem solid #dedede; padding: 1rem;">
                             <input type="hidden" name="id" value="<%=content._id%>">
                             <textarea style="display: inline-block;" required="" placeholder="동의합니다." class="form-control mr-sm-5" name="contents" id="submit-textarea">동의합니다.</textarea>
+                            
                             <div id=submit-div>
                                 <div style="float:right;">
                                     <button style="background-color: #003c70; border: 0.15rem solid #003c70" class="btn btn-primary" type="submit" id=submit-btn>SUBMIT</button>
                                 </div>
                             </div>
+                            
                         </div>
                     </form>
                 </div>
                 <br><br>
+                <%}%>
                 <div class="row">
                     <div class="col-lg-20 col-md-12" style= "max-width: 65rem;">
                         <table class="table table-hover">

@@ -6,8 +6,8 @@ router.get('/',function(req, res, next) {
     console.log('/petition get 패스 요청됨.');
     var now = new Date();
     var limitDay = 10;
-    
-    mongodb.PetitionModel.find({}).sort({'count':-1, 'created_at':-1}).exec(function(err,rawContents) {
+   
+    mongodb.PetitionModel.find({$and:[{answer_flag:false},{'created_at':{"$gte":(new Date()).setDate(now.getDate()-limitDay)}}]}).sort({'count':-1, 'created_at':-1}).exec(function(err,rawContents) {
         if(err) {throw err;}
         for(var i=0; i<rawContents.length; i++) {
             rawContents[i].startDay = rawContents[i].created_at.toISOString().substr(2,8);
@@ -18,7 +18,7 @@ router.get('/',function(req, res, next) {
             else rawContents[i].dayFlag = 0;
         }
         
-        mongodb.PetitionModel.find({'count': {$gte: 20}}).sort({'created_at':-1}).exec(function(err, listContents) {
+        mongodb.PetitionModel.find({$and:[{answer_flag:false},{'count':{$gte: 20}}]}).sort({'created_at':-1}).exec(function(err, listContents) {
             if(err) {throw err;}
             for(var i=0; i<listContents.length; i++) {
                 listContents[i].startDay = listContents[i].created_at.toISOString().substr(2,8);
@@ -56,7 +56,7 @@ router.get('/list',function(req, res) {
     switch (type) {
         case "All" : 
             if(deadlineFlag==1) {
-                mongodb.PetitionModel.count({'created_at' : {$gte: (new Date()).setDate(now.getDate()-limitDay)}},function(err, max){
+                mongodb.PetitionModel.count({$and:[{answer_flag:false},{'created_at' : {$gte: (new Date()).setDate(now.getDate()-limitDay)}}]},function(err, max){
                     if(err) {throw err;}
                     
                     var pageNum = Math.ceil(max/limitSize);
@@ -76,7 +76,7 @@ router.get('/list',function(req, res) {
                     } else { 
                         switch(sortType) {
                             case "created_at":
-                                mongodb.PetitionModel.find({"created_at" : {"$gte": (new Date()).setDate(now.getDate()-limitDay)}}).sort({'created_at':-1}).skip(skipSize).limit(limitSize).exec(function(err, pageContents) {
+                                mongodb.PetitionModel.find({$and:[{answer_flag:false},{'created_at' : {$gte: (new Date()).setDate(now.getDate()-limitDay)}}]}).sort({'created_at':-1}).skip(skipSize).limit(limitSize).exec(function(err, pageContents) {
                                     if(err) {throw err;}
                                     for(var i=0; i<pageContents.length; i++) {
                                         pageContents[i].startDay =  pageContents[i].created_at.toISOString().substr(2,8);
@@ -90,7 +90,7 @@ router.get('/list',function(req, res) {
                                 });
                                 break;
                             case "count":
-                                mongodb.PetitionModel.find({"created_at" : {"$gte": (new Date()).setDate(now.getDate()-limitDay)}}).sort({'count':-1,'created_at':-1}).skip(skipSize).limit(limitSize).exec(function(err, pageContents) {
+                                mongodb.PetitionModel.find({$and:[{answer_flag:false},{'created_at' : {$gte: (new Date()).setDate(now.getDate()-limitDay)}}]}).sort({'count':-1,'created_at':-1}).skip(skipSize).limit(limitSize).exec(function(err, pageContents) {
                                     if(err) {throw err;}
                                     for(var i=0; i<pageContents.length; i++) {
                                         pageContents[i].startDay =  pageContents[i].created_at.toISOString().substr(2,8);
@@ -106,7 +106,7 @@ router.get('/list',function(req, res) {
                     }     
                 });   
             } else {
-                mongodb.PetitionModel.count({'created_at' : {"$lt": (new Date()).setDate(now.getDate()-limitDay)}},function(err, max){
+                mongodb.PetitionModel.count({$and:[{answer_flag:false},{'created_at' : {$lt: (new Date()).setDate(now.getDate()-limitDay)}}]},function(err, max){
                     if(err) {throw err;}
                     
                     var pageNum = Math.ceil(max/limitSize);
@@ -126,7 +126,7 @@ router.get('/list',function(req, res) {
                     } else { 
                         switch(sortType) {
                             case "created_at":
-                                mongodb.PetitionModel.find({"created_at" : {"$lt": (new Date()).setDate(now.getDate()-limitDay)}}).sort({'created_at':-1}).skip(skipSize).limit(limitSize).exec(function(err, pageContents) {
+                                mongodb.PetitionModel.find( {$and:[{answer_flag:false},{'created_at' : {$lt: (new Date()).setDate(now.getDate()-limitDay)}}]}).sort({'created_at':-1}).skip(skipSize).limit(limitSize).exec(function(err, pageContents) {
                                     if(err) {throw err;}
                                     for(var i=0; i<pageContents.length; i++) {
                                         pageContents[i].startDay =  pageContents[i].created_at.toISOString().substr(2,8);
@@ -139,7 +139,7 @@ router.get('/list',function(req, res) {
                                 });
                                 break;
                             case "count":
-                                mongodb.PetitionModel.find({"created_at" : {"$lt": (new Date()).setDate(now.getDate()-limitDay)}}).sort({'count':-1,'created_at':-1}).skip(skipSize).limit(limitSize).exec(function(err, pageContents) {
+                                mongodb.PetitionModel.find( {$and:[{answer_flag:false},{'created_at' : {$lt: (new Date()).setDate(now.getDate()-limitDay)}}]}).sort({'count':-1,'created_at':-1}).skip(skipSize).limit(limitSize).exec(function(err, pageContents) {
                                     if(err) {throw err;}
                                     for(var i=0; i<pageContents.length; i++) {
                                         pageContents[i].startDay =  pageContents[i].created_at.toISOString().substr(2,8);
@@ -156,11 +156,11 @@ router.get('/list',function(req, res) {
                 });   
             }
             break;
-       
+            
         case "search" :
             var searchCondition = {$regex:word};
             if(deadlineFlag==1) {
-                mongodb.PetitionModel.count({$and:[{'created_at':{"$gte":(new Date()).setDate(now.getDate()-limitDay)}},{$or:[{title:searchCondition},{contents:searchCondition},     {nickname:searchCondition}]}]},function(err, max){
+                mongodb.PetitionModel.count({$and:[{answer_flag:false},{'created_at':{"$gte":(new Date()).setDate(now.getDate()-limitDay)}},{$or:[{title:searchCondition},{contents:searchCondition},{nickname:searchCondition}]}]},function(err, max){
                     if(err) {throw err;}
                     
                     var pageNum = Math.ceil(max/limitSize);
@@ -180,7 +180,7 @@ router.get('/list',function(req, res) {
                     } else { 
                         switch(sortType) {
                             case "created_at":
-                                mongodb.PetitionModel.find({$and:[{'created_at':{"$gte":(new Date()).setDate(now.getDate()-limitDay)}},{$or:[{title:searchCondition},{contents:searchCondition},     {nickname:searchCondition}]}]}).sort({'created_at':-1}).skip(skipSize).limit(limitSize).exec(function(err, pageContents) {
+                                mongodb.PetitionModel.find({$and:[{answer_flag:false},{'created_at':{"$gte":(new Date()).setDate(now.getDate()-limitDay)}},{$or:[{title:searchCondition},{contents:searchCondition},{nickname:searchCondition}]}]}).sort({'created_at':-1}).skip(skipSize).limit(limitSize).exec(function(err, pageContents) {
                                     if(err) {throw err;}
                                     for(var i=0; i<pageContents.length; i++) {
                                         pageContents[i].startDay =  pageContents[i].created_at.toISOString().substr(2,8);
@@ -194,7 +194,7 @@ router.get('/list',function(req, res) {
                                 });
                                 break;
                             case "count":
-                                mongodb.PetitionModel.find({$and:[{'created_at':{"$gte":(new Date()).setDate(now.getDate()-limitDay)}},{$or:[{title:searchCondition},{contents:searchCondition},     {nickname:searchCondition}]}]}).sort({'count':-1,'created_at':-1}).skip(skipSize).limit(limitSize).exec(function(err, pageContents) {
+                                mongodb.PetitionModel.find({$and:[{answer_flag:false},{'created_at':{"$gte":(new Date()).setDate(now.getDate()-limitDay)}},{$or:[{title:searchCondition},{contents:searchCondition},{nickname:searchCondition}]}]}).sort({'count':-1,'created_at':-1}).skip(skipSize).limit(limitSize).exec(function(err, pageContents) {
                                     if(err) {throw err;}
                                     for(var i=0; i<pageContents.length; i++) {
                                         pageContents[i].startDay =  pageContents[i].created_at.toISOString().substr(2,8);
@@ -210,7 +210,7 @@ router.get('/list',function(req, res) {
                     }     
                 });   
             } else {
-                mongodb.PetitionModel.count({$and:[{'created_at':{"$lt":(new Date()).setDate(now.getDate()-limitDay)}},{$or:[{title:searchCondition},{contents:searchCondition},     {nickname:searchCondition}]}]},function(err, max){
+                mongodb.PetitionModel.count({$and:[{answer_flag:false},{'created_at':{"$lt":(new Date()).setDate(now.getDate()-limitDay)}},{$or:[{title:searchCondition},{contents:searchCondition},{nickname:searchCondition}]}]},function(err, max){
                     if(err) {throw err;}
                     
                     var pageNum = Math.ceil(max/limitSize);
@@ -230,7 +230,7 @@ router.get('/list',function(req, res) {
                     } else { 
                         switch(sortType) {
                             case "created_at":
-                                mongodb.PetitionModel.find({$and:[{'created_at':{"$lt":(new Date()).setDate(now.getDate()-limitDay)}},{$or:[{title:searchCondition},{contents:searchCondition},     {nickname:searchCondition}]}]}).sort({'created_at':-1}).skip(skipSize).limit(limitSize).exec(function(err, pageContents) {
+                                mongodb.PetitionModel.find({$and:[{answer_flag:false},{'created_at':{"$lt":(new Date()).setDate(now.getDate()-limitDay)}},{$or:[{title:searchCondition},{contents:searchCondition},{nickname:searchCondition}]}]}).sort({'created_at':-1}).skip(skipSize).limit(limitSize).exec(function(err, pageContents) {
                                     if(err) {throw err;}
                                     for(var i=0; i<pageContents.length; i++) {
                                         pageContents[i].startDay =  pageContents[i].created_at.toISOString().substr(2,8);
@@ -243,7 +243,7 @@ router.get('/list',function(req, res) {
                                 });
                                 break;
                             case "count":
-                                mongodb.PetitionModel.find({$and:[{'created_at':{"$lt":(new Date()).setDate(now.getDate()-limitDay)}},{$or:[{title:searchCondition},{contents:searchCondition},     {nickname:searchCondition}]}]}).sort({'count':-1,'created_at':-1}).skip(skipSize).limit(limitSize).exec(function(err, pageContents) {
+                                mongodb.PetitionModel.find({$and:[{answer_flag:false},{'created_at':{"$lt":(new Date()).setDate(now.getDate()-limitDay)}},{$or:[{title:searchCondition},{contents:searchCondition},{nickname:searchCondition}]}]}).sort({'count':-1,'created_at':-1}).skip(skipSize).limit(limitSize).exec(function(err, pageContents) {
                                     if(err) {throw err;}
                                     for(var i=0; i<pageContents.length; i++) {
                                         pageContents[i].startDay =  pageContents[i].created_at.toISOString().substr(2,8);
@@ -260,12 +260,12 @@ router.get('/list',function(req, res) {
                 });   
             }
             break;
-       
+            
         default :
             var searchType = {$regex:type};
             if(deadlineFlag==1) {
                 console.log(type);
-                mongodb.PetitionModel.count({$and:[{'created_at':{"$gte":(new Date()).setDate(now.getDate()-limitDay)}},{"type":searchType}]},function(err, max){
+                mongodb.PetitionModel.count({$and:[{answer_flag:false},{'created_at':{"$gte":(new Date()).setDate(now.getDate()-limitDay)}},{"type":searchType}]},function(err, max){
                     if(err) {throw err;}
                     var pageNum = Math.ceil(max/limitSize);
                     var num = max-((page - 1)*limitSize); 
@@ -284,7 +284,7 @@ router.get('/list',function(req, res) {
                     } else { 
                         switch(sortType) {
                             case "created_at":
-                                mongodb.PetitionModel.find({$and:[{'created_at':{"$gte":(new Date()).setDate(now.getDate()-limitDay)}},{"type":searchType}]}).sort({'created_at':-1}).skip(skipSize).limit(limitSize).exec(function(err, pageContents) {
+                                mongodb.PetitionModel.find({$and:[{answer_flag:false},{'created_at':{"$gte":(new Date()).setDate(now.getDate()-limitDay)}},{"type":searchType}]}).sort({'created_at':-1}).skip(skipSize).limit(limitSize).exec(function(err, pageContents) {
                                     if(err) {throw err;}
                                     for(var i=0; i<pageContents.length; i++) {
                                         pageContents[i].startDay =  pageContents[i].created_at.toISOString().substr(2,8);
@@ -298,7 +298,7 @@ router.get('/list',function(req, res) {
                                 });
                                 break;
                             case "count":
-                                mongodb.PetitionModel.find({$and:[{'created_at':{"$gte":(new Date()).setDate(now.getDate()-limitDay)}},{"type":searchType}]}).sort({'count':-1,'created_at':-1}).skip(skipSize).limit(limitSize).exec(function(err, pageContents) {
+                                mongodb.PetitionModel.find({$and:[{answer_flag:false},{'created_at':{"$gte":(new Date()).setDate(now.getDate()-limitDay)}},{"type":searchType}]}).sort({'count':-1,'created_at':-1}).skip(skipSize).limit(limitSize).exec(function(err, pageContents) {
                                     if(err) {throw err;}
                                     for(var i=0; i<pageContents.length; i++) {
                                         pageContents[i].startDay =  pageContents[i].created_at.toISOString().substr(2,8);
@@ -312,9 +312,10 @@ router.get('/list',function(req, res) {
                                 break;
                         }
                     }     
-                });   
+                });
+                
             } else {
-                mongodb.PetitionModel.count({$and:[{'created_at':{"$lt":(new Date()).setDate(now.getDate()-limitDay)}},{"type":searchType}]},function(err, max){
+                mongodb.PetitionModel.count({$and:[{answer_flag:false},{'created_at':{"$lt":(new Date()).setDate(now.getDate()-limitDay)}},{"type":searchType}]},function(err, max){
                     if(err) {throw err;}
                     
                     var pageNum = Math.ceil(max/limitSize);
@@ -334,7 +335,7 @@ router.get('/list',function(req, res) {
                     } else { 
                         switch(sortType) {
                             case "created_at":
-                                mongodb.PetitionModel.find({$and:[{'created_at':{"$lt":(new Date()).setDate(now.getDate()-limitDay)}},{"type":searchType}]}).sort({'created_at':-1}).skip(skipSize).limit(limitSize).exec(function(err, pageContents) {
+                                mongodb.PetitionModel.find({$and:[{answer_flag:false},{'created_at':{"$lt":(new Date()).setDate(now.getDate()-limitDay)}},{"type":searchType}]}).sort({'created_at':-1}).skip(skipSize).limit(limitSize).exec(function(err, pageContents) {
                                     if(err) {throw err;}
                                     for(var i=0; i<pageContents.length; i++) {
                                         pageContents[i].startDay =  pageContents[i].created_at.toISOString().substr(2,8);
@@ -347,7 +348,7 @@ router.get('/list',function(req, res) {
                                 });
                                 break;
                             case "count":
-                                mongodb.PetitionModel.find({$and:[{'created_at':{"$lt":(new Date()).setDate(now.getDate()-limitDay)}},{"type":searchType}]}).sort({'count':-1,'created_at':-1}).skip(skipSize).limit(limitSize).exec(function(err, pageContents) {
+                                mongodb.PetitionModel.find({$and:[{answer_flag:false},{'created_at':{"$lt":(new Date()).setDate(now.getDate()-limitDay)}},{"type":searchType}]}).sort({'count':-1,'created_at':-1}).skip(skipSize).limit(limitSize).exec(function(err, pageContents) {
                                     if(err) {throw err;}
                                     for(var i=0; i<pageContents.length; i++) {
                                         pageContents[i].startDay =  pageContents[i].created_at.toISOString().substr(2,8);
@@ -366,7 +367,6 @@ router.get('/list',function(req, res) {
             break;
     }
 });
-
 
 
 router.get('/post',function(req, res, next) {

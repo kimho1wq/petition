@@ -5,6 +5,7 @@
             .card-content{margin-bottom:0.4rem;background:no-repeat center center;background-color:#ffffff;background-attachment:scroll;position:relative;-webkit-background-size:cover;-moz-background-size:cover;-o-background-size:cover;background-size:cover;
                 background-image: url('img/contentImage.jpg');}
             .card-header{font-size: 1rem; margin-left:1.5rem;}
+            #mbest-card{display:none;}
             .title { font-size: 1.8rem; margin-left:1rem;}
             .numbering {font-size: 1.4rem; padding: 0 1rem;}
             .card-title {font-size: 1.5rem;}
@@ -22,7 +23,8 @@
         <style media = "all and (max-width: 768px)">
             .card-content{ margin-bottom:0.4rem;background:no-repeat center center;background-color:#ffffff;background-attachment:scroll;position:relative;-webkit-background-size:cover;-moz-background-size:cover;-o-background-size:cover;background-size:cover;
                 background-image: url('img/mcontentImage.jpg');}
-            .card-header{font-size: 0.8rem;}
+            .card-header{font-size: 0.9rem;}
+            #best-card{display:none;}
             .title {font-size: 1.5rem; margin-left:0.2rem;}
             .info-content p{text-align:center; margin-right:1.2rem; font-size:1.5rem;}
             .info-content h5{text-align:center; font-size:1.1rem;}
@@ -68,8 +70,12 @@
                         <button onclick = "location.href = '/petition/content?id=<%=contents[i]._id%>'" type="button" class="btn" style="background-color: #003c70; color: #ffffff; padding :0.5rem;"><span class="numbering">　<%=contentCount%> 등　</span></button>
                     </div>
                     <div class="container card card-content border-secondary mb-5" style="max-width: 70rem;">
-                        <div class="card-header">
-                            분류 : <strong><%=contents[i].type%></strong>,　청원기간 : <strong><%=contents[i].startDay%> ~ <%=contents[i].endDay%></strong>
+                        <div class="card-header" id="best-card">
+                            분류 : <strong style="color: #003c70;"><%=contents[i].type%></strong>,　청원기간 : <strong style="color: #003c70;"><%=contents[i].startDay%> ~ <%=contents[i].endDay%></strong>
+                        </div>
+                        <div class="card-header" id="mbest-card">
+                            <div><strong>분류 : <span style="color: #003c70;"><%=contents[i].type%></span></strong></div>
+                            <div><strong>청원기간 : <span style="color: #003c70;"><%=contents[i].startDay%> ~ <%=contents[i].endDay%></span></strong></div>
                         </div>
                         <div class="card-body">
                             <h3 class="card-title">　<%=contents[i].title%></h3>
@@ -82,7 +88,7 @@
                             <%if(j != lines.length) { txt1 += "..."; }%>
                             <%var txt2 = " ";%>
                             <%for(j = 0; j < lines.length; j++) {%>
-                                <%if(j == 27) break;%>
+                                <%if(j == 23) break;%>
                                 <%txt2 = txt2 + lines[j] + " ";%>
                             <%}%>
                             <%if(j != lines.length) { txt2 += "..."; }%>
