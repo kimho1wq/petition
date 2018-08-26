@@ -79,22 +79,22 @@
                             <li style="text-align: center; display: inline-block; width:20%;">
                                 <img src="img/start.png" width="40px">
                                 <p style="font-size:0.8rem; margin-bottom: 0.5rem;">청원시작</p>
-                                <p style="font-size:0.8rem; background-color: #efefef; margin-top: 0.5rem; color: #145caa;">[<%=item.startDay%>]</p> 
+                                <p style="font-size:0.5rem; margin-top: 0.5rem; color: #145caa;">[<%=item.startDay%>]</p> 
                             </li>
                             <li  style="text-align: center; display: inline-block; width:20%;">
                                 <img src="img/end.png" width="40px">
                                 <p style="font-size:0.8rem; margin-bottom: 0.5rem;">청원마감</p>
-                                <p style="font-size:0.8rem; background-color: #efefef; margin-top:  0.5rem; color: #0064CD;">[<%=item.endDay%>]</p>    
+                                <p style="font-size:0.5rem; margin-top:  0.5rem; color: #0064CD;">[<%=item.endDay%>]</p>    
                             </li>            
                             <li style="text-align: center; display: inline-block; width:20%;">
                                 <img src="img/parti.png" width="40px">
                                 <p style="font-size:0.8rem; margin-bottom: 0.5rem;">참여인원</p>
-                                <p style="font-size:0.8rem; background-color: #efefef; margin-top: 0.5rem; color: #0A6ECD;">[<%=item.count%>] 명</p>    
+                                <p style="font-size:0.5rem; margin-top: 0.5rem; color: #0A6ECD;">[<%=item.count%>] 명</p>    
                             </li>            
                             <li style="text-align: center; display: inline-block; width:20%;">
                                 <img src="img/answer.png" width="40px">
                                 <p style="font-size:0.8rem; margin-bottom: 0.5rem;">답변일</p>
-                                <p style="font-size:0.8rem; background-color: #efefef; margin-top: 0.5rem; color: #1E82CD;">[<%=item.answerDay%>]</p>    
+                                <p style="font-size:0.5rem; margin-top: 0.5rem; color: #1E82CD;">[<%=item.answerDay%>]</p>    
                             </li>
                         </ol>
                     </div>
@@ -111,56 +111,58 @@
                     
    
             <div class="container border-light mb-5" style="max-width: 21rem;">
+                <center>
                 <ul class="pagination">
                     <%if(info.active==1) {%>
                         <li class="page-item disabled">
-                            <a class="page-link" href="/petition/list?page=1&sort=<%=info.sort%>&type=<%=info.type%>&word=<%=info.word%>&deadlineFlag=<%=info.deadlineFlag%>">&laquo;</a>
+                            <a class="page-link" href="/petition/reply?page=1&sort=<%=info.sort%>&type=<%=info.type%>&word=<%=info.word%>&deadlineFlag=<%=info.deadlineFlag%>">&laquo;</a>
                         </li>
                     <%} else {%>
                         <li class="page-item">
-                            <a class="page-link " href="/petition/list?page=1&sort=<%=info.sort%>&type=<%=info.type%>&word=<%=info.word%>&deadlineFlag=<%=info.deadlineFlag%>">&laquo;</a>
+                            <a class="page-link " href="/petition/reply?page=1&sort=<%=info.sort%>&type=<%=info.type%>&word=<%=info.word%>&deadlineFlag=<%=info.deadlineFlag%>">&laquo;</a>
                         </li>
                     <%}%>
                     <%if(info.startPage==1) {%>
                         <li class="page-item disabled">
-                            <a class="page-link" href="/petition/list?page=<%=info.startPage-info.limitPage%>&sort=<%=info.sort%>&type=<%=info.type%>&word=<%=info.word%>&deadlineFlag=<%=info.deadlineFlag%>">&lt;</a>
+                            <a class="page-link" href="/petition/reply?page=<%=info.startPage-info.limitPage%>&sort=<%=info.sort%>&type=<%=info.type%>&word=<%=info.word%>&deadlineFlag=<%=info.deadlineFlag%>">&lt;</a>
                         </li>
                     <%} else {%>
                         <li class="page-item">
-                            <a class="page-link" href="/petition/list?page=<%=info.startPage-info.limitPage%>&sort=<%=info.sort%>&type=<%=info.type%>&word=<%=info.word%>&deadlineFlag=<%=info.deadlineFlag%>">&lt;</a>
+                            <a class="page-link" href="/petition/reply?page=<%=info.startPage-info.limitPage%>&sort=<%=info.sort%>&type=<%=info.type%>&word=<%=info.word%>&deadlineFlag=<%=info.deadlineFlag%>">&lt;</a>
                         </li>
                     <%}%>
                     <%for(var i=info.startPage; i<=info.endPage; i++){%>
                         <%if(i==info.active) {%>
                             <li class="page-item active">
-                                <a class="page-link" href="/petition/list?page=<%=i%>&sort=<%=info.sort%>&type=<%=info.type%>&word=<%=info.word%>&deadlineFlag=<%=info.deadlineFlag%>"><%=i%></a>
+                                <a class="page-link" href="/petition/reply?page=<%=i%>&sort=<%=info.sort%>&type=<%=info.type%>&word=<%=info.word%>&deadlineFlag=<%=info.deadlineFlag%>"><%=i%></a>
                             </li>
                         <%} else {%>
                             <li class="page-item">
-                                <a class="page-link" href="/petition/list?page=<%=i%>&sort=<%=info.sort%>&type=<%=info.type%>&word=<%=info.word%>&deadlineFlag=<%=info.deadlineFlag%>"><%=i%></a>
+                                <a class="page-link" href="/petition/reply?page=<%=i%>&sort=<%=info.sort%>&type=<%=info.type%>&word=<%=info.word%>&deadlineFlag=<%=info.deadlineFlag%>"><%=i%></a>
                             </li>
                         <%}%>
                     <%}%>
                     <%if(info.endPage==info.pagination) {%>
                         <li class="page-item disabled">
-                            <a class="page-link" href="/petition/list?page=<%=info.startPage-(-info.limitPage)%>&sort=<%=info.sort%>&type=<%=info.type%>&word=<%=info.word%>&deadlineFlag=<%=info.deadlineFlag%>">&gt;</a>
+                            <a class="page-link" href="/petition/reply?page=<%=info.startPage-(-info.limitPage)%>&sort=<%=info.sort%>&type=<%=info.type%>&word=<%=info.word%>&deadlineFlag=<%=info.deadlineFlag%>">&gt;</a>
                         </li>
                     <%} else {%>
                         <li class="page-item">
-                            <a class="page-link" href="/petition/list?page=<%=info.startPage-(-info.limitPage)%>&sort=<%=info.sort%>&type=<%=info.type%>&word=<%=info.word%>&deadlineFlag=<%=info.deadlineFlag%>">&gt;</a>
+                            <a class="page-link" href="/petition/reply?page=<%=info.startPage-(-info.limitPage)%>&sort=<%=info.sort%>&type=<%=info.type%>&word=<%=info.word%>&deadlineFlag=<%=info.deadlineFlag%>">&gt;</a>
                         </li>
                     <%}%>
                     <%if(info.active==info.pagination) {%>
                         <li class="page-item disabled">
-                            <a class="page-link" href="/petition/list?page=<%=info.pagination%>&sort=<%=info.sort%>&type=<%=info.type%>&word=<%=info.word%>&deadlineFlag=<%=info.deadlineFlag%>">&raquo;</a>
+                            <a class="page-link" href="/petition/reply?page=<%=info.pagination%>&sort=<%=info.sort%>&type=<%=info.type%>&word=<%=info.word%>&deadlineFlag=<%=info.deadlineFlag%>">&raquo;</a>
                         </li>
                     <%} else {%>
                         <li class="page-item">
-                            <a class="page-link " href="/petition/list?page=<%=info.pagination%>&sort=<%=info.sort%>&type=<%=info.type%>&word=<%=info.word%>&deadlineFlag=<%=info.deadlineFlag%>">&raquo;</a>
+                            <a class="page-link " href="/petition/reply?page=<%=info.pagination%>&sort=<%=info.sort%>&type=<%=info.type%>&word=<%=info.word%>&deadlineFlag=<%=info.deadlineFlag%>">&raquo;</a>
                         </li>
                     <%}%>
                 </ul>
             </div>
+            
         </div>
         <br><hr>
         <!-- Footer -->
