@@ -26,7 +26,7 @@
             .title {font-size: 1.5rem; margin-left:0.2rem;}
             .type-div {padding: 0.3rem;}
             .type-tr{display:none;}
-            .mtype-tr th{padding:1.5rem 0;}
+            .mtype-tr th{padding:0.5rem 0;}
             .type-table { font-size: 0.8rem; padding: 0.6rem; color: #565656;}
             .type-table:hover { color: #003c70; padding: 0.65rem; background-color: #93DAFF; text-decoration:none; }
             .type-table:active { color: #003c70; padding: 0.65rem; background-color: #93DAFF; text-decoration:none; }
@@ -303,7 +303,7 @@
             </div>
             <br><br>
                 
-            <form action="/petition/list" method="get" style="width:40%">
+            <form action="/petition/list" method="get" style="width:40% justify-content: center;">
                 <input type="hidden" name="sort" value="<%=info.sort%>">
                 <input type="hidden" name="deadlineFlag" value="<%=info.deadlineFlag%>">
                 <input type="hidden" name="type" value="search">
@@ -315,7 +315,7 @@
             <br>
             
             <div class="container border-light mb-5" style="max-width: 22rem;">
-                <ul class="pagination">
+                <ul class="pagination" style="justify-content: center;">
                     <%if(info.active==1) {%>
                         <li class="page-item disabled">
                             <a class="page-link" href="/petition/list?page=1&sort=<%=info.sort%>&type=<%=info.type%>&word=<%=info.word%>&deadlineFlag=<%=info.deadlineFlag%>">&laquo;</a>

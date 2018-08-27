@@ -19,20 +19,23 @@
             .answer {font-size: 1.2rem;}
         </style>
         <style media = "all and (max-width: 768px)">
-            .deadline-text{font-size: 1.2rem;}
+            .deadline-text{font-size: 0.8rem;}
             .title-text{font-size: 1.5rem;}
-            .count-text{font-size: 1.2rem;}
+            .count-text{font-size: 1.0rem;}
             #info-box{width: 87%;}
             #submit-textarea{width:100%;}
             #submit-div{display:none;} 
-            .type-mtext{font-size: 1.0rem;}
+            .type-mtext{margin: 10px 0; font-size: 0.7rem;}
             .type-text{display:none;}
-            .title { font-size: 1.5rem; margin:2rem 1rem 0;}
+            .title { font-size: 1.2rem; margin:2rem 1rem 0;}
             .title_center{ text-align:center; font-size: 1.5rem; margin:2rem 1rem 0;}
-            .main-text{font-size: 1.0rem;}
-            td{font-size:0.8rem;}
+            .main-text{font-size: 0.8rem;}
+            td{font-size:0.7rem;}
             .re_vedio iframe{ width: 300px; height: 200px;}
-             .answer {font-size: 1.0rem;}
+            .answer {font-size: 0.8rem;}
+            div.card-body p{margin:5px;}
+            div.mb-5 {margin-bottom: 0rem!important;}
+            p.answer_title{margin-top: 10px;}
         </style>
         <% include ./head.html %>
         <title>Siri-b Petition</title>
@@ -46,7 +49,7 @@
         
         <div class="container" style="max-width: 80rem;">
             <div class="container card mb-10" style="padding: 0.6rem; border: 0.04rem solid #9a9a9a; max-width: 80rem;">
-                <br>
+               
                 <div class="container border-light mb-5" style="max-width: 70rem;">
                     <div class="card-body">
                         <%if(content.dayFlag==1 && !content.answer_flag) {%>
@@ -60,8 +63,8 @@
                         <p align="center" style="margin-bottom: 0;"><strong class="count-text">참여인원 : [ <strong class="text-primary"><%=content.count%></strong>명 ]</strong></p>
                     </div>
                 </div>
-                <div class="container border-secondary mb-5" id=info-box>
-                    <div class="card-header" style="padding: 0.2rem;">
+                <div class="container border-secondary mb-5 " id='info-box'>
+                    <div class="card-header" style="padding: 0.2rem; ">
                         <p align="center" class="type-text">분류 : <strong><%=content.type%></strong>　　　청원인 : <strong><%=content.nickname%></strong></p>
                         <p align="center" class="type-text">청원시작 : <strong><%=content.startDay%></strong>　~　청원종료 : <strong><%=content.endDay%></strong></p>
                         <p align="center" class="type-mtext">분류 : <strong><%=content.type%></strong>　청원인 : <strong><%=content.nickname%></strong></p>
@@ -92,11 +95,11 @@
                         <%})%>
                         </strong></p>
                 </div>
-                
+                <br>
                 <%if(content.answer_flag) {%>
                     <div class="container border-secondary mb-5">
                         <div class="card-header" style="padding: 1.2rem;">
-                            <p class="title"><span style="color: #003c70;"> ● </span><strong>답변원고</strong></p>
+                            <p class="title answer_title"><span style="color: #003c70;"> ● </span><strong>답변원고</strong></p>
                             <p class="answer"><strong>
                                 <%var answer_lines = answer.contents.split("\n");%>
                                 <%lines.forEach(function(item) {%>
@@ -132,7 +135,7 @@
             <br><br>
             
             <div class="container" style="max-width: 65rem;">
-                <p class="title_center"><span style="color: #003c70;"> ● </span><strong>청원 동의　[ <span style="color: #003c70;"><%=content.count%> ]</span> 명</strong></p>
+                <p class="title"><span style="color: #003c70;"> ● </span><strong>청원 동의　[ <span style="color: #003c70;"><%=content.count%> ]</span> 명</strong></p>
                 <br>
                 <%if(!content.answer_flag) {%>
                 <div class="col-lg-20 col-md-12" style= "max-width: 65rem;">
@@ -181,7 +184,7 @@
 
      
             <div class="container border-light mb-5" style="max-width: 23rem;">
-                 <ul class="pagination">
+                 <ul class="pagination" style="justify-content: center;">
                  <%if(info.active==1) {%>
                     <li class="page-item disabled">
                         <a class="page-link" href="/petition/content?id=<%=content._id%>&page=1">&laquo;</a>
@@ -234,7 +237,7 @@
             </div>
         </div>
         <br>
-        <hr/>
+        <hr>
         <!-- Footer -->
         <% include ./footer.html %>
 
