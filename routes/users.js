@@ -1,6 +1,7 @@
 var express = require('express');
 var router = express.Router();
 var firebase = require("firebase");
+var mongodb = require('../database');
 
 var config = {
     apiKey: "AIzaSyDHbuU2DzSRzXV2V9zwf9rS8DxzYfR9Ir4",
@@ -33,7 +34,7 @@ router.post('/login',function(req, res) {
     let sess = req.session;
     var email =  req.body.email || req.query.email;
     var password = req.body.password || req.query.password;
-           
+
     firebase.auth().signInWithEmailAndPassword(email, password).then(function() {
         firebase.auth().onAuthStateChanged(function (user) {
             if (user) {
@@ -55,13 +56,38 @@ router.post('/login',function(req, res) {
                         }
                     }
                     res.send('<script type="text/javascript">alert(" 로그인 성공! ");window.location.href = "/";</script>');
-                }   
+                }
             }
         });
     }).catch(function(e) {
         res.send('<script type="text/javascript">alert("아이디 또는 비밀번호를 다시 확인해주십시오.");window.location.href = "/users/login";</script>');
         return;
     });
+});
+
+router.get('/mypage', function(req, res) {
+    console.log('get /mypage');
+    console.log(req.session.user);
+    if(!req.session.user) {
+        console.log('login X');
+        res.send('<script type="text/javascript">alert("로그인이 필요합니다.");window.location.href = "/users/login";</script>');
+    }else {
+        console.log('login O');
+        //res.render('mypage', {login:req.session.user});
+        mongodb.PetitionModel.find({writer:req.session.user.uid}).exec(function(err,rawContents) {
+            if(err) throw err;
+
+            for(var i=0; i<rawContents.length; i++) {
+                rawContents[i].startDay =  rawContents[i].created_at.toISOString().substr(2,8);
+                var tmp = new Date();
+                tmp.setDate(rawContents[i].created_at.getDate() + 30);
+                rawContents[i].endDay = tmp.toISOString().substr(2,8);
+                console.log(rawContents[i].startDay, rawContents[i].endDay);
+            }
+            console.log('found');
+            res.render('mypage', {contents:rawContents, login:req.session.user});
+        });
+    }
 });
 
 //회원가입 폼 링크
@@ -72,7 +98,7 @@ router.get('/signup', function(req, res, next) {
 
 router.post('/signup', function(req, res, next) {
     console.log('/signup post 패스 요청됨.');
-    
+
     var email =  req.body.email || req.query.email;
     var password = req.body.password || req.query.password;
     var name = req.body.name || req.query.name;
@@ -80,7 +106,7 @@ router.post('/signup', function(req, res, next) {
     var major = req.body.major || req.query.major;
     var nickname = req.body.nickname || req.query.nickname;
     var year = req.body.year || req.query.year;
-    
+
     firebase.auth().createUserWithEmailAndPassword(email, password).then(function() {
         firebase.auth().signInWithEmailAndPassword(email, password).then(function() {
             console.log("로그인 성공");
@@ -100,16 +126,16 @@ router.post('/signup', function(req, res, next) {
                     }).catch(function(error) {
                         console.error("Error writing document: ", error);
                     });
-                    
+
                     /*pool.getConnection(function(err, conn) {
                         if(err) {
                             if(conn) conn.release();
                             return;
                         }
                         console.log('데이터베이스 연결 스레드 아이디 : ' + conn.threadId);
-                        
+
                         var data = {uid:user.uid, name:name, email:email, university:university, major:major, nickname:nickname, year:year};
-                        
+
                         var exec = conn.query('insert into users set ?', data, function(err, result) {
                             conn.release();
                             if(err) {
@@ -119,7 +145,7 @@ router.post('/signup', function(req, res, next) {
                             }
                         })
                     })*/
-                        
+
                     if(!user.emailVerified){
 						user.sendEmailVerification().then(function() {
                             console.log("인증메일 보냄");

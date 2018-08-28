@@ -6,18 +6,18 @@ router.get('/',function(req, res, next) {
     console.log('/petition get 패스 요청됨.');
     var now = new Date();
     var limitDay = 10;
-   
+
     mongodb.PetitionModel.find({$and:[{answer_flag:false},{'created_at':{"$gte":(new Date()).setDate(now.getDate()-limitDay)}}]}).sort({'count':-1, 'created_at':-1}).exec(function(err,rawContents) {
         if(err) {throw err;}
         for(var i=0; i<rawContents.length; i++) {
             rawContents[i].startDay = rawContents[i].created_at.toISOString().substr(2,8);
             var tmp = new Date(); tmp.setDate(rawContents[i].created_at.getDate() + limitDay);
             rawContents[i].endDay = tmp.toISOString().substr(2,8);
-            
+
             if(now < tmp) rawContents[i].dayFlag = 1;
             else rawContents[i].dayFlag = 0;
         }
-        
+
         mongodb.PetitionModel.find({$and:[{answer_flag:false},{'count':{$gte: 20}}]}).sort({'created_at':-1}).exec(function(err, listContents) {
             if(err) {throw err;}
             for(var i=0; i<listContents.length; i++) {
@@ -27,10 +27,10 @@ router.get('/',function(req, res, next) {
                 if(now < tmp) listContents[i].dayFlag = 1;
                 else listContents[i].dayFlag = 0;
             }
-            
+
             res.render('index',{ title:"index", contents:rawContents, list:listContents, login:req.session.user });
-           
-        }) 
+
+        })
      });
 });
 
@@ -47,33 +47,33 @@ router.get('/list',function(req, res) {
     if(deadlineFlag == null) {deadlineFlag = 1;}
 
     var now = new Date();
-    
+
     var limitDay = 10;
     var limitSize = 10;
     var limitPage = 5;
     var skipSize = (page-1)*limitSize;
-    
+
     switch (type) {
-        case "All" : 
+        case "All" :
             if(deadlineFlag==1) {
                 mongodb.PetitionModel.count({$and:[{answer_flag:false},{'created_at' : {$gte: (new Date()).setDate(now.getDate()-limitDay)}}]},function(err, max){
                     if(err) {throw err;}
-                    
+
                     var pageNum = Math.ceil(max/limitSize);
-                    var num = max-((page - 1)*limitSize); 
+                    var num = max-((page - 1)*limitSize);
                     var startPage = (Math.floor((page-1)/limitPage)*limitPage)+1;
                     var endPage = startPage + limitPage - 1;
                     if(endPage > pageNum) { endPage = pageNum; }
-       
+
                     if((page > pageNum || page < 1 ) && max != 0) {
                         console.log("잘못된 페이지");
                         res.send('<script type="text/javascript">alert("잘못된 페이지입니다.");window.location.href = "/petition/list";</script>');
                     } else if(max == 0) {
-                        console.log("list가 없다"); 
+                        console.log("list가 없다");
                         var info = { startPage: 1, endPage: 1,  limitPage: limitPage, word:word, active: 1, sort: sortType, type: type, pagination: 1, no: 0, deadlineFlag: deadlineFlag };
-                        
+
                         res.render('list', { title:"list", info: info, contents: [], login:req.session.user});
-                    } else { 
+                    } else {
                         switch(sortType) {
                             case "created_at":
                                 mongodb.PetitionModel.find({$and:[{answer_flag:false},{'created_at' : {$gte: (new Date()).setDate(now.getDate()-limitDay)}}]}).sort({'created_at':-1}).skip(skipSize).limit(limitSize).exec(function(err, pageContents) {
@@ -84,7 +84,7 @@ router.get('/list',function(req, res) {
                                         pageContents[i].endDay = tmp.toISOString().substr(2,8);
                                     }
                                     var info = {startPage: startPage, endPage: endPage, limitPage: limitPage, word:word, active: page, sort: sortType, type: type, pagination: pageNum, no: num, deadlineFlag: deadlineFlag };
-                                   
+
                                     res.render('list', { title:"list", info: info, contents: pageContents, login:req.session.user});
 
                                 });
@@ -98,32 +98,32 @@ router.get('/list',function(req, res) {
                                         pageContents[i].endDay = tmp.toISOString().substr(2,8);
                                     }
                                     var info = {startPage: startPage, endPage: endPage, limitPage: limitPage, word:word, active: page, sort: sortType, type: type, pagination: pageNum, no: num, deadlineFlag: deadlineFlag };
-                                    
+
                                     res.render('list', { title:"list", info: info, contents: pageContents, login:req.session.user});
                                 });
                                 break;
                         }
-                    }     
-                });   
+                    }
+                });
             } else {
                 mongodb.PetitionModel.count({$and:[{answer_flag:false},{'created_at' : {$lt: (new Date()).setDate(now.getDate()-limitDay)}}]},function(err, max){
                     if(err) {throw err;}
-                    
+
                     var pageNum = Math.ceil(max/limitSize);
-                    var num = max-((page - 1)*limitSize); 
+                    var num = max-((page - 1)*limitSize);
                     var startPage = (Math.floor((page-1)/limitPage)*limitPage)+1;
                     var endPage = startPage + limitPage - 1;
                     if(endPage > pageNum) { endPage = pageNum; }
-       
+
                     if((page > pageNum || page < 1 ) && max != 0) {
                         console.log("잘못된 페이지");
                         res.send('<script type="text/javascript">alert("잘못된 페이지입니다.");window.location.href = "/petition/list";</script>');
                     } else if(max == 0) {
-                        console.log("list가 없다"); 
+                        console.log("list가 없다");
                         var info = { startPage: 1, endPage: 1,  limitPage: limitPage, word:word, active: 1, sort: sortType, type: type, pagination: 1, no: 0, deadlineFlag: deadlineFlag };
-                        
+
                         res.render('list', { title:"list", info: info, contents: [], login:req.session.user});
-                    } else { 
+                    } else {
                         switch(sortType) {
                             case "created_at":
                                 mongodb.PetitionModel.find( {$and:[{answer_flag:false},{'created_at' : {$lt: (new Date()).setDate(now.getDate()-limitDay)}}]}).sort({'created_at':-1}).skip(skipSize).limit(limitSize).exec(function(err, pageContents) {
@@ -134,7 +134,7 @@ router.get('/list',function(req, res) {
                                         pageContents[i].endDay = tmp.toISOString().substr(2,8);
                                     }
                                     var info = {startPage: startPage, endPage: endPage, limitPage: limitPage, word:word, active: page, sort: sortType, type: type, pagination: pageNum, no: num, deadlineFlag: deadlineFlag };
-                                   
+
                                     res.render('list', { title:"list", info: info, contents: pageContents, login:req.session.user});
                                 });
                                 break;
@@ -147,37 +147,37 @@ router.get('/list',function(req, res) {
                                         pageContents[i].endDay = tmp.toISOString().substr(2,8);
                                     }
                                     var info = {startPage: startPage, endPage: endPage, limitPage: limitPage, word:word, active: page, sort: sortType, type: type, pagination: pageNum, no: num, deadlineFlag: deadlineFlag };
-                                   
+
                                     res.render('list', { title:"list", info: info, contents: pageContents, login:req.session.user});
                                 });
                                 break;
                         }
-                    }     
-                });   
+                    }
+                });
             }
             break;
-            
+
         case "search" :
             var searchCondition = {$regex:word};
             if(deadlineFlag==1) {
                 mongodb.PetitionModel.count({$and:[{answer_flag:false},{'created_at':{"$gte":(new Date()).setDate(now.getDate()-limitDay)}},{$or:[{title:searchCondition},{contents:searchCondition},{nickname:searchCondition}]}]},function(err, max){
                     if(err) {throw err;}
-                    
+
                     var pageNum = Math.ceil(max/limitSize);
-                    var num = max-((page - 1)*limitSize); 
+                    var num = max-((page - 1)*limitSize);
                     var startPage = (Math.floor((page-1)/limitPage)*limitPage)+1;
                     var endPage = startPage + limitPage - 1;
                     if(endPage > pageNum) { endPage = pageNum; }
-       
+
                     if((page > pageNum || page < 1 ) && max != 0) {
                         console.log("잘못된 페이지");
                         res.send('<script type="text/javascript">alert("잘못된 페이지입니다.");window.location.href = "/petition/list";</script>');
                     } else if(max == 0) {
-                        console.log("list가 없다"); 
+                        console.log("list가 없다");
                         var info = { startPage: 1, endPage: 1,  limitPage: limitPage, word:word, active: 1, sort: sortType, type: type, pagination: 1, no: 0, deadlineFlag: deadlineFlag };
-                        
+
                         res.render('list', { title:"list", info: info, contents: [], login:req.session.user});
-                    } else { 
+                    } else {
                         switch(sortType) {
                             case "created_at":
                                 mongodb.PetitionModel.find({$and:[{answer_flag:false},{'created_at':{"$gte":(new Date()).setDate(now.getDate()-limitDay)}},{$or:[{title:searchCondition},{contents:searchCondition},{nickname:searchCondition}]}]}).sort({'created_at':-1}).skip(skipSize).limit(limitSize).exec(function(err, pageContents) {
@@ -188,7 +188,7 @@ router.get('/list',function(req, res) {
                                         pageContents[i].endDay = tmp.toISOString().substr(2,8);
                                     }
                                     var info = {startPage: startPage, endPage: endPage, limitPage: limitPage, word:word, active: page, sort: sortType, type: type, pagination: pageNum, no: num, deadlineFlag: deadlineFlag };
-                                   
+
                                     res.render('list', { title:"list", info: info, contents: pageContents, login:req.session.user});
 
                                 });
@@ -202,32 +202,32 @@ router.get('/list',function(req, res) {
                                         pageContents[i].endDay = tmp.toISOString().substr(2,8);
                                     }
                                     var info = {startPage: startPage, endPage: endPage, limitPage: limitPage, word:word, active: page, sort: sortType, type: type, pagination: pageNum, no: num, deadlineFlag: deadlineFlag };
-                                    
+
                                     res.render('list', { title:"list", info: info, contents: pageContents, login:req.session.user});
                                 });
                                 break;
                         }
-                    }     
-                });   
+                    }
+                });
             } else {
                 mongodb.PetitionModel.count({$and:[{answer_flag:false},{'created_at':{"$lt":(new Date()).setDate(now.getDate()-limitDay)}},{$or:[{title:searchCondition},{contents:searchCondition},{nickname:searchCondition}]}]},function(err, max){
                     if(err) {throw err;}
-                    
+
                     var pageNum = Math.ceil(max/limitSize);
-                    var num = max-((page - 1)*limitSize); 
+                    var num = max-((page - 1)*limitSize);
                     var startPage = (Math.floor((page-1)/limitPage)*limitPage)+1;
                     var endPage = startPage + limitPage - 1;
                     if(endPage > pageNum) { endPage = pageNum; }
-       
+
                     if((page > pageNum || page < 1 ) && max != 0) {
                         console.log("잘못된 페이지");
                         res.send('<script type="text/javascript">alert("잘못된 페이지입니다.");window.location.href = "/petition/list";</script>');
                     } else if(max == 0) {
-                        console.log("list가 없다"); 
+                        console.log("list가 없다");
                         var info = { startPage: 1, endPage: 1,  limitPage: limitPage, word:word, active: 1, sort: sortType, type: type, pagination: 1, no: 0, deadlineFlag: deadlineFlag };
-                        
+
                         res.render('list', { title:"list", info: info, contents: [], login:req.session.user});
-                    } else { 
+                    } else {
                         switch(sortType) {
                             case "created_at":
                                 mongodb.PetitionModel.find({$and:[{answer_flag:false},{'created_at':{"$lt":(new Date()).setDate(now.getDate()-limitDay)}},{$or:[{title:searchCondition},{contents:searchCondition},{nickname:searchCondition}]}]}).sort({'created_at':-1}).skip(skipSize).limit(limitSize).exec(function(err, pageContents) {
@@ -238,7 +238,7 @@ router.get('/list',function(req, res) {
                                         pageContents[i].endDay = tmp.toISOString().substr(2,8);
                                     }
                                     var info = {startPage: startPage, endPage: endPage, limitPage: limitPage, word:word, active: page, sort: sortType, type: type, pagination: pageNum, no: num, deadlineFlag: deadlineFlag };
-                                   
+
                                     res.render('list', { title:"list", info: info, contents: pageContents, login:req.session.user});
                                 });
                                 break;
@@ -251,16 +251,16 @@ router.get('/list',function(req, res) {
                                         pageContents[i].endDay = tmp.toISOString().substr(2,8);
                                     }
                                     var info = {startPage: startPage, endPage: endPage, limitPage: limitPage, word:word, active: page, sort: sortType, type: type, pagination: pageNum, no: num, deadlineFlag: deadlineFlag };
-                                   
+
                                     res.render('list', { title:"list", info: info, contents: pageContents, login:req.session.user});
                                 });
                                 break;
                         }
-                    }     
-                });   
+                    }
+                });
             }
             break;
-            
+
         default :
             var searchType = {$regex:type};
             if(deadlineFlag==1) {
@@ -268,20 +268,20 @@ router.get('/list',function(req, res) {
                 mongodb.PetitionModel.count({$and:[{answer_flag:false},{'created_at':{"$gte":(new Date()).setDate(now.getDate()-limitDay)}},{"type":searchType}]},function(err, max){
                     if(err) {throw err;}
                     var pageNum = Math.ceil(max/limitSize);
-                    var num = max-((page - 1)*limitSize); 
+                    var num = max-((page - 1)*limitSize);
                     var startPage = (Math.floor((page-1)/limitPage)*limitPage)+1;
                     var endPage = startPage + limitPage - 1;
                     if(endPage > pageNum) { endPage = pageNum; }
-       
+
                    if((page > pageNum || page < 1 ) && max != 0) {
                         console.log("잘못된 페이지");
                         res.send('<script type="text/javascript">alert("잘못된 페이지입니다.");window.location.href = "/petition/list";</script>');
                     } else if(max == 0) {
-                        console.log("list가 없다"); 
+                        console.log("list가 없다");
                         var info = { startPage: 1, endPage: 1,  limitPage: limitPage, word:word, active: 1, sort: sortType, type: type, pagination: 1, no: 0, deadlineFlag: deadlineFlag };
-                        
+
                         res.render('list', { title:"list", info: info, contents: [], login:req.session.user});
-                    } else { 
+                    } else {
                         switch(sortType) {
                             case "created_at":
                                 mongodb.PetitionModel.find({$and:[{answer_flag:false},{'created_at':{"$gte":(new Date()).setDate(now.getDate()-limitDay)}},{"type":searchType}]}).sort({'created_at':-1}).skip(skipSize).limit(limitSize).exec(function(err, pageContents) {
@@ -292,7 +292,7 @@ router.get('/list',function(req, res) {
                                         pageContents[i].endDay = tmp.toISOString().substr(2,8);
                                     }
                                     var info = {startPage: startPage, endPage: endPage, limitPage: limitPage, word:word, active: page, sort: sortType, type: type, pagination: pageNum, no: num, deadlineFlag: deadlineFlag };
-                                   
+
                                     res.render('list', { title:"list", info: info, contents: pageContents, login:req.session.user});
 
                                 });
@@ -306,33 +306,33 @@ router.get('/list',function(req, res) {
                                         pageContents[i].endDay = tmp.toISOString().substr(2,8);
                                     }
                                     var info = {startPage: startPage, endPage: endPage, limitPage: limitPage, word:word, active: page, sort: sortType, type: type, pagination: pageNum, no: num, deadlineFlag: deadlineFlag };
-                                    
+
                                     res.render('list', { title:"list", info: info, contents: pageContents, login:req.session.user});
                                 });
                                 break;
                         }
-                    }     
+                    }
                 });
-                
+
             } else {
                 mongodb.PetitionModel.count({$and:[{answer_flag:false},{'created_at':{"$lt":(new Date()).setDate(now.getDate()-limitDay)}},{"type":searchType}]},function(err, max){
                     if(err) {throw err;}
-                    
+
                     var pageNum = Math.ceil(max/limitSize);
-                    var num = max-((page - 1)*limitSize); 
+                    var num = max-((page - 1)*limitSize);
                     var startPage = (Math.floor((page-1)/limitPage)*limitPage)+1;
                     var endPage = startPage + limitPage - 1;
                     if(endPage > pageNum) { endPage = pageNum; }
-       
+
                     if((page > pageNum || page < 1 ) && max != 0) {
                         console.log("잘못된 페이지");
                         res.send('<script type="text/javascript">alert("잘못된 페이지입니다.");window.location.href = "/petition/list";</script>');
                     } else if(max == 0) {
-                        console.log("list가 없다"); 
+                        console.log("list가 없다");
                         var info = { startPage: 1, endPage: 1,  limitPage: limitPage, word:word, active: 1, sort: sortType, type: type, pagination: 1, no: 0, deadlineFlag: deadlineFlag };
-                        
+
                         res.render('list', { title:"list", info: info, contents: [], login:req.session.user});
-                    } else { 
+                    } else {
                         switch(sortType) {
                             case "created_at":
                                 mongodb.PetitionModel.find({$and:[{answer_flag:false},{'created_at':{"$lt":(new Date()).setDate(now.getDate()-limitDay)}},{"type":searchType}]}).sort({'created_at':-1}).skip(skipSize).limit(limitSize).exec(function(err, pageContents) {
@@ -343,7 +343,7 @@ router.get('/list',function(req, res) {
                                         pageContents[i].endDay = tmp.toISOString().substr(2,8);
                                     }
                                     var info = {startPage: startPage, endPage: endPage, limitPage: limitPage, word:word, active: page, sort: sortType, type: type, pagination: pageNum, no: num, deadlineFlag: deadlineFlag };
-                                   
+
                                     res.render('list', { title:"list", info: info, contents: pageContents, login:req.session.user});
                                 });
                                 break;
@@ -356,13 +356,13 @@ router.get('/list',function(req, res) {
                                         pageContents[i].endDay = tmp.toISOString().substr(2,8);
                                     }
                                     var info = {startPage: startPage, endPage: endPage, limitPage: limitPage, word:word, active: page, sort: sortType, type: type, pagination: pageNum, no: num, deadlineFlag: deadlineFlag };
-                                   
+
                                     res.render('list', { title:"list", info: info, contents: pageContents, login:req.session.user});
                                 });
                                 break;
                         }
-                    }     
-                });   
+                    }
+                });
             }
             break;
     }
@@ -384,6 +384,8 @@ router.post('/post', function(req, res, next) {
     var title = req.body.title;
     var type = req.body.type;
     var contents = req.body.contents;
+    var is_anonymous = req.body.is_anonymous;
+
     if(!req.session.user) {
         res.send('<script type="text/javascript">alert("로그인하셔야 합니다.");window.location.href = "/users/login";</script>');
     }
@@ -396,14 +398,15 @@ router.post('/post', function(req, res, next) {
               } else {
                   if (rows.length > 0) {
                       console.log('요청 파라미터 : ' + title +', '+contents);
-    
+                      var flag = is_anonymous=="true"?true:false;
                       var post = new mongodb.PetitionModel({
                           title : title,
                           type : type,
                           contents : contents,
                           nickname : rows[0].nickname,
-                          writer : rows[0].uid
-                      }); 
+                          writer : rows[0].uid,
+                          is_anonymous:flag
+                      });
                       post.save(function(err, result) {
                           if(err) {throw err;}
                           console.log('글 데이터 추가함');
@@ -415,53 +418,57 @@ router.post('/post', function(req, res, next) {
                     return; }
               }
           });
-    }      
+    }
 });
 
 router.get('/content', function(req, res){
     console.log('/petition/content get 패스 요청됨.');
-    
+
     var page = req.param('page');
     if(page == null) {page = 1;}
     var id = req.param('id');
     var now = new Date();
-    
+
     var limitDay = 10;
     var limitSize = 5;
     var limitPage = 5;
-    
+
+
     mongodb.PetitionModel.findOne({_id: id},function(err, content){
         if(err) { throw err; }
+
+        var writer=content.is_anonymous?"익명":content.nickname;
+        console.log(writer);
 
         console.log(content);
         mongodb.AnswerModel.findOne({_id: content.answer},function(err, answer){
             if(err) { throw err; }
-            console.log(answer);    
+            console.log(answer);
 
             var max = content.comments.length;
-            
+
             var skipSize = (page-1)*limitSize;
             var pageNum = Math.ceil(max/limitSize);
             var startPage = (Math.floor((page-1)/limitPage)*limitPage)+1;
             var endPage = startPage + limitPage - 1;
             if(endPage > pageNum) { endPage = pageNum; }
-            
-    
+
+
             if((page > pageNum || page < 1) && max != 0) {
                 console.log("잘못된 페이지");
                 res.send('<script type="text/javascript">alert("잘못된 페이지입니다.");window.location.href = "/petition/content?id='+id+'";</script>');
             } else if(max == 0) {
                 console.log("comments가 없다.");
-            
+
                 content.startDay = content.created_at.toISOString().substr(2,8);
                 var tmp = new Date(); tmp.setDate(content.created_at.getDate() + limitDay);
                 content.endDay = tmp.toISOString().substr(2,8);
                 if(now < tmp) content.dayFlag = 1;
                 else content.dayFlag = 0;
-                        
+
                 var info = { startPage: 1, endPage: 1, limitPage: limitPage, active: 1, pagination: 1 };
-                res.render('content', { title:"content", info: info, content:content,answer:answer, login:req.session.user}); 
-            
+                res.render('content', { title:"content", info: info, content:content,answer:answer, login:req.session.user});
+
             } else {
                 mongodb.PetitionModel.findOne({_id: id}, {comments: {$slice: [skipSize, limitSize]}}, function(err, commentsContent){
                     if(err) {throw err; }
@@ -470,11 +477,11 @@ router.get('/content', function(req, res){
                     commentsContent.endDay = tmp.toISOString().substr(2,8);
                     if(now < tmp) commentsContent.dayFlag = 1;
                     else commentsContent.dayFlag = 0;
-                    
+
                     var info = { startPage: startPage, endPage: endPage, limitPage: limitPage, active: page, pagination: pageNum };
-                    res.render('content', { title:"content", info: info, content:commentsContent,answer:answer, login:req.session.user}); 
+                    res.render('content', { title:"content", info: info, content:commentsContent,answer:answer, login:req.session.user});
                 });
-            }           
+            }
         });
     });
 });
@@ -482,26 +489,28 @@ router.get('/content', function(req, res){
 router.post('/comment', function(req, res){
     console.log('/petition/comment post 패스 요청됨.');
     var contents = req.body.contents;
+    var is_comment_anonymous = req.body.is_comment_anonymous=="true"?true:false;
+    console.log(is_comment_anonymous)
     var id = req.body.id;
     var now = new Date();
-    
+
     var limitDay = 10;
     var limitSize = 5;
     var limitPage = 5;
-    
+
     if(!req.session.user) {
         res.send('<script type="text/javascript">alert("로그인하셔야 합니다.");window.location.href = "/users/login";</script>');
     } else {
          mongodb.PetitionModel.findOne({_id: id}, function(err, content){
              if(err) {throw err;}
-             
+
              var max = content.comments.length + 1;
              var pageNum = Math.ceil(max/limitSize);
              var startPage = 1;
              var endPage = limitPage;
              if(endPage > pageNum) { endPage = pageNum; }
-             
-             content.comments.unshift({writer:req.session.user.uid, contents: contents});
+
+             content.comments.unshift({writer:req.session.user.uid, contents: contents, is_comment_anonymous:is_comment_anonymous});
              content.count += 1;
              content.save(function(err){
                  mongodb.PetitionModel.findOne({_id: id}, {comments: {$slice: [0, limitSize]}}, function(err, rawContent){
@@ -511,9 +520,11 @@ router.post('/comment', function(req, res){
                      rawContent.endDay = tmp.toISOString().substr(2,8);
                      if(now < tmp) rawContent.dayFlag = 1;
                      else rawContent.dayFlag = 0;
-                     
+
                      var info = { startPage: startPage, endPage: endPage, limitPage: limitPage, active: 1, pagination: pageNum  }
-                     res.render('content', { title:"content", info: info, content:rawContent, login:req.session.user}); 
+                     res.render('content', { title:"content", info: info, content:rawContent, login:req.session.user});
+
+                     console.log('render완료')
                  });
              });
          });
@@ -522,19 +533,19 @@ router.post('/comment', function(req, res){
 
 
 router.get('/reply', function(req, res) {
-    console.log('/petition/reply get 패스 요청됨.'); 
-        
+    console.log('/petition/reply get 패스 요청됨.');
+
     var page = req.param('page');
     if(page == null) {page = 1;}
     var limitDay = 10;
     var limitSize = 5;
     var limitPage = 5;
     var now = new Date();
-    
+
     mongodb.PetitionModel.count({answer_flag: true},function(err, max){
         if(err) {throw err;}
-        
-        var num = max-((page - 1)*limitSize); 
+
+        var num = max-((page - 1)*limitSize);
         var skipSize = (page-1)*limitSize;
         var pageNum = Math.ceil(max/limitSize);
         var startPage = (Math.floor((page-1)/limitPage)*limitPage)+1;
@@ -546,11 +557,11 @@ router.get('/reply', function(req, res) {
             console.log("잘못된 페이지");
             res.send('<script type="text/javascript">alert("잘못된 페이지입니다.");window.location.href = "/petition/reply";</script>');
         } else if(max == 0) {
-            console.log("reply가 없다"); 
+            console.log("reply가 없다");
             var info = { startPage: 1, endPage: 1, limitPage: limitPage, active: 1, no: 1, pagination: 1 };
-                        
+
             res.render('reply', { title:"reply", info: info, contents: [], login:req.session.user});
-                
+
         } else {
             mongodb.PetitionModel.find({answer_flag:true}).populate("answer").sort({'updated_at':-1}).skip(skipSize).limit(limitSize).exec(function(err, contents) {
                 if(err) { throw err; }
@@ -560,9 +571,9 @@ router.get('/reply', function(req, res) {
                     var tmp = new Date(); tmp.setDate(contents[i].created_at.getDate() + limitDay);
                     contents[i].endDay = tmp.toISOString().substr(2,8);
                     contents[i].answerDay = contents[i].updated_at.toISOString().substr(2,8);
-                }            
+                }
                 var info = { startPage: startPage, endPage: endPage, limitPage: limitPage, no: num, active: page,   pagination: pageNum };
-              
+
                 res.render('reply', { title:"reply", info: info, contents:contents, login:req.session.user});
             });
         }
@@ -575,7 +586,7 @@ router.get('/reply_post', function(req, res) {
     var id = req.param('id');
     var now = new Date();
     var limitDay = 10;
-    
+
     mongodb.PetitionModel.findOne({_id:id}).populate("answer").exec(function(err, content){
         if(err) {throw err;}
 
@@ -588,10 +599,10 @@ router.get('/reply_post', function(req, res) {
             content.endDay = tmp.toISOString().substr(2,8);
             if(now < tmp) content.dayFlag = 1;
             else content.dayFlag = 0;
-            
-            res.render('reply_post', { title:"reply_post", content:content,answer_list:answers, id:id, login:req.session.user});  
+
+            res.render('reply_post', { title:"reply_post", content:content,answer_list:answers, id:id, login:req.session.user});
         });
-    });    
+    });
 });
 
 
@@ -601,12 +612,12 @@ router.post('/reply_post', function(req, res) {
     var limitDay = 10;
     var limitSize = 5;
     var limitPage = 5;
-    
+
     var id = req.body.id || req.query.id;
 
     var answer_selected = req.body.answer_list_select|| req.query.answer_list_select;
     console.log(answer_selected);
-    
+
     if(answer_selected != "없음"){
         mongodb.PetitionModel.findOne({_id:id}, function(err, content){
 
@@ -620,17 +631,17 @@ router.post('/reply_post', function(req, res) {
 
                 mongodb.PetitionModel.count({answer_flag: true},function(err, max){
                     if(err) {throw err;}
-                    var num = max; 
+                    var num = max;
                     var pageNum = Math.ceil(max/limitSize);
                     var startPage = 1;
                     var endPage = limitPage;
                     if(endPage > pageNum) { endPage = pageNum; }
-                
+
                     if(max == 0) {
-                        console.log("reply가 없다"); 
+                        console.log("reply가 없다");
                         var info = { startPage: 1, endPage: 1, limitPage: limitPage, active: 1, no: 1, pagination: 1}
                         res.render('reply', { title:"reply", info: info, contents:[], login:req.session.user});
-                    } else {  
+                    } else {
                         mongodb.PetitionModel.find({answer_flag: true}).populate("answer").sort({'updated_at':-1}).limit(limitSize).exec(function(err, contents) {
                             if(err) { throw err; }
                             console.log(contents);
@@ -640,21 +651,21 @@ router.post('/reply_post', function(req, res) {
                                 contents[i].endDay = tmp.toISOString().substr(2,8);
                                 contents[i].answerDay = contents[i].updated_at.toISOString().substr(2,8);
                             }
-                                                    
+
                             var info = { startPage: startPage, endPage: endPage, limitPage: limitPage, no: num, active: 1, pagination: pageNum  }
                             res.render('reply', { title:"reply", info: info, contents:contents, login:req.session.user});
                         });
-                    }   
-                }); 
+                    }
+                });
             });
-        });                    
+        });
     }
     else{
 
         var contents = req.body.content || req.query.content;
         var link = req.body.link || req.query.link;
         var linkstr = link.substr(0,24);
-        var now = new Date();    
+        var now = new Date();
 
         var newAnswers = new mongodb.AnswerModel({
             contents: null,
@@ -680,7 +691,7 @@ router.post('/reply_post', function(req, res) {
                     console.log("strtmp : " + strtmp);
                     // content.answer_video = strtmp;
                     content.answer_flag = true;
-                    // content.answer_contents = contents;   
+                    // content.answer_contents = contents;
                     // content.updated_at = now;
 
                     newAnswers.video = strtmp;
@@ -690,36 +701,36 @@ router.post('/reply_post', function(req, res) {
                     console.log("link : " + link);
                     // content.answer_video = link;
                     content.answer_flag = true;
-                    // content.answer_contents = contents;   
+                    // content.answer_contents = contents;
                     // content.updated_at = now;
-                    
+
                     newAnswers.video = link;
                     newAnswers.contents = contents;
                 } else {
-                    throw err;            
-                } 
-                
+                    throw err;
+                }
+
                 newAnswers.save(function(err,result){
                     if(err){throw err;}
 
-                    console.log("청원답변 저장");    
+                    console.log("청원답변 저장");
                     content.answer = result._id;
                     content.save(function(err){
                         if(err){throw err;}
 
                         mongodb.PetitionModel.count({answer_flag: true},function(err, max){
                             if(err) {throw err;}
-                            var num = max; 
+                            var num = max;
                             var pageNum = Math.ceil(max/limitSize);
                             var startPage = 1;
                             var endPage = limitPage;
                             if(endPage > pageNum) { endPage = pageNum; }
-                    
+
                             if(max == 0) {
-                                console.log("reply가 없다"); 
+                                console.log("reply가 없다");
                                 var info = { startPage: 1, endPage: 1, limitPage: limitPage, active: 1, no: 1, pagination: 1}
                                 res.render('reply', { title:"reply", info: info, contents:[], login:req.session.user});
-                            } else {  
+                            } else {
                                 mongodb.PetitionModel.find({answer_flag: true}).populate("answer").sort({'updated_at':-1}).limit(limitSize).exec(function(err, contents) {
                                     if(err) { throw err; }
                                     for(var i=0; i<contents.length; i++) {
@@ -728,28 +739,28 @@ router.post('/reply_post', function(req, res) {
                                         contents[i].endDay = tmp.toISOString().substr(2,8);
                                         contents[i].answerDay = contents[i].updated_at.toISOString().substr(2,8);
                                     }
-                                                    
+
                                     var info = { startPage: startPage, endPage: endPage, limitPage: limitPage, no: num, active: 1, pagination: pageNum  }
                                     res.render('reply', { title:"reply", info: info, contents:contents, login:req.session.user});
                                     });
-                                }   
-                            }); 
-                            
+                                }
+                            });
+
                         });
-                            
+
                     });
             });
         }
-    }      
+    }
 });
 
 
 
 router.get('/delete', function(req, res){
     console.log('/petition/delete get 패스 요청됨.');
-    
+
     var contentId = req.param('id');
-    
+
     if(req.session.user.uid != "DYYuut6bTfNEkNLbMiFjyDIui1e2") {
         res.send('<script type="text/javascript">alert("삭제 할 권한이 없습니다.");</script>');
     } else {
