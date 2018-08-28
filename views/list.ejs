@@ -56,7 +56,7 @@
 
         <!-- Page Header -->
         <% include ./header.html %>
-    
+
         <div class="container" style="max-width: 70rem;">
             <div class="container border-light mb-4" style="max-width: 70rem;">
                  <p class="title"><span style="color: #003c70;"> ● </span><strong>청원 그룹별 보기</strong></p>
@@ -125,7 +125,7 @@
                             <th><a class="type-table" href="/petition/list?sort=created_at&type=기타&deadlineFlag=<%=info.deadlineFlag%>"><strong>기타</strong></a></th>
                         <%}%>
                     </tr>
-                    
+
                     <tr class="mtype-tr">
                         <%if(info.type=="All") {%>
                             <th><a class="type-table-active" href="/petition/list?sort=created_at&type=All&deadlineFlag=<%=info.deadlineFlag%>"><strong>전체</strong></a></th>
@@ -192,7 +192,7 @@
                 </table>
             </div>
             <br><br><br><br>
-            
+
             <div class="container" style="max-width: 70rem;">
                 <table class="container border-light" style="text-align: center; max-width: 90rem;">
                     <tr>
@@ -207,7 +207,7 @@
                 </table>
             </div>
             <br>
-            
+
             <div class="container border-light mb-4" style="max-width: 65rem;">
                 <p class="title"><span style="color: #003c70;"> ● </span><strong>전체 목록</strong></p>
             </div>
@@ -231,7 +231,7 @@
                     </li>
                 <%}%>
             </ul>
-             
+
             <div class="row">
                 <div class="col-lg-24 col-md-12" style="max-width: 70rem;">
                     <table class="table table-hover" style="text-align: center;" cellspacing="0.6rem">
@@ -240,7 +240,7 @@
                                 <th style="font-size: 1.2rem; padding: 0.9rem 0.28rem; background-color: #003c70; color: #ffffff" scope="col">번호</th>
                                 <th style="font-size: 1.2rem; padding: 0.9rem 0.28rem; background-color: #003c70; color: #ffffff" scope="col">분류</th>
                                 <th style="font-size: 1.2rem; padding: 0.9rem 0.28rem; background-color: #003c70; color: #ffffff" scope="col">제목</th>
-                                <th style="font-size: 1.2rem; padding: 0.9rem 0.28rem; background-color: #003c70; color: #ffffff" scope="col">별명</th>
+                                <th style="font-size: 1.2rem; padding: 0.9rem 0.28rem; background-color: #003c70; color: #ffffff" scope="col">청원인</th>
                                 <th style="font-size: 1.2rem; padding: 0.9rem 0.28rem; background-color: #003c70; color: #ffffff" scope="col">기간</th>
                                 <th style="font-size: 1.1rem; padding: 0.9rem 0.28rem; background-color: #003c70; color: #ffffff" scope="col">참여인원</th>
                             </tr>
@@ -260,30 +260,36 @@
                                             <%}%>
                                             <%txt += "...";%>
                                             <td class="table-text" style="text-align: left;"><strong class="text-muted"><a href="/petition/content?id=<%=item._id%>"><%=txt%></a></strong></td>
-                                        
+
                                             <div class="table-mtext">
                                                 <p style="display: inline-block; width:49%; margin:0.7rem 0;"><span style="background-color:#003c70; color: #ffffff">　<%=i%>번　</span></p>
                                                 <p style="display: inline-block; text-align:right; width:49%; margin:0.4rem 0;"><strong class="text-primary"><%=item.type%></strong></p>
-                                    
+
                                                 <p style="font-size: 1.2rem; margin:0.7rem 0"><strong class="text-dark"><a href="/petition/content?id=<%=item._id%>"><%=txt%></a></strong></p>
-                                                
+
                                                 <p style="display: inline-block; width:49%; margin:0.1rem 0; "><%=item.startDay%> ~ <%=item.endDay%></p>
-                                                <p style="display: inline-block; text-align:right; width:49%; margin:0.2rem 0 0.5rem;"><strong class="text-primary"><%=item.count%>명</strong></p> 
+                                                <p style="display: inline-block; text-align:right; width:49%; margin:0.2rem 0 0.5rem;"><strong class="text-primary"><%=item.count%>명</strong></p>
                                             </div>
                                         <%} else {%>
                                             <td class="table-text" style="text-align: left;"><strong class="text-muted"><a href="/petition/content?id=<%=item._id%>"><%=item.title%></a></strong></td>
-                                        
+
                                             <div class="table-mtext">
                                                <p style="display: inline-block; width:49%; margin:0.7rem 0;"><span style="background-color:#003c70; color: #ffffff">　<%=i%>번　</span></p>
                                                 <p style="display: inline-block; text-align:right; width:49%; margin:0.4rem 0;"><strong class="text-primary"><%=item.type%></strong></p>
-                                    
+
                                                 <p style="font-size: 1.2rem; margin:0.7rem 0"><strong class="text-dark"><a href="/petition/content?id=<%=item._id%>"><%=item.title%></a></strong></p>
-                                                
+
                                                 <p style="display: inline-block; width:49%; margin:0.1rem 0; "><%=item.startDay%> ~ <%=item.endDay%></p>
-                                                <p style="display: inline-block; text-align:right; width:49%; margin:0.2rem 0 0.5rem;"><strong class="text-primary"><%=item.count%>명</strong></p> 
+                                                <p style="display: inline-block; text-align:right; width:49%; margin:0.2rem 0 0.5rem;"><strong class="text-primary"><%=item.count%>명</strong></p>
                                             </div>
                                         <%}%>
-                                        <td class="table-text"><strong class="text-dark"><%=item.nickname%></strong></td>
+                                        <td class="table-text">
+                                            <%if (item.is_anonymous) {%>
+                                                <strong class="text-dark">익명</strongd>
+                                            <%} else {%>
+                                                <strong class="text-dart"><%=item.nickname%></strong>
+                                            <%}%>
+                                        </td>
                                         <td class="table-text"><strong class="text-muted"><%=item.startDay%> ~ <%=item.endDay%></strong></td>
                                         <%if(item.count > 10) {%>
                                             <td class="table-text"><strong class="text-primary"><%=item.count%>명</strong></td>
@@ -298,11 +304,11 @@
                                 <tr><th colspan="6"><h5>　리스트가 없습니다.　</h5></th></tr>
                             <%}%>
                         </tbody>
-                    </table> 
+                    </table>
                 </div>
             </div>
             <br><br>
-                
+
             <form action="/petition/list" method="get" style="width:40% justify-content: center;">
                 <input type="hidden" name="sort" value="<%=info.sort%>">
                 <input type="hidden" name="deadlineFlag" value="<%=info.deadlineFlag%>">
@@ -313,7 +319,7 @@
                 </div>
             </form>
             <br>
-            
+
             <div class="container border-light mb-5" style="max-width: 22rem;">
                 <ul class="pagination" style="justify-content: center;">
                     <%if(info.active==1) {%>

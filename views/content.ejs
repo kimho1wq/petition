@@ -7,7 +7,7 @@
             .count-text{font-size: 1.5rem;}
             #info-box{width: 62%; }
             #submit-textarea{width:60%;}
-            #submit-div{width:28%; display: inline-block;} 
+            #submit-div{width:28%; display: inline-block;}
             #submit-mdiv{display:none;}
             .type-text{font-size: 1.2rem;}
             .type-mtext{display: none;}
@@ -24,7 +24,7 @@
             .count-text{font-size: 1.0rem;}
             #info-box{width: 87%;}
             #submit-textarea{width:100%;}
-            #submit-div{display:none;} 
+            #submit-div{display:none;}
             .type-mtext{margin: 10px 0; font-size: 0.7rem;}
             .type-text{display:none;}
             .title { font-size: 1.2rem; margin:2rem 1rem 0;}
@@ -39,17 +39,17 @@
         </style>
         <% include ./head.html %>
         <title>Siri-b Petition</title>
-    </head> 
+    </head>
     <body>
         <!-- Navigation -->
         <% include ./navigation.html %>
-        
+
         <!-- Page Header -->
         <% include ./header.html %>
-        
+
         <div class="container" style="max-width: 80rem;">
             <div class="container card mb-10" style="padding: 0.6rem; border: 0.04rem solid #9a9a9a; max-width: 80rem;">
-               
+
                 <div class="container border-light mb-5" style="max-width: 70rem;">
                     <div class="card-body">
                         <%if(content.dayFlag==1 && !content.answer_flag) {%>
@@ -65,7 +65,13 @@
                 </div>
                 <div class="container border-secondary mb-5 " id='info-box'>
                     <div class="card-header" style="padding: 0.2rem; ">
-                        <p align="center" class="type-text">분류 : <strong><%=content.type%></strong>　　　청원인 : <strong><%=content.nickname%></strong></p>
+                        <p align="center" class="type-text">분류 : <strong><%=content.type%></strong>　　　
+                            <%if(content.is_anonymous) {%>
+                                청원인 : <strong>익명</strong>
+                            <%} else {%>
+                                청원인 : <strong>content.nickname</strong>
+                            <%}%>
+                        </p>
                         <p align="center" class="type-text">청원시작 : <strong><%=content.startDay%></strong>　~　청원종료 : <strong><%=content.endDay%></strong></p>
                         <p align="center" class="type-mtext">분류 : <strong><%=content.type%></strong>　청원인 : <strong><%=content.nickname%></strong></p>
                         <p align="center" class="type-mtext">청원시작 : <strong><%=content.startDay%></strong></p>
@@ -76,13 +82,13 @@
                 <%if(content.answer_flag) {%>
                     <div class="container" style="max-width: 70rem;">
                         <hr><br>
-                        <div class="re_vedio" style="text-align:center;">  
-                            <iframe src="<%=answer.video%>" frameborder="0" allow="encrypted-media" allowfullscreen></iframe>        
+                        <div class="re_vedio" style="text-align:center;">
+                            <iframe src="<%=answer.video%>" frameborder="0" allow="encrypted-media" allowfullscreen></iframe>
                         </div>
                         <br>
                     </div>
                 <%}%>
-                
+
                 <div class="container border-light mb-5" style="max-width: 70rem;">
                     <hr>
                     <p class="title"><span style="color: #003c70;"> ● </span><strong>청원 개요</strong></p>
@@ -109,8 +115,8 @@
                         </div>
                     </div>
                 <%}%>
-                
-                
+
+
                 <%if(!content.answer_flag) {%>
                     <div class="navbar navbar-expand-lg">
                         <div class="collapse navbar-collapse" id="navbarColor02">
@@ -128,12 +134,12 @@
                 <%}%>
                 <%if(login) {%>
                     <%if(login.uid == "DYYuut6bTfNEkNLbMiFjyDIui1e2") {%>
-                    <%}%> 
-                <%}%> 
-                
+                    <%}%>
+                <%}%>
+
             </div>
             <br><br>
-            
+
             <div class="container" style="max-width: 65rem;">
                 <p class="title"><span style="color: #003c70;"> ● </span><strong>청원 동의　[ <span style="color: #003c70;"><%=content.count%> ]</span> 명</strong></p>
                 <br>
@@ -145,14 +151,19 @@
                         </div>
                         <div style="background-color: #f3f3f3; border: 0.15rem solid #dedede; padding: 1rem;">
                             <input type="hidden" name="id" value="<%=content._id%>">
+                            <div class="anonymous_comment">
+                                <label for="is_comment_anonymous">
+                                <input type="checkbox" name="is_comment_anonymous" id="is_comment_anonymous" value="true" checked><font size="3"><strong>익명 댓글</strong></font>
+                                </label>
+                            </div>
                             <textarea style="display: inline-block;" required="" placeholder="동의합니다." class="form-control mr-sm-5" name="contents" id="submit-textarea">동의합니다.</textarea>
-                            
+
                             <div id=submit-div>
                                 <div style="float:right;">
                                     <button style="background-color: #003c70; border: 0.15rem solid #003c70" class="btn btn-primary" type="submit" id=submit-btn>SUBMIT</button>
                                 </div>
                             </div>
-                            
+
                         </div>
                     </form>
                 </div>
@@ -161,28 +172,33 @@
                 <div class="row">
                     <div class="col-lg-20 col-md-12" style= "max-width: 65rem;">
                         <table class="table table-hover">
-                            <tbody> 
+                            <tbody>
                                 <%if(content.comments.length>0){%>
                                     <%var commentsList = content.comments;%>
                                     <%commentsList.forEach(function(item){%>
                                         <tr class="table-light">
-                                            <td><strong class="text-dark"><%=item.writer%></strong>
+                                            <td>
+                                                <%if(item.is_comment_anonymous) {%>
+                                                    <strong class="text-dark">익명</strong>
+                                                <%} else {%>
+                                                    <strong class="text-dark"><%=item.writer%></strong>
+                                                <%}%>
                                                 <p><%=item.contents%></p></td>
                                         </tr>
                                     <%})%>
-                                <%} else {%>  
+                                <%} else {%>
                                     <tr class="table-light">
                                         <td><strong class="text-dark">댓글이 없습니다.</strong></td>
                                     </tr>
                                 <%}%>
                             </tbody>
-                        </table> 
+                        </table>
                     </div>
                 </div>
             </div>
             <br>
 
-     
+
             <div class="container border-light mb-5" style="max-width: 23rem;">
                  <ul class="pagination" style="justify-content: center;">
                  <%if(info.active==1) {%>
@@ -212,7 +228,7 @@
                         <li class="page-item">
                             <a class="page-link" href="/petition/content?id=<%=content._id%>&page=<%=i%>"><%=i%></a>
                         </li>
-                
+
                     <%}%>
                  <%}%>
                  <%if(info.endPage==info.pagination) {%>
@@ -246,6 +262,6 @@
         <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
 
         <!-- Custom scripts for this template -->
-        <script src="js/clean-blog.min.js"></script>      
+        <script src="js/clean-blog.min.js"></script>
     </body>
 </html>

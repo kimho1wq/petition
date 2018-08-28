@@ -17,7 +17,7 @@
 <style media = "all and (max-width: 768px)">
     .mylink { font-size: 1.9rem; color: #003c70; padding: 0 0.95rem 0.55rem 0.95rem;}
     .mynolink { font-size: 1.2rem; color: #9a9a9a; padding: 0 0.95rem 0.52rem 0.95rem; }
- 
+
     .apost {font-size: 1.0rem; padding: 0.8rem 1.2rem; border: 0.16rem solid #dedede; font-weight: bold; color: #dedede;}
     .apost:hover { padding-right: 2.1rem; color: #bcbcbc; text-decoration:none;}
     .apost:active { padding-right: 2.1rem; color: #bcbcbc; text-decoration:none; }
@@ -28,7 +28,7 @@
     .masthead-subtext{font-size:1.0rem;}
 </style>
 
-<div class="myhead"> 
+<div class="myhead">
     <h1 class="myhead-text" align="middle">Siri-B</h1>
     <h1 class="myhead-subtext" align="middle">학생청원 및 제안</h1>
 </div>
@@ -46,7 +46,7 @@
             </div>
         </div>
     </div>
-        
+
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
         <div class="container" style="max-width: 59rem;">
         <a class="navbar-brand"></a>
@@ -65,7 +65,7 @@
                         <a class="mynolink" href="/"><strong>홈페이지</strong></a>
                     </li>
                 <%}%>
-                
+
                 <%if(title=="list" || title=="content") {%>
                     <li class="nav-item">
                         <a class="mylink" href="/petition/list"><strong>청원 목록</strong></a>
@@ -75,7 +75,7 @@
                         <a class="mynolink" href="/petition/list"><strong>청원 목록</strong></a>
                     </li>
                 <%}%>
-                    
+
                 <%if(title=="post") {%>
                     <li class="nav-item">
                         <a class="mylink" href="/petition/post"><strong>청원 작성하기</strong></a>
@@ -85,7 +85,7 @@
                         <a class="mynolink" href="/petition/post"><strong>청원 작성하기</strong></a>
                     </li>
                 <%}%>
-                    
+
                 <%if(title=="reply" || title=="reply_post") {%>
                     <li class="nav-item">
                         <a class="mylink" href="/petition/reply"><strong>답변된 청원</strong></a>
@@ -100,7 +100,7 @@
                     </div>
     </nav>
 </header>
-                    
+
 <script type="text/javascript">
     var interval=6000;
     var n=0;
@@ -119,7 +119,7 @@
             setTimeout("rotate()",interval);
              document.getElementsByTagName("body").style.fontSize = "30px";
         }
-       
+
     }
     function rotate() {
         var mql = window.matchMedia("screen and (max-width: 768px)");
@@ -133,5 +133,5 @@
             setTimeout("rotate()",interval);
         }
     }
-    
+
 </script>

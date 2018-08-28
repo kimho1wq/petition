@@ -44,7 +44,7 @@
             .alert-content h3{font-size:1.3rem;}
             .alert-content h5{font-size:0.8rem;}
             /* .btn-primary button{width: 154.4px;height: 54.4px;} */
-        </style> 
+        </style>
         <% include ./head.html %>
         <title>Siri-b Petition</title>
     </head>
@@ -57,11 +57,11 @@
         <% include ./header.html %>
 
         <div class="container" style="max-width: 70rem;">
-            
+
             <div class="info-content">
                 <p class="title"><span style="color: #003c70;"> ● </span><strong>최다 추천 청원</strong></p>
-            </div>      
-                
+            </div>
+
             <%var contentCount=0;%>
             <%for(var i=0; i < contents.length; i++) {%>
                 <%if(contentCount==2) break;%>
@@ -96,29 +96,34 @@
                             <p class="card-text">　<%=txt1%></p>
                             <p class="card-mtext"> <%=txt2%></p>
                             <div>
-                                <p class="card-subtext"><strong class="text-dark">청원인 : </strong><strong class="text-primary"><%=contents[i].nickname%></strong></p>
+                                <p class="card-subtext"><strong class="text-dark">청원인 : </strong>
+                                    <%if(contents[i].is_anonymous) {%>
+                                        <strong class="text-primary">익명</strong>
+                                    <%} else {%>
+                                        <strong class="text-primary"><%contents[i].nickname%></strong>
+                                    <%}%></p>
                                 <p class="card-subtext"><strong class="text-dark">참여인원 : </strong><strong class="text-primary"><%=contents[i].count%>명</strong></p>
-                                
+
                                 <p class="card-button"><button onclick = "location.href = '/petition/content?id=<%=contents[i]._id%>'" type="button" class="btn btn-primary mybutton" style="padding:0.6rem 1rem;">내용 자세히 보기</button></p>
                             </div>
                         </div>
                     </div>
                     <br>
-                <%}%>    
-            <%}%>      
+                <%}%>
+            <%}%>
             <%if(contentCount==0) {%>
                 <div style="max-width: 70rem; text-align: center;">
                     <hr>
                     <h5> 추천 청원이 없습니다.</h5>
-                </div> 
+                </div>
                 <br><br>
             <%}%>
             <br>
-        
+
             <div class="info-content">
                 <p class="title"><span style="color: #003c70;"> ● </span><strong>답변 대기 중인 청원</strong></p>
             </div>
-          
+
             <div class="row">
                 <div class="col-lg-30 col-md-12" style="max-width: 70rem;">
                     <table class="table table-hover" style="text-align: center;">
@@ -127,13 +132,13 @@
                                 <th style="font-size: 1.05rem; padding: 0.9rem 0.28rem; background-color: #003c70; color: #ffffff" scope="col">번호</th>
                                 <th style="font-size: 1.05rem; padding: 0.9rem 0.28rem; background-color: #003c70; color: #ffffff" scope="col">분류</th>
                                 <th style="font-size: 1.05rem; padding: 0.9rem 0.28rem; background-color: #003c70; color: #ffffff" scope="col">제목</th>
-                                <th style="font-size: 1.05rem; padding: 0.9rem 0.28rem; background-color: #003c70; color: #ffffff" scope="col">별명</th>
+                                <th style="font-size: 1.05rem; padding: 0.9rem 0.28rem; background-color: #003c70; color: #ffffff" scope="col">청원인</th>
                                 <th style="font-size: 1.05rem; padding: 0.9rem 0.28rem; background-color: #003c70; color: #ffffff" scope="col">기간</th>
                                 <th style="font-size: 0.9rem; padding: 0.9rem 0.28rem; background-color: #003c70; color: #ffffff" scope="col">참여인원</th>
                             </tr>
                         </thead>
                         <tbody>
-                            <%if(list.length>0){%>         
+                            <%if(list.length>0){%>
                                 <%list.forEach(function(item){%>
                                     <tr style="font-size: 1rem;" class="table-light">
                                         <th class="table-text">답변대기</th>
@@ -145,50 +150,56 @@
                                             <%}%>
                                             <%txt += "...";%>
                                             <td class="table-text" style="text-align: left;"><strong class="text-dark"><a href="/petition/content?id=<%=item._id%>"><%=txt%></a></strong></td>
-                                        
+
                                             <div class="table-mtext">
                                                 <p style="display: inline-block; width:49%; margin:0.7rem 0;"><span style="background-color:#003c70; color: #ffffff">　답변대기　</span></p>
                                                 <p style="display: inline-block; text-align:right; width:49%; margin:0.4rem 0;"><strong class="text-primary"><%=item.type%></strong></p>
-                                    
+
                                                 <p style="font-size: 1.2rem; margin:0.7rem 0"><strong class="text-dark"><a href="/petition/content?id=<%=item._id%>"><%=txt%></a></strong></p>
-                                                
+
                                                 <p style="display: inline-block; width:49%; margin:0.1rem 0; "><%=item.startDay%> ~ <%=item.endDay%></p>
-                                                <p style="display: inline-block; text-align:right; width:49%; margin:0.2rem 0 0.5rem;"><strong class="text-primary"><%=item.count%>명</strong></p> 
+                                                <p style="display: inline-block; text-align:right; width:49%; margin:0.2rem 0 0.5rem;"><strong class="text-primary"><%=item.count%>명</strong></p>
                                             </div>
-                                        
+
                                         <%} else {%>
                                             <td class="table-text" style="text-align: left;"><strong class="text-dark"><a href="/petition/content?id=<%=item._id%>"><%=item.title%></a></strong></td>
-                                        
+
                                             <div class="table-mtext">
                                                 <p style="display: inline-block; width:49%; margin:0.7rem 0;"><span style="background-color:#003c70; color: #ffffff">　답변대기　</span></p>
                                                 <p style="display: inline-block; text-align:right; width:49%; margin:0.4rem 0;"><strong class="text-primary"><%=item.type%></strong></p>
-                                    
+
                                                 <p style="font-size: 1.2rem; margin:0.7rem 0"><strong class="text-dark"><a href="/petition/content?id=<%=item._id%>"><%=item.title%></a></strong></p>
-                                                
+
                                                 <p style="display: inline-block; width:49%; margin:0.1rem 0; "><%=item.startDay%> ~ <%=item.endDay%></p>
                                                 <p style="display: inline-block; text-align:right; width:49%; margin:0.2rem 0 0.5rem;"><strong class="text-primary"><%=item.count%>명</strong></p>
                                             </div>
                                         <%}%>
-                                        <td class="table-text"><strong class="text-dark"><%=item.nickname%></strong></td>
+                                        <td class="table-text"><strong class="text-dark">
+                                            <%if(item.is_anonymous) {%>
+                                                <strong class="text-primary">익명</strong>
+                                            <%} else {%>
+                                                <strong class="text-primary"><%=item.nickname%></strong>
+                                            <%}%>
+                                        </td>
                                         <td class="table-text"><strong class="text-muted"><%=item.startDay%> ~ <%=item.endDay%></strong></td>
                                         <td class="table-text"><strong class="text-primary" ><%=item.count%>명</strong></td>
-                                       
+
                                     </tr>
                                 <%})%>
                                 <tr class="table-text"><td></td><td></td><td></td><td></td><td></td><td></td></tr>
                                 <div class="table-mtext">
                                 </div>
-                            <%} else {%> 
+                            <%} else {%>
                                 <tr><th colspan="6"><h5>　답변대기 청원이 없습니다.　</h5></th></tr>
                             <%}%>
-                            
+
                         </tbody>
-                    </table> 
-                   
+                    </table>
+
                 </div>
             </div>
             <br><br>
-            
+
             <div class="container border-light mb-4" style="max-width: 65rem;">
                 <div class="info-content" style="max-width: 65rem;">
                     <p class="title"><span style="color: #003c70;"> ● </span><strong>청원 작성하기</strong></p>
@@ -196,13 +207,13 @@
                     <h5 class="text-muted">　대학 현안 관련, 학생들 다수의 목소리가 모여 <strong class="text-primary">30일 동안 200 명 이상의 학생들이 추천한 청원</strong>에 대해서는</h5>
                     <h5 class="text-muted">　학교 및 총학생회 관계자(각 총학생회 국장, 단과대 회장, 학과 회장 등)가 답하겠습니다.</h5>
                 </div>
-               
+
                 <div class="container" style="max-width: 65rem;">
                     <p class="post-button"><button onclick = "location.href = '/petition/post'" type="button" class="btn btn-primary" style="padding:1rem 1.5rem; border: 0.2rem solid #003c70; background-color: #003c70; color: #ffffff;"><h5>지금 청원하기</h5></button></p>
                 </div>
             </div>
             <br>
-            
+
             <div class="container border-secondary mb-4" style="max-width: 70rem; margin-top: 1.4rem 0;">
                 <div class="card-header container" style=" padding: 2.2rem; font-size: 1.6rem">
                     <div class="alert-content">
@@ -214,7 +225,7 @@
                         <h5 class="text-muted"><strong class="text-dark">  ·  </strong>동일 이용자에 의해 동일한 내용으로 중복 게시된 청원은 최초 1개 청원만 남기고 '숨김'처리 또는 삭제 될 수 있습니다.</h5>
                         <h5 class="text-muted"><strong class="text-dark">  ·  </strong>한번 작성된 청원은 <strong class="text-primary">수정 및 삭제가 불가능합니다.</strong> 최초 청원취지와 다른내용으로 변경되는 것을 방지하여 청원참여자 의견을 보호하기 위한 조치이니 신중하게 작성하여 주시기 바랍니다.</h5>
                         <h5 class="text-muted"><strong class="text-dark">  ·  </strong><strong class="text-primary">허위 사실이나 타인의 명예를 훼손하는 내용</strong>이 포함된 청원은 관리자에 의해 '숨김'처리 또는 삭제될 수 있습니다.</h5>
-                    </div>  
+                    </div>
                 </div>
             </div>
             <br><br>

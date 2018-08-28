@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <% include ./head.html %>
+    <title>Siri-b Petition</title>
+</head>
+<body>
+
+    <!-- Navigation -->
+    <% include ./navigation.html %>
+    <style media = "all and (min-width: 769px)">
+       .mylink { font-size: 1.9rem; color: #003c70; margin: 0 0.7rem; padding: 0 0.95rem 0.55rem 0.95rem; border-bottom: 0.25rem solid #003c70; }
+       .mylink:hover { color: #003c70; padding: 0 1.2rem 0.35rem 1.2rem; border-bottom: 0.25rem solid #003c70; text-decoration:none;}
+       .mylink:active { color: #003c70; padding: 0 1.2rem 0.35rem 1.2rem; border-bottom: 0.25rem solid #003c70; text-decoration:none;}
+       .mynolink { font-size: 1.9rem; color: #9a9a9a; margin: 0 0.7rem; padding: 0 0.95rem 0.52rem 0.95rem; }
+       .mynolink:hover { color: #003c70; padding: 0 1.2rem 0.35rem 1.2rem; border-bottom: 0.25rem solid #003c70; text-decoration:none;}
+       .mynolink:active { color: #003c70; padding: 0 1.2rem 0.35rem 1.2rem; border-bottom: 0.25rem solid #003c70; text-decoration:none;}
+       .apost {font-size: 1.6rem; padding: 0.8rem 1.2rem; border: 0.16rem solid #dedede; font-weight: bold; color: #dedede;}
+       .apost:hover { padding-right: 2.1rem; color: #bcbcbc; text-decoration:none;}
+       .apost:active { padding-right: 2.1rem; color: #bcbcbc; text-decoration:none; }
+       .myhead { margin: 2.347em 0; font-size:3.5rem;}
+       .myhead-text{font-size:3.3rem;}
+       .myhead-subtext{font-size:2.5rem;}
+       .masthead-text{font-size:2.7rem;}
+       .masthead-subtext{font-size:1.8rem;}
+   </style>
+   <style media = "all and (max-width: 768px)">
+       .mylink { font-size: 1.9rem; color: #003c70; padding: 0 0.95rem 0.55rem 0.95rem;}
+       .mynolink { font-size: 1.2rem; color: #9a9a9a; padding: 0 0.95rem 0.52rem 0.95rem; }
+
+       .apost {font-size: 1.0rem; padding: 0.8rem 1.2rem; border: 0.16rem solid #dedede; font-weight: bold; color: #dedede;}
+       .apost:hover { padding-right: 2.1rem; color: #bcbcbc; text-decoration:none;}
+       .apost:active { padding-right: 2.1rem; color: #bcbcbc; text-decoration:none; }
+       .myhead { margin: 2.8em 0 1.8em 0;font-size:3rem;}
+       .myhead-text{font-size:2.5rem;}
+       .myhead-subtext{font-size:2rem;}
+       .masthead-text{font-size:1.8rem;}
+       .masthead-subtext{font-size:1.0rem;}
+   </style>
+
+   <div class="myhead">
+       <h1 class="myhead-text" align="middle">Siri-B</h1>
+       <h1 class="myhead-subtext" align="middle">학생청원 및 제안</h1>
+   </div>
+
+    <div class="container">
+    <h3>나의 청원</h3>
+    <table>
+        <tr style="border-top: 0.2rem solid #003c70;">
+            <th>번호</th>
+            <th>분류</th>
+            <th>제목</th>
+            <th>기간</th>
+            <th>참여인원</th>
+            <th>상태</th>
+        </tr>
+        <% var i=1;%>
+        <%if(contents.length>0) {%>
+            <% contents.forEach(function(item) {%>
+
+            <tr>
+                <td><%=i%></td>
+                <td><%=item.type%></td>
+                <td><%=item.title%></td>
+                <td><%=item.startDay%>~<%=item.endDay%></td>
+                <td><%=item.count%></td>
+                <%if(item.endDay<Date.now) {%>
+                    <td>진행중</td>
+                <%} else {%>
+                    <td>완료</td>
+                <%}%>
+            </tr>
+            <%i=i+1;%>
+            <%});%>
+        <%} else {%>
+            작성한 글이 없습니다.
+            <%}%>
+
+    </table>
+</div>
+
+</body>
+</html>

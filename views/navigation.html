@@ -11,16 +11,11 @@
               <li class="nav-item">
                   <a class="nav-link" style="color: black;" href="/">Home</a>
               </li>
-              <li class="nav-item">
-                  <a class="nav-link" style="color: black;" href="/petition/list">List</a>
-              </li>
-              <li class="nav-item">
-                  <a class="nav-link" style="color: black;" href="/petition/post">Post</a>
-              </li>
-              <li class="nav-item">
-                  <a class="nav-link" style="color: black;" href="/petition/reply">Reply</a>
-              </li>
+
                 <%if(login){ %>
+                    <li class="nav-item">
+                        <a class="nav-link" style="color: black;" href="/users/mypage">MyPage</a>
+                    </li>
                   <li class="nav-item">
                       <a class="nav-link" style="color: black;" href="/users/logout">로그아웃</a>
                   </li>
@@ -35,4 +30,4 @@
           </ul>
         </div>
       </div>
-    </nav>      
+    </nav>
