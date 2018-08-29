@@ -19,7 +19,7 @@ Schema.createSchema = function(mongoose) {
         }],
         answer_flag: {type:Boolean, 'default':false},
         answer:{type:mongoose.Schema.Types.ObjectId,ref:"answers"},
-        is_anonymous:{type:Boolean}
+        is_anonymous:{type:Boolean, 'default':true}
     });
 
     return PetitionSchema;
