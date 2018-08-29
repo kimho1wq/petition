@@ -69,11 +69,17 @@
                             <%if(content.is_anonymous) {%>
                                 청원인 : <strong>익명</strong>
                             <%} else {%>
-                                청원인 : <strong>content.nickname</strong>
+                                청원인 : <strong><%=content.nickname%></strong>
                             <%}%>
                         </p>
                         <p align="center" class="type-text">청원시작 : <strong><%=content.startDay%></strong>　~　청원종료 : <strong><%=content.endDay%></strong></p>
-                        <p align="center" class="type-mtext">분류 : <strong><%=content.type%></strong>　청원인 : <strong><%=content.nickname%></strong></p>
+                        <p align="center" class="type-mtext">분류 : <strong><%=content.type%></strong>　청원인 : <strong>
+                            <%if(content.is_anonymous) {%>
+                            청원인 : <strong>익명</strong>
+                            <%} else {%>
+                                청원인 : <strong><%=content.nickname%></strong>
+                            <%}%>
+                        </p>
                         <p align="center" class="type-mtext">청원시작 : <strong><%=content.startDay%></strong></p>
                         <p align="center" class="type-mtext">청원종료 : <strong><%=content.endDay%></strong></p>
                     </div>
