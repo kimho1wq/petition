@@ -32,12 +32,12 @@
 
         <!-- Page Header -->
         <% include ./header.html %>
-        
+
         <div class="container" style="max-width: 70rem;">
            <br>
             <p class="title_center"><span style="color: #003c70;"> &laquo; </span><strong>청원 답변하기</strong></p>
             <br>
-            
+
             <div class="container border-secondary mb-4" style="max-width: 67rem;">
                 <div class="card-header" style=" padding: 2.4rem;">
                     <h4>학생청원 홈페이지 운영 원칙</h4>
@@ -48,26 +48,26 @@
                 </div>
                 <br><br><hr><br>
             </div>
-            
+
             <div class="container border-light mb-5" style="max-width: 65rem;">
                 <p class="title"><span style="color: #003c70;"> ● </span><strong>청원 답변하기</strong></p>
-            </div>      
-        
+            </div>
+
             <div class="container col-lg-9 col-md-12" style="max-width: 65rem;">
-                <form class="card-header" action="/petition/reply_post" method="post" >
+                <form class="card-header" action="/petition/reply_post" id="reply_post" method="post" >
                     <input type="hidden" name="id" value="<%=id%>">
                     <div class="form-group" id="form-title">
                         <h5>청원제목</h5>
                         <p class="form-control" style="background-color: #dedede; border 0.1rem solid #efefef;"><%=content.title%></p>
                     </div>
                     <div class="form-group">
-                        <h5>분류</h5>   
+                        <h5>분류</h5>
                         <div class="custom-control custom-radio" style="margin: 1rem;">
                             <input type="radio" id="<%=content.type%>" class="custom-control-input" checked="">
                             <label class="custom-control-label" for="<%=content.type%>"><%=content.type%></label>
                         </div>
                     </div>
-                    
+
                     <div class="form-group" style="width: 65%; margin-left: 1.2rem; padding: 0.3 1rem; background-color: #dedede; border 0.2rem solid #ababab; text-align:center;" id="group">
                         <h6 style="display: inline-block; width: 32%;">청원인원 : <strong class="text-primary"><%=content.count%>명</strong></h6>
                         <h6 style="display: inline-block; width: 32%;">청원시작 : <strong class="text-primary"><%=content.startDay%></strong></h6>
@@ -100,8 +100,8 @@
                         <h5>답변 내용</h5>
                         <textarea class="form-control" name="content" rows="15" id="content"></textarea>
                     </div>
-                    <p align="right"><button type="submit" class="btn btn-primary" style="margin-right: 20px;background-color: #003c70; border: 2px solid #003c70"><h5>　SUBMIT　</h5></button></p>
-                </form> 
+                    <p align="right"><input type="button"  onclick="reply();" class="btn btn-primary" value="SUBMIT" style="margin-right: 20px;background-color: #003c70; border: 2px solid #003c70"></p>
+                </form>
             </div>
         </div>
         <br><hr><br>
@@ -116,23 +116,42 @@
         <script>
             function answer_select(){
                 var langSelect = document.getElementById("answer_list_select");
-     
+
                 // select element에서 선택된 option의 value가 저장된다.
                 var selectValue = langSelect.options[langSelect.selectedIndex].value;
                 if(selectValue != "없음"){
                     document.getElementById('link').value = '이미 작성된 답변 사용';
                     document.getElementById('content').value = '이미 작성된 답변 사용';
-                    
+
                     document.getElementById('link').disabled = true ;
                     document.getElementById('content').disabled = true ;
                 }else{
                     document.getElementById('link').value = '';
                     document.getElementById('content').value = '';
-                    
+
                     document.getElementById('link').disabled = false ;
                     document.getElementById('content').disabled = false ;
                 }
             }
-        </script>    
+
+            function reply() {
+                var link = $("#link").val();
+                var content = $("#content").val();
+
+                if(!link||!content) {
+                    alert("동영상 링크와 답변 내용을 입력하세요.");
+                }
+                else {
+                    var linkstr=link.substr(0,24);
+                    
+                    if(linkstr!='https://www.youtube.com/') {
+                        alert("링크의 형식이 잘못되었습니다.");
+                    }else {
+                        $('#reply_post').submit();
+                    }
+                }
+
+            }
+        </script>
     </body>
 </html>

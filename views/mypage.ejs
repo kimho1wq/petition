@@ -39,44 +39,127 @@
    </style>
 
    <div class="myhead">
-       <h1 class="myhead-text" align="middle">Siri-B</h1>
-       <h1 class="myhead-subtext" align="middle">학생청원 및 제안</h1>
+       <h1 class="myhead-subtext" align="center">My Page</h1>
    </div>
 
     <div class="container">
     <h3>나의 청원</h3>
-    <table>
+    <hr>
+    <div class="my_petitions">
+        <li type="disc">나의 청원 : <a class="text-primary" href="/users/mypage?view=all"><%=info.all_cnt%>건</a></li>
+        <li type="disc">진행 중인 청원 : <a class="text-primary" href="/users/mypage?view=ing"><%=info.ing_cnt%>건</a></li>
+        <li type="disc">답변된 청원 : <a class="text-primary" href="/users/mypage?view=answered"><%=info.answered_cnt%>건</a></li>
+    </div>
+    <hr>
+
+    <table class="table table-hover" style="text-align:center;" cellspacing="0.6rem">
         <tr style="border-top: 0.2rem solid #003c70;">
-            <th>번호</th>
-            <th>분류</th>
-            <th>제목</th>
-            <th>기간</th>
-            <th>참여인원</th>
-            <th>상태</th>
+            <th style="font-size: 1.2rem; padding: 0.9rem 0.28rem; background-color: #003c70; color: #ffffff" scope="col">번호</th>
+            <th style="font-size: 1.2rem; padding: 0.9rem 0.28rem; background-color: #003c70; color: #ffffff" scope="col">분류</th>
+            <th style="font-size: 1.2rem; padding: 0.9rem 0.28rem; background-color: #003c70; color: #ffffff" scope="col">제목</th>
+            <th style="font-size: 1.2rem; padding: 0.9rem 0.28rem; background-color: #003c70; color: #ffffff" scope="col">기간</th>
+            <th style="font-size: 1.2rem; padding: 0.9rem 0.28rem; background-color: #003c70; color: #ffffff" scope="col">참여인원</th>
+            <th style="font-size: 1.2rem; padding: 0.9rem 0.28rem; background-color: #003c70; color: #ffffff" scope="col">상태</th>
         </tr>
-        <% var i=1;%>
-        <%if(contents.length>0) {%>
+
+        <% var n=info.no; %>
+        <% var i=n;%>
+        <%if(n>0) {%>
             <% contents.forEach(function(item) {%>
 
-            <tr>
-                <td><%=i%></td>
-                <td><%=item.type%></td>
-                <td><%=item.title%></td>
-                <td><%=item.startDay%>~<%=item.endDay%></td>
-                <td><%=item.count%></td>
-                <%if(item.endDay<Date.now) {%>
-                    <td>진행중</td>
+            <tr style="font-size: 1rem" class="table-light">
+                <td class="table-text"><strong><%=i%></td>
+                <td class="table-text"><strong class="text-primary"><%=item.type%></td>
+                <%if(item.title.length >= 38) {%>
+                    <%var txt = "";%>
+                    <%for(var j = 0; j < 38; j++) {%>
+                        <%txt += item.title[j];%>
+                    <%}%>
+                    <%txt += "...";%>
+                <td class="table-text"><strong class="text-muted"><a href='/petition/content?id=<%=item._id%>'><%=txt%></td>
+                    <%}else {%>
+                        <td class="table-text"><strong class="text-muted"><a href='/petition/content?id=<%=item._id%>'><%=item.title%></td>
+                    <%}%>
+                <td class="table-text"><strong><%=item.startDay%>~<%=item.endDay%></td>
+                <%if(item.count>=20) {%>
+                    <td class="table-text"><strong class="text-primary"><%=item.count%></td>
                 <%} else {%>
-                    <td>완료</td>
+                    <td class="table-text"><strong class="text-muted"><%=item.count%></td>
+                <%}%>
+
+                <%if(item.endDay<Date.now) {%>
+                    <%if (item.count>=20) {%>
+                        <td class="table-text"><strong>답변대기</td>
+                    <%} else {%>
+                        <td class="table-text"><strong>진행중</td>
+                    <%}%>
+                <%} else if (item.answer_flag) {%>
+                    <td class="table-text"><strong>답변완료</td>
+                <%}else if(!item.answer_flag) {%>
+                    <td class="table-text"><strong>답변대기</td>
+                <%} else {%>
+                    <td class="table-text"><strong>기간만료</td>
                 <%}%>
             </tr>
-            <%i=i+1;%>
+            <%i=i-1;%>
             <%});%>
         <%} else {%>
             작성한 글이 없습니다.
             <%}%>
 
     </table>
+    
+    <div class="container border-light mb-5" style="max-width: 22rem;">
+        <ul class="pagination" style="justify-content: center;">
+            <%if(info.active==1) {%>
+                <li class="page-item disabled">
+                    <a class="page-link" href="/users/mypage?page=1&sort=<%=info.sort%>&type=<%=info.type%>&view=<%=info.view%>&word=<%=info.word%>&deadlineFlag=<%=info.deadlineFlag%>">&laquo;</a>
+                </li>
+            <%} else {%>
+                <li class="page-item">
+                    <a class="page-link " href="/users/mypage?page=1&sort=<%=info.sort%>&type=<%=info.type%>&view=<%=info.view%>&word=<%=info.word%>&deadlineFlag=<%=info.deadlineFlag%>">&laquo;</a>
+                </li>
+            <%}%>
+            <%if(info.startPage==1) {%>
+                <li class="page-item disabled">
+                    <a class="page-link" href="/users/mypage?page=<%=info.startPage-info.limitPage%>&sort=<%=info.sort%>&type=<%=info.type%>&view=<%=info.view%>&word=<%=info.word%>&deadlineFlag=<%=info.deadlineFlag%>">&lt;</a>
+                </li>
+            <%} else {%>
+                <li class="page-item">
+                    <a class="page-link" href="/users/mypage?page=<%=info.startPage-info.limitPage%>&sort=<%=info.sort%>&type=<%=info.type%>&view=<%=info.view%>&word=<%=info.word%>&deadlineFlag=<%=info.deadlineFlag%>">&lt;</a>
+                </li>
+            <%}%>
+            <%for(var i=info.startPage; i<=info.endPage; i++){%>
+                <%if(i==info.active) {%>
+                    <li class="page-item active">
+                        <a class="page-link" href="/users/mypage?page=<%=i%>&sort=<%=info.sort%>&type=<%=info.type%>&view=<%=info.view%>&word=<%=info.word%>&deadlineFlag=<%=info.deadlineFlag%>"><%=i%></a>
+                    </li>
+                <%} else {%>
+                    <li class="page-item">
+                        <a class="page-link" href="/users/mypage?page=<%=i%>&sort=<%=info.sort%>&type=<%=info.type%>&view=<%=info.view%>&word=<%=info.word%>&deadlineFlag=<%=info.deadlineFlag%>"><%=i%></a>
+                    </li>
+                <%}%>
+            <%}%>
+            <%if(info.endPage==info.pagination) {%>
+                <li class="page-item disabled">
+                    <a class="page-link" href="/users/mypage?page=<%=info.startPage-(-info.limitPage)%>&sort=<%=info.sort%>&type=<%=info.type%>&view=<%=info.view%>&word=<%=info.word%>&deadlineFlag=<%=info.deadlineFlag%>">&gt;</a>
+                </li>
+            <%} else {%>
+                <li class="page-item">
+                    <a class="page-link" href="/users/mypage?page=<%=info.startPage-(-info.limitPage)%>&sort=<%=info.sort%>&type=<%=info.type%>&view=<%=info.view%>&word=<%=info.word%>&deadlineFlag=<%=info.deadlineFlag%>">&gt;</a>
+                </li>
+            <%}%>
+            <%if(info.active==info.pagination) {%>
+                <li class="page-item disabled">
+                    <a class="page-link" href="/users/mypage?page=<%=info.pagination%>&sort=<%=info.sort%>&type=<%=info.type%>&view=<%=info.view%>&word=<%=info.word%>&deadlineFlag=<%=info.deadlineFlag%>">&raquo;</a>
+                </li>
+            <%} else {%>
+                <li class="page-item">
+                    <a class="page-link " href="/users/mypage?page=<%=info.pagination%>&sort=<%=info.sort%>&type=<%=info.type%>&view=<%=info.view%>&word=<%=info.word%>&deadlineFlag=<%=info.deadlineFlag%>">&raquo;</a>
+                </li>
+            <%}%>
+        </ul>
+    </div>
 </div>
 
 </body>

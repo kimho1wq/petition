@@ -68,24 +68,115 @@ router.post('/login',function(req, res) {
 router.get('/mypage', function(req, res) {
     console.log('get /mypage');
     console.log(req.session.user);
+    var page = req.param('page');
+    var sortType = req.param('sort');
+    var type = req.param('type');
+    var word = req.param('word');
+    var view = req.param('view');
+    console.log('view:', view);
+    var deadlineFlag = req.param('deadlineFlag');
+
+    if(page == null) {page = 1;}
+    if(type == null) {type = "All";}
+    if(sortType == null) {sortType = "created_at";}
+    if(deadlineFlag == null) {deadlineFlag = 1;}
+    if(view==null) view="all";
+
+    var limitDay = 30;
+    var limitSize = 5;
+    var limitPage = 5;
+    var skipSize = (page-1)*limitSize;
+
     if(!req.session.user) {
         console.log('login X');
         res.send('<script type="text/javascript">alert("로그인이 필요합니다.");window.location.href = "/users/login";</script>');
     }else {
-        console.log('login O');
-        //res.render('mypage', {login:req.session.user});
-        mongodb.PetitionModel.find({writer:req.session.user.uid}).exec(function(err,rawContents) {
-            if(err) throw err;
+        var viewCondition;
+        var today=Date.now();
 
-            for(var i=0; i<rawContents.length; i++) {
-                rawContents[i].startDay =  rawContents[i].created_at.toISOString().substr(2,8);
-                var tmp = new Date();
-                tmp.setDate(rawContents[i].created_at.getDate() + 30);
-                rawContents[i].endDay = tmp.toISOString().substr(2,8);
-                console.log(rawContents[i].startDay, rawContents[i].endDay);
+        console.log('login O');
+
+        //res.render('mypage', {login:req.session.user});
+        if(view=="all") {
+            console.log('all')
+            viewCondition = {
+                writer:req.session.user.uid
             }
-            console.log('found');
-            res.render('mypage', {contents:rawContents, login:req.session.user});
+        } else if(view=="ing") {
+            console.log('ing');
+            viewCondition={
+                writer:req.session.user.uid,
+                created_at:{$gte: today-30*24*60*60000}
+            }
+        } else {
+            console.log('ans');
+            viewCondition={
+
+                    writer:req.session.user.uid,
+                    answer_flag:true
+
+            }
+        }
+
+        var all_cnt;
+        var ing_cnt;
+        var answered_cnt;
+
+        mongodb.PetitionModel.count({writer:req.session.user.uid}).exec(function(err, c) {
+            if (err) throw err;
+            all_cnt=c;
+        });
+        console.log('1');
+        mongodb.PetitionModel.count({$and:[{writer:req.session.user.uid}, {created_at:{$gte: today-limitDay*24*60*60000}}]}, function(err, c) {
+            if (err) throw err;
+            ing_cnt=c;
+        });
+        console.log('2');
+        mongodb.PetitionModel.count({$and:[{writer:req.session.user.uid}, {answer_flag:true}]}).exec(function(err, c) {
+            if (err) throw err;
+            answered_cnt=c;
+        });
+        console.log('3');
+        mongodb.PetitionModel.count(viewCondition).exec(function(err, cnt) {
+            console.log('mongodv1');
+            if(err) {
+                throw err;
+            }
+            var pageNum = Math.ceil(cnt/limitSize);
+            var num = cnt-((page - 1)*limitSize);
+            var startPage = (Math.floor((page-1)/limitPage)*limitPage)+1;
+            var endPage = startPage + limitPage - 1;
+            if(endPage > pageNum) { endPage = pageNum; }
+
+            if((page > pageNum || page < 1 ) && cnt != 0) {
+                console.log("잘못된 페이지");
+                res.send('<script type="text/javascript">alert("잘못된 페이지입니다.");window.location.href = "/users/mypage";</script>');
+            } else if(cnt == 0) {
+                console.log("list가 없다");
+                var info = { startPage: 1, endPage: 1,  all_cnt:all_cnt, ing_cnt:ing_cnt, view:view, answered_cnt:answered_cnt, limitPage: limitPage, active: 1, type: type, pagination: 1, no: 0 };
+
+                res.render('mypage', { title:"mypage", info: info, contents: rawContents, login:req.session.user});
+            } else {
+                var info = {startPage: startPage, endPage: endPage, all_cnt:all_cnt, view:view, ing_cnt:ing_cnt, answered_cnt:answered_cnt, limitPage: limitPage, active: page,  type: type, pagination: pageNum, no: num };
+
+                mongodb.PetitionModel.find(viewCondition).skip(skipSize).limit(limitSize).exec(function(err,rawContents) {
+
+                    if(err) throw err;
+
+
+
+                    for(var i=0; i<rawContents.length; i++) {
+                        rawContents[i].startDay =  rawContents[i].created_at.toISOString().substr(2,8);
+                        var tmp = new Date();
+                        tmp.setDate(rawContents[i].created_at.getDate() + 30);
+                        rawContents[i].endDay = tmp.toISOString().substr(2,8);
+                        console.log(rawContents[i].startDay, rawContents[i].endDay);
+                    }
+
+                    res.render('mypage', { title:"mypage", info: info, contents: rawContents, login:req.session.user});
+                    console.log('found');
+                });
+            }
         });
     }
 });

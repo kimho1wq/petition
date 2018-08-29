@@ -621,7 +621,7 @@ router.post('/reply_post', function(req, res) {
     if(answer_selected != "없음"){
         mongodb.PetitionModel.findOne({_id:id}, function(err, content){
 
-            if(err){throw err;}
+            if(err){ console.log('err발생!');console.log(err);}
 
             content.answer_flag = true;
             content.answer = answer_selected;
@@ -653,6 +653,7 @@ router.post('/reply_post', function(req, res) {
                             }
 
                             var info = { startPage: startPage, endPage: endPage, limitPage: limitPage, no: num, active: 1, pagination: pageNum  }
+                            console.log('render');
                             res.render('reply', { title:"reply", info: info, contents:contents, login:req.session.user});
                         });
                     }
@@ -664,7 +665,17 @@ router.post('/reply_post', function(req, res) {
 
         var contents = req.body.content || req.query.content;
         var link = req.body.link || req.query.link;
-        var linkstr = link.substr(0,24);
+        console.log('link:', link);
+
+        var linkstr;
+        if(!link) {
+            linkstr='';
+        } else if(link.length<24) {
+            linkstr='';
+        } else {
+            linkstr = link.substr(0,24);
+        }
+        console.log('linkstr:', linkstr);
         var now = new Date();
 
         var newAnswers = new mongodb.AnswerModel({
@@ -674,11 +685,14 @@ router.post('/reply_post', function(req, res) {
             created_at : now,
             updated_at : now
         })
-
+        console.log('answer_selected==없음');
         if(!link || !contents) {
+            var url='/petition/reply_post?id='+id;
             res.send('<script type="text/javascript">alert("링크와 내용을 입력해야합니다.");</script>');
+
         } else if(linkstr != "https://www.youtube.com/") {
-            res.send('<script type="text/javascript">alert("링크의 형식이 잘못되었습니다. [ https://www.youtube.com/ ]");</script>');
+            res.send('<script type="text/javascript">alert("링크의 형식이 잘못되었습니다. [ https://www.youtube.com/ ]");window.location.href="/petition/reply_post?id=<%=id%>";</script>');
+            //res.redirect('/petition/reply_post?id=', id);
         } else {
             mongodb.PetitionModel.findOne({_id:id}, function(err, content){
                 if(err) {throw err;}
