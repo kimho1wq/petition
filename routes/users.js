@@ -47,15 +47,30 @@ router.post('/login',function(req, res) {
                         console.log('이미 로그인되어 있습니다.');
                     }
                     else {
-                        sess.user = {
-                            uid: user.uid,
-                            email: email,
-                            name: user.name,
-                            nickname: user.nickname,
-                            authorized:true
-                        }
+                        pool.query("SELECT * FROM users where uid=?", user.uid , (err, rows) => {
+                            if (err) {
+                                console.log(err);
+                                res.send('<script type="text/javascript">alert(" 로그인정보가 mysql에 없습니다! ");window.location.href = "/";</script>');
+                            } else {
+                                try{
+                                    sess.user = {
+                                        uid: user.uid,
+                                        email: email,
+                                        name: rows[0].name,
+                                        major: rows[0].major,
+                                        nickname: rows[0].nickname,
+                                        authorized:true
+                                    }
+                                    console.log(sess.user);
+                                    res.send('<script type="text/javascript">alert(" 로그인 성공! ");window.location.href = "/";</script>');
+                                }catch (exception) {
+                                    console.log(rows);
+                                    res.send('<script type="text/javascript">alert(" 회원정보가 mysql에 없습니다! ");window.location.href = "/";</script>');
+                                }
+                            }
+                        });                        
                     }
-                    res.send('<script type="text/javascript">alert(" 로그인 성공! ");window.location.href = "/";</script>');
+                    
                 }
             }
         });

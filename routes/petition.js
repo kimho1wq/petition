@@ -392,32 +392,49 @@ router.post('/post', function(req, res, next) {
     else if(!title || !contents) {
          res.send('<script type="text/javascript">alert("제목과 내용을 입력해야합니다.");window.location.href = "/petition/post";</script>');
     } else {
-          pool.query("SELECT * FROM users where uid=?", req.session.user.uid , (err, rows) => {
-              if (err) {
-                  console.log(err);
-              } else {
-                  if (rows.length > 0) {
-                      console.log('요청 파라미터 : ' + title +', '+contents);
-                      var flag = is_anonymous=="true"?true:false;
-                      var post = new mongodb.PetitionModel({
-                          title : title,
-                          type : type,
-                          contents : contents,
-                          nickname : rows[0].nickname,
-                          writer : rows[0].uid,
-                          is_anonymous:flag
-                      });
-                      post.save(function(err, result) {
-                          if(err) {throw err;}
-                          console.log('글 데이터 추가함');
-                          res.redirect('/petition/list');
-                      });
-                  } else {
-                        console.log("회원정보가 mysql에 없습니다");
-                        console.log(req.session.user.uid) ;
-                    return; }
-              }
-          });
+        var flag = is_anonymous=="true"?true:false;
+        
+        var post = new mongodb.PetitionModel({
+            title : title,
+            type : type,
+            contents : contents,
+            nickname : req.session.user.nickname,
+            writer : req.session.user.uid,
+            is_anonymous:flag
+        });
+
+        post.save(function(err, result) {
+            if(err) {throw err;}
+            console.log('글 데이터 추가함');
+            res.redirect('/petition/list');
+        });
+
+        //   pool.query("SELECT * FROM users where uid=?", req.session.user.uid , (err, rows) => {
+        //       if (err) {
+        //           console.log(err);
+        //       } else {
+        //           if (rows.length > 0) {
+        //               console.log('요청 파라미터 : ' + title +', '+contents);
+        //               var flag = is_anonymous=="true"?true:false;
+        //               var post = new mongodb.PetitionModel({
+        //                   title : title,
+        //                   type : type,
+        //                   contents : contents,
+        //                   nickname : rows[0].nickname,
+        //                   writer : rows[0].uid,
+        //                   is_anonymous:flag
+        //               });
+        //               post.save(function(err, result) {
+        //                   if(err) {throw err;}
+        //                   console.log('글 데이터 추가함');
+        //                   res.redirect('/petition/list');
+        //               });
+        //           } else {
+        //                 console.log("회원정보가 mysql에 없습니다");
+        //                 console.log(req.session.user.uid) ;
+        //             return; }
+        //       }
+        //   });
     }
 });
 
@@ -490,7 +507,7 @@ router.post('/comment', function(req, res){
     console.log('/petition/comment post 패스 요청됨.');
     var contents = req.body.contents;
     var is_comment_anonymous = req.body.is_comment_anonymous=="true"?true:false;
-    console.log(is_comment_anonymous)
+
     var id = req.body.id;
     var now = new Date();
 
@@ -501,33 +518,40 @@ router.post('/comment', function(req, res){
     if(!req.session.user) {
         res.send('<script type="text/javascript">alert("로그인하셔야 합니다.");window.location.href = "/users/login";</script>');
     } else {
-         mongodb.PetitionModel.findOne({_id: id}, function(err, content){
-             if(err) {throw err;}
+        addComment(id,req.session.user,contents,is_comment_anonymous,function(result){            
+            if(result){
+                mongodb.PetitionModel.findOne({_id: id}, function(err, content){
+                    if(err) {throw err;}
 
-             var max = content.comments.length + 1;
-             var pageNum = Math.ceil(max/limitSize);
-             var startPage = 1;
-             var endPage = limitPage;
-             if(endPage > pageNum) { endPage = pageNum; }
+                    var max = content.comments.length + 1;
+                    var pageNum = Math.ceil(max/limitSize);
+                    var startPage = 1;
+                    var endPage = limitPage;
+                    if(endPage > pageNum) { endPage = pageNum; }
 
-             content.comments.unshift({writer:req.session.user.uid, contents: contents, is_comment_anonymous:is_comment_anonymous});
-             content.count += 1;
-             content.save(function(err){
-                 mongodb.PetitionModel.findOne({_id: id}, {comments: {$slice: [0, limitSize]}}, function(err, rawContent){
-                     if(err) { throw err; }
-                     rawContent.startDay = rawContent.created_at.toISOString().substr(2,8);
-                     var tmp = new Date(); tmp.setDate(rawContent.created_at.getDate() + limitDay);
-                     rawContent.endDay = tmp.toISOString().substr(2,8);
-                     if(now < tmp) rawContent.dayFlag = 1;
-                     else rawContent.dayFlag = 0;
+                    // content.comments.unshift({writer:req.session.user.uid, contents: contents, is_comment_anonymous:is_comment_anonymous});
+                    // content.count += 1;
+                    // content.save(function(err){
+                        mongodb.PetitionModel.findOne({_id: id}, {comments: {$slice: [0, limitSize]}}, function(err, rawContent){
+                            if(err) { throw err; }
+                            rawContent.startDay = rawContent.created_at.toISOString().substr(2,8);
+                            var tmp = new Date(); tmp.setDate(rawContent.created_at.getDate() + limitDay);
+                            rawContent.endDay = tmp.toISOString().substr(2,8);
+                            if(now < tmp) rawContent.dayFlag = 1;
+                            else rawContent.dayFlag = 0;
 
-                     var info = { startPage: startPage, endPage: endPage, limitPage: limitPage, active: 1, pagination: pageNum  }
-                     res.render('content', { title:"content", info: info, content:rawContent, login:req.session.user});
+                            var info = { startPage: startPage, endPage: endPage, limitPage: limitPage, active: 1, pagination: pageNum  }
+                            res.render('content', { title:"content", info: info, content:rawContent, login:req.session.user});
 
-                     console.log('render완료')
-                 });
-             });
-         });
+                            console.log('render완료')
+                        });
+                    });
+                // });
+            }else{
+                console.log(" addComment result false")
+                res.send('<script type="text/javascript">alert("' + '이미 동의한 청원입니다.' + '");window.history.back();</script>');
+            }
+        });
     }
 });
 
@@ -788,3 +812,35 @@ router.get('/delete', function(req, res){
 
 
 module.exports = router;
+
+function addComment(petition,writer,comment,annoymous,callback){
+
+    var result = false;
+    console.log(petition,writer)
+    mongodb.PetitionModel.findOne({_id:petition},{'comments':{$elemMatch:{writer:writer.nickname}}},function(err,user_comment){
+        if(!err){
+            if(user_comment.comments.length == 0){                
+                mongodb.PetitionModel.findOne({_id:petition},function(err,rawContent){
+                    if(err) throw err;
+                    
+                    //데이터를 배열 앞에 추가해준다 (댓글이 추가된 순서대로 보기 위해서)
+                    rawContent.comments.unshift({writer:writer.nickname, contents: comment, is_comment_anonymous:annoymous});
+                    rawContent.count += 1;
+                    // rawContent.comments.unshift({name:writer.email,memo:comment});
+                
+                    rawContent.save(function(err){
+                        if(err) throw err;
+                        result = true;
+                        
+                        console.log("callback true return");
+                        callback(result);
+                    });
+                });
+            }
+            else{
+                console.log("callback false return");
+                callback(result);                
+            }
+        }
+    });
+  }
