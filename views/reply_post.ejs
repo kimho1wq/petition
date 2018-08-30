@@ -135,20 +135,29 @@
             }
 
             function reply() {
-                var link = $("#link").val();
-                var content = $("#content").val();
+                var langSelect = document.getElementById("answer_list_select");
 
-                if(!link||!content) {
-                    alert("동영상 링크와 답변 내용을 입력하세요.");
-                }
-                else {
-                    var linkstr=link.substr(0,24);
-                    
-                    if(linkstr!='https://www.youtube.com/') {
-                        alert("링크의 형식이 잘못되었습니다.");
-                    }else {
-                        $('#reply_post').submit();
+                // select element에서 선택된 option의 value가 저장된다.
+                var selectValue = langSelect.options[langSelect.selectedIndex].value;
+                if(selectValue == "없음"){
+                    alert(selectValue);
+                    var link = $("#link").val();
+                    var content = $("#content").val();
+
+                    if(!link||!content) {
+                        alert("동영상 링크와 답변 내용을 입력하세요.");
                     }
+                    else {
+                        var linkstr=link.substr(0,24);
+                        
+                        if(linkstr!='https://www.youtube.com/') {
+                            alert("링크의 형식이 잘못되었습니다.");
+                        }else {
+                            $('#reply_post').submit();
+                        }
+                    }
+                }else{
+                    $('#reply_post').submit();
                 }
 
             }
