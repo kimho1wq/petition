@@ -314,9 +314,6 @@ router.post('/comment', function(req, res){
                     var endPage = limitPage;
                     if(endPage > pageNum) { endPage = pageNum; }
 
-                    // content.comments.unshift({writer:req.session.user.uid, contents: contents, is_comment_anonymous:is_comment_anonymous});
-                    // content.count += 1;
-                    // content.save(function(err){
                         mongodb.PetitionModel.findOne({_id: id}, {comments: {$slice: [0, limitSize]}}, function(err, rawContent){
                             if(err) { throw err; }
                             rawContent.startDay = rawContent.created_at.toISOString().substr(2,8);
@@ -327,11 +324,8 @@ router.post('/comment', function(req, res){
 
                             var info = { startPage: startPage, endPage: endPage, limitPage: limitPage, active: 1, pagination: pageNum  }
                             res.render('content', { title:"content", info: info, content:rawContent, login:req.session.user});
-
-                            console.log('render완료')
                         });
                     });
-                // });
             }else{
                 console.log(" addComment result false")
                 res.send('<script type="text/javascript">alert("' + '이미 동의한 청원입니다.' + '");window.history.back();</script>');
@@ -349,7 +343,6 @@ router.get('/reply', function(req, res) {
     var limitDay = 10;
     var limitSize = 5;
     var limitPage = 5;
-    var now = new Date();
 
     mongodb.PetitionModel.count({answer_flag: true},function(err, max){
         if(err) {throw err;}
@@ -430,7 +423,10 @@ router.post('/reply_post', function(req, res) {
     if(answer_selected != "없음"){
         mongodb.PetitionModel.findOne({_id:id}, function(err, content){
 
-            if(err){ console.log('err발생!');console.log(err);}
+            if(err){
+                console.log(err);
+                res.send('<script type="text/javascript">alert("예상치못한 에러가 발생했습니다.");window.location.href = "/petition/reply";</script>');
+            }
 
             content.answer_flag = true;
             content.answer = answer_selected;
@@ -512,20 +508,14 @@ router.post('/reply_post', function(req, res) {
                 if(linkstr1[0] == "https://www.youtube.com/watch?v") {
                     var strtmp = "https://www.youtube.com/embed/" + linkstr1[1];
                     console.log("strtmp : " + strtmp);
-                    // content.answer_video = strtmp;
                     content.answer_flag = true;
-                    // content.answer_contents = contents;
-                    // content.updated_at = now;
 
                     newAnswers.video = strtmp;
                     newAnswers.contents = contents;
 
                 } else if(linkstr2 == "embed/") {
                     console.log("link : " + link);
-                    // content.answer_video = link;
                     content.answer_flag = true;
-                    // content.answer_contents = contents;
-                    // content.updated_at = now;
 
                     newAnswers.video = link;
                     newAnswers.contents = contents;
