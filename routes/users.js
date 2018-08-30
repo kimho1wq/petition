@@ -68,9 +68,9 @@ router.post('/login',function(req, res) {
                                     res.send('<script type="text/javascript">alert(" 회원정보가 mysql에 없습니다! ");window.location.href = "/";</script>');
                                 }
                             }
-                        });                        
+                        });
                     }
-                    
+
                 }
             }
         });
@@ -80,13 +80,32 @@ router.post('/login',function(req, res) {
     });
 });
 
+router.post('/mypage/search', function(req, res) {
+    var word = req.body.word;
+
+    if(!req.session.user) {
+        res.send('<script type="text/javascript">alert("로그인이 필요합니다.");window.location.href = "/users/login";</script>');
+    }
+    else {
+        res.redirect('/mypage?word='+word);
+    }
+})
 router.get('/mypage', function(req, res) {
     console.log('get /mypage');
     console.log(req.session.user);
     var page = req.param('page');
     var sortType = req.param('sort');
     var type = req.param('type');
-    var word = req.param('word');
+    var word = req.query.word;
+
+    if(!word) {
+        word='';
+    }
+    var searchCondition={
+        $or:[{title:{$regex:word}}, {contents:{$regex:word}}, {nickname:{$regex:word}}]
+    };
+
+
     var view = req.param('view');
     console.log('view:', view);
     var deadlineFlag = req.param('deadlineFlag');
@@ -152,7 +171,7 @@ router.get('/mypage', function(req, res) {
             answered_cnt=c;
         });
         console.log('3');
-        mongodb.PetitionModel.count(viewCondition).exec(function(err, cnt) {
+        mongodb.PetitionModel.count({$and:[searchCondition, viewCondition]}).exec(function(err, cnt) {
             console.log('mongodv1');
             if(err) {
                 throw err;
@@ -168,13 +187,13 @@ router.get('/mypage', function(req, res) {
                 res.send('<script type="text/javascript">alert("잘못된 페이지입니다.");window.location.href = "/users/mypage";</script>');
             } else if(cnt == 0) {
                 console.log("list가 없다");
-                var info = { startPage: 1, endPage: 1,  all_cnt:all_cnt, ing_cnt:ing_cnt, view:view, answered_cnt:answered_cnt, limitPage: limitPage, active: 1, type: type, pagination: 1, no: 0 };
+                var info = { startPage: 1, endPage: 1,  all_cnt:all_cnt, ing_cnt:ing_cnt, word:word, view:view, answered_cnt:answered_cnt, limitPage: limitPage, active: 1, type: type, pagination: 1, no: 0 };
 
                 res.render('mypage', { title:"mypage", info: info, contents: rawContents, login:req.session.user});
             } else {
-                var info = {startPage: startPage, endPage: endPage, all_cnt:all_cnt, view:view, ing_cnt:ing_cnt, answered_cnt:answered_cnt, limitPage: limitPage, active: page,  type: type, pagination: pageNum, no: num };
+                var info = {startPage: startPage, endPage: endPage, all_cnt:all_cnt, word:word, view:view, ing_cnt:ing_cnt, answered_cnt:answered_cnt, limitPage: limitPage, active: page,  type: type, pagination: pageNum, no: num };
 
-                mongodb.PetitionModel.find(viewCondition).skip(skipSize).limit(limitSize).exec(function(err,rawContents) {
+                mongodb.PetitionModel.find({$and:[searchCondition, viewCondition]}).skip(skipSize).limit(limitSize).exec(function(err,rawContents) {
 
                     if(err) throw err;
 

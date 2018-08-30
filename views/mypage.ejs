@@ -45,6 +45,8 @@
     <div class="container">
     <h3>나의 청원</h3>
     <hr>
+
+
     <div class="my_petitions">
         <li type="disc">나의 청원 : <a class="text-primary" href="/users/mypage?view=all"><%=info.all_cnt%>건</a></li>
         <li type="disc">진행 중인 청원 : <a class="text-primary" href="/users/mypage?view=ing"><%=info.ing_cnt%>건</a></li>
@@ -108,7 +110,27 @@
             <%}%>
 
     </table>
-    
+
+    <form action="/users/mypage" method="get" style="width:40% justify-content: center;">
+        <input type="hidden" name="sort" value="<%=info.sort%>">
+        <input type="hidden" name="deadlineFlag" value="<%=info.deadlineFlag%>">
+        <input type="hidden" name="type" value="search">
+        <input type="hidden" name="view" value="<%=info.view%>">
+        <% var placeholder;%>
+        <%if (info.view=="all") {%>
+        <% placeholder="나의 청원";%>
+        <%}else if(info.view=="ing") {%>
+        <% placeholder="진행 중인 청원";%>
+        <%} else {%>
+        <% placeholder="답변된 청원";%>
+        <%}%>
+        <input class="form-control mr-sm-2" type="text" placeholder="<%=placeholder%> 검색하기" name="word" style="display: inline-block; width:60%;">
+        <div style="display: inline-block; width:20%;">
+            <button class="btn btn-secondary btn-xs" type="submit">Search</button>
+        </div>
+    </form>
+    <hr>
+
     <div class="container border-light mb-5" style="max-width: 22rem;">
         <ul class="pagination" style="justify-content: center;">
             <%if(info.active==1) {%>

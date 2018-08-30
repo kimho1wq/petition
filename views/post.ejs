@@ -43,14 +43,14 @@
         </div>
 
         <div class="container col-lg-9 col-md-12" style="max-width: 65rem;">
-            <form class="card-header" action="/petition/post" method="post" >
+            <form class="card-header" action="/petition/post" id="write_petition" method="post" >
                 <div class="form-group" style="width: 90%">
                     <h5>청원제목</h5>
-                    <input type="text" class="form-control" name="title">
+                    <input type="text" class="form-control" id="title" name="title">
                 </div>
                 <div class="form-group" style="width: 50%">
                     <h5>카테고리</h5>
-                    <select class="form-control" name="type">
+                    <select class="form-control" id="type" name="type">
                         <option>총학생회</option>
                         <option>경영대학</option>
                         <option>공과대학</option>
@@ -70,9 +70,9 @@
                 </div>
                 <div class="form-group">
                     <h5>청원내용</h5>
-                    <textarea class="form-control" name="contents" rows="15"></textarea>
+                    <textarea class="form-control" name="contents" id="contents" rows="15"></textarea>
                 </div>
-                <p align="right"><button type="submit" class="btn btn-primary" style="margin-right: 20px;background-color: #003c70; border: 2px solid #003c70"><h5>　SUBMIT　</h5></button></p>
+                <p align="right"><input type="button" onclick="click_submit();" class="btn btn-primary" value="SUBMIT" style="margin-right: 20px;background-color: #003c70; border: 2px solid #003c70"></p>
             </form>
         </div>
         <br><hr><br>
@@ -85,5 +85,19 @@
 
         <!-- Custom scripts for this template -->
         <script src="js/clean-blog.min.js"></script>
+        <script>
+        function click_submit() {
+            var title=$('#title').val();
+            var content=$('#contents').val();
+
+            if(!title||!content) {
+                alert('제목과 내용을 모두 입력하세요.');
+            }
+            else {
+                $('#write_petition').submit();
+            }
+
+        }
+        </script>
     </body>
 </html>
