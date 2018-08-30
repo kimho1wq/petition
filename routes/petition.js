@@ -42,48 +42,47 @@ router.get('/list',function(req, res) {
     var word = req.param('word');
     var deadlineFlag = req.param('deadlineFlag');
 
-    var searchType = null;
-    var dead_condition = null
-
-    if(page == null) {page = 1;}
-    
-    if(type == null) {
-        type = "All";
-        searchType = {$regex:""};
-    }else if(type == type){
-        searchType = {$regex:""};
-    }else if(type != "search"){
-        searchType = {$regex:type};
-    }else{
-        // var searchCondition = {$regex:word};
-    }
-
-    if(sortType == null) {
-        // sortType = "created_at";
-        sortType = {'created_at':-1};
-    }else{
-        sortType = {'count':-1,'created_at':-1};        
-    }
-    if(deadlineFlag == null) {
-        deadlineFlag = 1;
-        dead_condition = "$gte"
-    }else if(deadlineFlag==1){
-        dead_condition = "$gte"
-    }else{
-        dead_condition = "$lt"
-    }
-
-    var now = new Date();
+var now = new Date();
 
     var limitDay = 10;
     var limitSize = 10;
     var limitPage = 5;
     var skipSize = (page-1)*limitSize;
 
+    if(page == null) {page = 1;}
+    var searchType = null;
+    if(type == null) {
+        type = "All";
+        searchType = {$regex:""};
+    }else if(type == "All"){
+        searchType = {$regex:""};
+    }else if(type != "search"){
+        searchType = {$regex:type};
+    }
+
+    var sortCondition = null;
+    if(sortType == null) {
+        sortType = "created_at";
+        sortCondition = {'created_at':-1};
+    }else{
+        sortCondition = {'count':-1,'created_at':-1};        
+    }
+    var dead_condition = null
+    var deadline_date = (new Date()).setDate(now.getDate()-limitDay)
+
+    if(deadlineFlag == null) {
+        deadlineFlag = 1;
+        dead_condition = {'$gte':deadline_date}
+    }else if(deadlineFlag==1){
+        dead_condition = {'$gte':deadline_date}
+    }else{
+        dead_condition = {'$lt':deadline_date}
+    }
+
     switch (type) {
         case "search" :
             var searchCondition = {$regex:word};
-            mongodb.PetitionModel.count({$and:[{answer_flag:false},{'created_at':{dead_condition:(new Date()).setDate(now.getDate()-limitDay)}},{$or:[{title:searchCondition},{contents:searchCondition},{nickname:searchCondition}]}]},function(err, max){
+            mongodb.PetitionModel.count({$and:[{answer_flag:false},{created_at:dead_condition},{$or:[{title:searchCondition},{contents:searchCondition},{nickname:searchCondition}]}]},function(err, max){
                 if(err) {throw err;}
 
                 var pageNum = Math.ceil(max/limitSize);
@@ -101,7 +100,7 @@ router.get('/list',function(req, res) {
 
                     res.render('list', { title:"list", info: info, contents: [], login:req.session.user});
                 } else {
-                    mongodb.PetitionModel.find({$and:[{answer_flag:false},{'created_at':{dead_condition:(new Date()).setDate(now.getDate()-limitDay)}},{$or:[{title:searchCondition},{contents:searchCondition},{nickname:searchCondition}]}]}).sort(sortType).skip(skipSize).limit(limitSize).exec(function(err, pageContents) {
+                    mongodb.PetitionModel.find({$and:[{answer_flag:false},{created_at:dead_condition},{$or:[{title:searchCondition},{contents:searchCondition},{nickname:searchCondition}]}]}).sort(sortCondition).skip(skipSize).limit(limitSize).exec(function(err, pageContents) {
                         if(err) {throw err;}
                         for(var i=0; i<pageContents.length; i++) {
                             pageContents[i].startDay =  pageContents[i].created_at.toISOString().substr(2,8);
@@ -118,7 +117,7 @@ router.get('/list',function(req, res) {
             break;
 
         default:
-            mongodb.PetitionModel.count({$and:[{answer_flag:false},{dead_condition:{"$gte":(new Date()).setDate(now.getDate()-limitDay)}},{type:searchType}]},function(err, max){
+            mongodb.PetitionModel.count({$and:[{answer_flag:false},{created_at:dead_condition},{type:searchType}]},function(err, max){
                 if(err) {throw err;}
                 var pageNum = Math.ceil(max/limitSize);
                 var num = max-((page - 1)*limitSize);
@@ -135,7 +134,7 @@ router.get('/list',function(req, res) {
 
                     res.render('list', { title:"list", info: info, contents: [], login:req.session.user});
                 } else {
-                    mongodb.PetitionModel.find({$and:[{answer_flag:false},{'created_at':{"$gte":(new Date()).setDate(now.getDate()-limitDay)}},{type:searchType}]}).sort(sortType).skip(skipSize).limit(limitSize).exec(function(err, pageContents) {
+                    mongodb.PetitionModel.find({$and:[{answer_flag:false},{created_at:dead_condition},{type:searchType}]}).sort(sortCondition).skip(skipSize).limit(limitSize).exec(function(err, pageContents) {
                         if(err) {throw err;}
                         for(var i=0; i<pageContents.length; i++) {
                             pageContents[i].startDay =  pageContents[i].created_at.toISOString().substr(2,8);
@@ -149,6 +148,7 @@ router.get('/list',function(req, res) {
                     });
                 }
             });
+
             break;
         }
 });
