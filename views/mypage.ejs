@@ -1,13 +1,6 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <% include ./head.html %>
-    <title>Siri-b Petition</title>
-</head>
-<body>
-
-    <!-- Navigation -->
-    <% include ./navigation.html %>
     <style media = "all and (min-width: 769px)">
        .mylink { font-size: 1.9rem; color: #003c70; margin: 0 0.7rem; padding: 0 0.95rem 0.55rem 0.95rem; border-bottom: 0.25rem solid #003c70; }
        .mylink:hover { color: #003c70; padding: 0 1.2rem 0.35rem 1.2rem; border-bottom: 0.25rem solid #003c70; text-decoration:none;}
@@ -23,6 +16,25 @@
        .myhead-subtext{font-size:2.5rem;}
        .masthead-text{font-size:2.7rem;}
        .masthead-subtext{font-size:1.8rem;}
+       .title { font-size: 1.8rem; margin-left:1rem;}
+       .type-div {padding: 1.1rem;}
+       .mtype-tr{display:none;}
+       .type-tr th{padding:1rem;}
+       .type-table { font-size: 1.2rem; padding: 0.9rem; color: #565656;}
+       .type-table:hover { color: #003c70; padding: 1rem; background-color: #93DAFF; text-decoration:none; }
+       .type-table:active { color: #003c70; padding: 1rem; background-color: #93DAFF; text-decoration:none; }
+       .type-table-active { font-size: 1.2rem; color: #003c70; padding: 1rem; background-color: #93DAFF;}
+       .type-table-active:hover { color: #003c70; background-color: #93DAFF; text-decoration:none; }
+       .type-table-active:active { color: #003c70; background-color: #93DAFF; text-decoration:none; }
+       .my-box {color: #787878; font-weight: bold; font-size: 1.5rem; }
+       .my-box:hover { color: #003c70; text-decoration:none; font-size: 1.55rem; }
+       .my-box:active { color: #003c70; text-decoration:none; font-size: 1.55rem; }
+       .nav-link { color: #787878; font-weight: bold; font-size:1.3rem;}
+       .nav-link:hover { color: #003c70; text-decoration:none; font-size:1.35rem;}
+       .nav-link:active { color: #003c70; text-decoration:none; font-size:1.35rem;}
+       .nav-tabs li{padding: 0.8rem;}
+       .table-text{font-size: 1rem; padding: 0.9rem 0.28rem;}
+       .table-mtext{display:none}
    </style>
    <style media = "all and (max-width: 768px)">
        .mylink { font-size: 1.9rem; color: #003c70; padding: 0 0.95rem 0.55rem 0.95rem;}
@@ -36,7 +48,38 @@
        .myhead-subtext{font-size:2rem;}
        .masthead-text{font-size:1.8rem;}
        .masthead-subtext{font-size:1.0rem;}
-   </style>
+       .title {font-size: 1.5rem; margin-left:0.2rem;}
+       .type-div {padding: 0.3rem;}
+       .type-tr{display:none;}
+       .mtype-tr th{padding:0.5rem 0;}
+       .type-table { font-size: 0.8rem; padding: 0.6rem; color: #565656;}
+       .type-table:hover { color: #003c70; padding: 0.65rem; background-color: #93DAFF; text-decoration:none; }
+       .type-table:active { color: #003c70; padding: 0.65rem; background-color: #93DAFF; text-decoration:none; }
+       .type-table-active { font-size: 0.8rem; color: #003c70; padding: 0.6rem; background-color: #93DAFF;}
+       .type-table-active:hover { color: #003c70; background-color: #93DAFF; text-decoration:none; }
+       .type-table-active:active { color: #003c70; background-color: #93DAFF; text-decoration:none; }
+       .my-box {color: #787878; font-weight: bold; font-size: 0.9rem; }
+       .my-box:hover { color: #003c70; text-decoration:none; font-size: 0.95rem;}
+       .my-box:active { color: #003c70; text-decoration:none; font-size: 0.95rem; }
+       .nav-link { color: #787878; font-weight: bold; font-size:0.8rem;}
+       .nav-link:hover { color: #003c70; text-decoration:none; font-size:0.85rem;}
+       .nav-link:active { color: #003c70; text-decoration:none; font-size:0.85rem;}
+       .nav-tabs li{padding: 0.5rem;}
+        thead{display:none;}
+       .table-text{display:none}
+       .table-mtext{text-align: left; font-size: 1.05rem; margin: 0; padding:0.5rem;  border-top: 0.1rem solid #003c70;  }
+       .table-mtext a { text-decoration:none;}
+       .table-mtext a:hover {  text-decoration:none;}
+       .table-mtext a:active {  text-decoration:none;}
+      </style>
+    <% include ./head.html %>
+    <title>Siri-b Petition</title>
+</head>
+<body>
+
+    <!-- Navigation -->
+    <% include ./navigation.html %>
+
 
    <div class="myhead">
        <h1 class="myhead-subtext" align="center">My Page</h1>
@@ -55,6 +98,7 @@
     <hr>
 
     <table class="table table-hover" style="text-align:center;" cellspacing="0.6rem">
+        <thead>
         <tr style="border-top: 0.2rem solid #003c70;">
             <th style="font-size: 1.2rem; padding: 0.9rem 0.28rem; background-color: #003c70; color: #ffffff" scope="col">번호</th>
             <th style="font-size: 1.2rem; padding: 0.9rem 0.28rem; background-color: #003c70; color: #ffffff" scope="col">분류</th>
@@ -63,6 +107,7 @@
             <th style="font-size: 1.2rem; padding: 0.9rem 0.28rem; background-color: #003c70; color: #ffffff" scope="col">참여인원</th>
             <th style="font-size: 1.2rem; padding: 0.9rem 0.28rem; background-color: #003c70; color: #ffffff" scope="col">상태</th>
         </tr>
+        </thead>
 
         <% var n=info.no; %>
         <% var i=n;%>
@@ -90,8 +135,8 @@
                 <%}%>
 
                 <%if(item.endDay<Date.now) {%>
-                    <%if (item.count>=20) {%>
-                        <td class="table-text"><strong>답변대기</td>
+                    <%if (item.answer_flag) {%>
+                        <td class="table-text"><strong>답변완료</td>
                     <%} else {%>
                         <td class="table-text"><strong>진행중</td>
                     <%}%>
@@ -103,6 +148,26 @@
                     <td class="table-text"><strong>기간만료</td>
                 <%}%>
             </tr>
+            <%console.log('dafsdf')%>
+            <div class="table-mtext">
+                <p style="display: inline-block; width:49%; margin:0.7rem 0;"><span style="background-color:#003c70; color: #ffffff">　<%=i%>번　</span></p>
+                <p style="display: inline-block; text-align:right; width:49%; margin:0.4rem 0;"><strong class="text-primary"><%=item.type%></strong></p>
+                <%if(item.title.length >= 38) {%>
+                    <%var txt = "";%>
+                    <%for(var j = 0; j < 38; j++) {%>
+                        <%txt += item.title[j];%>
+                    <%}%>
+                    <%txt += "...";%>
+                    <%console.log('9999');%>
+
+                <p style="font-size: 1.2rem; margin:0.7rem 0"><strong class="text-dark"><a href="/petition/content?id=<%=item._id%>"><%=txt%></a></strong></p>
+                <%}else {%>
+                    <p style="font-size: 1.2rem; margin:0.7rem 0"><strong class="text-dark"><a href="/petition/content?id=<%=item._id%>"><%=item.title%></a></strong></p>
+                    <%}%>
+
+                <p style="display: inline-block; width:49%; margin:0.1rem 0; "><%=item.startDay%> ~ <%=item.endDay%></p>
+                <p style="display: inline-block; text-align:right; width:49%; margin:0.2rem 0 0.5rem;"><strong class="text-primary"><%=item.count%>명</strong></p>
+            </div>
             <%i=i-1;%>
             <%});%>
         <%} else {%>
@@ -110,6 +175,10 @@
             <%}%>
 
     </table>
+
+
+
+
 
     <form action="/users/mypage" method="get" style="width:40% justify-content: center;">
         <input type="hidden" name="sort" value="<%=info.sort%>">
@@ -183,6 +252,13 @@
         </ul>
     </div>
 </div>
+<% include ./footer.html %>
 
+<!-- Bootstrap core JavaScript -->
+<script src="vendor/jquery/jquery.min.js"></script>
+<script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+
+<!-- Custom scripts for this template -->
+<script src="js/clean-blog.min.js"></script>
 </body>
 </html>

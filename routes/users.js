@@ -80,16 +80,7 @@ router.post('/login',function(req, res) {
     });
 });
 
-router.post('/mypage/search', function(req, res) {
-    var word = req.body.word;
 
-    if(!req.session.user) {
-        res.send('<script type="text/javascript">alert("로그인이 필요합니다.");window.location.href = "/users/login";</script>');
-    }
-    else {
-        res.redirect('/mypage?word='+word);
-    }
-})
 router.get('/mypage', function(req, res) {
     console.log('get /mypage');
     console.log(req.session.user);
@@ -140,7 +131,8 @@ router.get('/mypage', function(req, res) {
             console.log('ing');
             viewCondition={
                 writer:req.session.user.uid,
-                created_at:{$gte: today-30*24*60*60000}
+                created_at:{$gte: today-30*24*60*60000},
+                answer_flag:false
             }
         } else {
             console.log('ans');
@@ -161,7 +153,7 @@ router.get('/mypage', function(req, res) {
             all_cnt=c;
         });
         console.log('1');
-        mongodb.PetitionModel.count({$and:[{writer:req.session.user.uid}, {created_at:{$gte: today-limitDay*24*60*60000}}]}, function(err, c) {
+        mongodb.PetitionModel.count({$and:[{writer:req.session.user.uid}, {answer_flag:false}, {created_at:{$gte: today-limitDay*24*60*60000}}]}, function(err, c) {
             if (err) throw err;
             ing_cnt=c;
         });
@@ -202,7 +194,7 @@ router.get('/mypage', function(req, res) {
                     for(var i=0; i<rawContents.length; i++) {
                         rawContents[i].startDay =  rawContents[i].created_at.toISOString().substr(2,8);
                         var tmp = new Date();
-                        tmp.setDate(rawContents[i].created_at.getDate() + 30);
+                        tmp.setDate(rawContents[i].created_at.getDate() + limitDay);
                         rawContents[i].endDay = tmp.toISOString().substr(2,8);
                         console.log(rawContents[i].startDay, rawContents[i].endDay);
                     }
