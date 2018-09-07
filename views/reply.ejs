@@ -10,6 +10,12 @@
             .item_title a:active{ text-decoration:none; }
             .re_vedio {display: inline-block; width:35%;}
             .re_vedio iframe{width: 350px; height: 280px;}
+            #re_content{display:inline-block; width:35%;}
+            #re_content p a{color: #dedede; font-size:1rem;}
+            #re_content p a{text-decoration:none;}    
+            #re_content p a:hover{text-decoration:none;  font-size:1.05rem; color: #efefef; font-weight: bold;}
+            #re_content p a:active{text-decoration:none;  font-size:1.05rem; color: #efefef; font-weight: bold;}
+            #re_mcontent{display:none;}
             #reply-container{display: inline-block; width:60%;}
             #reply-container p{font-weight: bold;}
             #mreply-container{display:none;}
@@ -17,12 +23,19 @@
         <style media = "all and (max-width: 768px)">
             .title { font-size: 1.5rem; margin:2rem 1rem 0;}
             .title_center{ text-align:center; font-size: 1.8rem; margin:2rem 1rem 0;}
-            .item_title {padding: 0 2rem; font-size: 1.2rem; font-weight: bold;}
+            .item_title {padding: 0; font-size: 1.2rem; font-weight: bold;}
             .item_title a {text-decoration:none;}
             .item_title a:hover{text-decoration:none;}    
             .item_title a:active{ text-decoration:none; }
             .re_vedio {text-align: center;}
-            .re_vedio iframe{width: 300px; height: 200px;}
+            .re_vedio iframe{width: 280px; height: 200px;}
+            #re_mcontent{text-align:center;}
+            #re_mcontent p{padding: 0.5rem;}
+            #re_mcontent p a{color: #dedede; font-size:0.9rem; font-weight: bold;}
+            #re_mcontent p a{text-decoration:none;}    
+            #re_mcontent p a:hover{text-decoration:none;  font-size:0.93rem; color: #efefef; font-weight: bold;}
+            #re_mcontent p a:active{text-decoration:none;  font-size:0.93rem; color: #efefef; font-weight: bold;}
+            #re_content{display:none;}
             #reply-container{display:none;}
             #mreply-container p{font-weight: bold;}
         </style>
@@ -76,31 +89,59 @@
                         <p style="text-align:center; margin-bottom: 3rem;"><span style="background-color:#003c70; padding: 0.6rem 0; color: #ffffff">　청원답변 <%=i%>번　</span></p>
                         <p class="item_title" style="text-align: center;" ><a href="/petition/content?id=<%=item._id%>"><%=item.title%></a></p>
                         <ol style="text-align: center; list-style:none; padding:0;">
-                            <li style="text-align: center; display: inline-block; width:20%;">
+                            <li style="text-align: center; display: inline-block; width:23%;">
                                 <img src="img/start.png" width="40px">
                                 <p style="font-size:0.8rem; margin-bottom: 0.5rem;">청원시작</p>
                                 <p style="font-size:0.5rem; margin-top: 0.5rem; color: #145caa;">[<%=item.startDay%>]</p> 
                             </li>
-                            <li  style="text-align: center; display: inline-block; width:20%;">
+                            <li  style="text-align: center; display: inline-block; width:23%;">
                                 <img src="img/end.png" width="40px">
                                 <p style="font-size:0.8rem; margin-bottom: 0.5rem;">청원마감</p>
                                 <p style="font-size:0.5rem; margin-top:  0.5rem; color: #0064CD;">[<%=item.endDay%>]</p>    
                             </li>            
-                            <li style="text-align: center; display: inline-block; width:20%;">
+                            <li style="text-align: center; display: inline-block; width:23%;">
                                 <img src="img/parti.png" width="40px">
                                 <p style="font-size:0.8rem; margin-bottom: 0.5rem;">참여인원</p>
                                 <p style="font-size:0.5rem; margin-top: 0.5rem; color: #0A6ECD;">[<%=item.count%>] 명</p>    
                             </li>            
-                            <li style="text-align: center; display: inline-block; width:20%;">
+                            <li style="text-align: center; display: inline-block; width:23%;">
                                 <img src="img/answer.png" width="40px">
                                 <p style="font-size:0.8rem; margin-bottom: 0.5rem;">답변일</p>
                                 <p style="font-size:0.5rem; margin-top: 0.5rem; color: #1E82CD;">[<%=item.answerDay%>]</p>    
                             </li>
                         </ol>
                     </div>
-                    <div class="re_vedio">
-                        <iframe src="<%=item.answer.video%>" frameborder="0" allow="encrypted-media" allowfullscreen></iframe>        
-                    </div>
+                    <%if(item.answer.video) {%>
+                        <div class="re_vedio">
+                            <iframe src="<%=item.answer.video%>" frameborder="0" allow="encrypted-media" allowfullscreen></iframe>
+                        </div>
+                    <%} else {%>
+                        <%var lines = item.answer.contents.split(" ");%>
+                        <%var txt1 = " "; var j;%>
+                        <%for(j = 0; j < lines.length; j++) {%>
+                            <%if(j == 25) break;%>
+                            <%txt1 = txt1 + lines[j] + " ";%>
+                        <%}%>
+                        <%if(j != lines.length) { txt1 += "..."; }%>
+                        <%var txt2 = " ";%>
+                        <%for(j = 0; j < lines.length; j++) {%>
+                            <%if(j == 17) break;%>
+                            <%txt2 = txt2 + lines[j] + " ";%>
+                        <%}%>
+                        <%if(j != lines.length) { txt2 += "..."; }%>
+                        <div id="re_content">
+                            <div class="container card card-content border-secondary" style="background-image: url('img/letter.jpg'); width:350px; height: 240px; padding:0; ">
+                                <div style="height:100%;width:100%;background-color:#333333;opacity:.3;z-index:20;"></div>
+                                <p class="re_text" style="text-align: center; position:absolute;left:0;top:0; height:100%;width:100%;z-index:30; padding: 0.5rem;"><a href="/petition/content?id=<%=item._id%>"><%=txt1%></a></p>
+                            </div>
+                        </div>
+                       
+                        
+                        <div class="container card card-content border-secondary" style="background-image: url('img/mletter.jpg'); width:280px; height: 200px; padding:0;" id="re_mcontent">
+                            <div style="height:100%;width:100%;background-color:#333333;opacity:.3;z-index:20;"></div>
+                            <p class="re_mtext" style="text-align: center; position:absolute;left:0;top:0; height:100%;width:100%;z-index:30;"><a href="/petition/content?id=<%=item._id%>"><%=txt2%></a></p>
+                        </div>
+                        <%}%>
                     <br><hr><br>
                     <%})%>
                 <%} else {%>

@@ -367,7 +367,7 @@ router.get('/reply', function(req, res) {
         } else {
             mongodb.PetitionModel.find({answer_flag:true}).populate("answer").sort({'updated_at':-1}).skip(skipSize).limit(limitSize).exec(function(err, contents) {
                 if(err) { throw err; }
-                console.log(contents)
+                //console.log(contents)
                 for(var i=0; i<contents.length; i++) {
                     contents[i].startDay =  contents[i].created_at.toISOString().substr(2,8);
                     var tmp = new Date(); tmp.setDate(contents[i].created_at.getDate() + limitDay);
@@ -473,14 +473,21 @@ router.post('/reply_post', function(req, res) {
         console.log('link:', link);
 
         var linkstr;
+        var linkstr1;
         if(!link) {
-            linkstr='';
+            linkstr=''; linkstr1 = '';
+        } else if(link.length<17) {
+            linkstr1='';
         } else if(link.length<24) {
             linkstr='';
         } else {
             linkstr = link.substr(0,24);
+            linkstr1 = link.substr(0,17);
         }
+        
         console.log('linkstr:', linkstr);
+        console.log('linkstr1:', linkstr1);
+
         var now = new Date();
 
         var newAnswers = new mongodb.AnswerModel({
@@ -491,37 +498,50 @@ router.post('/reply_post', function(req, res) {
             updated_at : now
         })
         console.log('answer_selected==없음');
-        if(!link || !contents) {
+        if(!contents) {
             var url='/petition/reply_post?id='+id;
-            res.send('<script type="text/javascript">alert("링크와 내용을 입력해야합니다.");</script>');
+            res.send('<script type="text/javascript">alert("내용을 입력해야합니다.");</script>');
 
-        } else if(linkstr != "https://www.youtube.com/") {
-            res.send('<script type="text/javascript">alert("링크의 형식이 잘못되었습니다. [ https://www.youtube.com/ ]");window.location.href="/petition/reply_post?id=<%=id%>";</script>');
-            //res.redirect('/petition/reply_post?id=', id);
-        } else {
-            mongodb.PetitionModel.findOne({_id:id}, function(err, content){
-                if(err) {throw err;}
-                console.log(id+"찾음");
+        } else if(link) {
+            if(linkstr == "https://www.youtube.com/") {
                 var linkstr1 = link.split('=');
                 var linkstr2 = link.substr(24,6);
 
                 if(linkstr1[0] == "https://www.youtube.com/watch?v") {
                     var strtmp = "https://www.youtube.com/embed/" + linkstr1[1];
                     console.log("strtmp : " + strtmp);
-                    content.answer_flag = true;
-
+                    
                     newAnswers.video = strtmp;
                     newAnswers.contents = contents;
 
                 } else if(linkstr2 == "embed/") {
                     console.log("link : " + link);
-                    content.answer_flag = true;
+                    
 
                     newAnswers.video = link;
                     newAnswers.contents = contents;
                 } else {
                     throw err;
                 }
+            } else if(linkstr1 == "https://youtu.be/") {
+                var linkstr1 = link.split('.be/');
+                var strtmp = "https://www.youtube.com/embed/" + linkstr1[1];
+                console.log("strtmp : " + strtmp);
+                newAnswers.video = strtmp;
+                newAnswers.contents = contents;
+                
+            } else{
+                res.send('<script type="text/javascript">alert("링크의 형식이 잘못되었습니다. [ https://www.youtube.com/ ]");window.location.href="/petition/reply_post?id=<%=id%>";</script>');
+                //res.redirect('/petition/reply_post?id=', id);
+            }
+        } else {
+            newAnswers.contents = contents;
+        }
+        
+        mongodb.PetitionModel.findOne({_id:id}, function(err, content){
+                if(err) {throw err;}
+                console.log(id+"찾음");
+                content.answer_flag = true;
 
                 newAnswers.save(function(err,result){
                     if(err){throw err;}
@@ -563,7 +583,6 @@ router.post('/reply_post', function(req, res) {
 
                     });
             });
-        }
     }
 });
 
