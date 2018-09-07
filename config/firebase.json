@@ -1,0 +1,8 @@
+{
+    apiKey: "AIzaSyDHbuU2DzSRzXV2V9zwf9rS8DxzYfR9Ir4",
+    authDomain: "mypetition-1.firebaseapp.com",
+    databaseURL: "https://mypetition-1.firebaseio.com",
+    projectId: "mypetition-1",
+    storageBucket: "mypetition-1.appspot.com",
+    messagingSenderId: "643778957765"
+}

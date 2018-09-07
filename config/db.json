@@ -1,0 +1,14 @@
+{
+	"mongodb" : {
+		"host" : "mongodb://localhost:27017/local"
+		,"collection" : []
+	}
+	,"mysql" : {
+        "connectionLimit" : 10
+		,"host" : "localhost"
+		,"user"     : "root"
+		,"password" : "1234"
+		,"database" : "test"
+	}
+ 
+}

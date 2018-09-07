@@ -1,6 +1,6 @@
 var express = require('express');
 var router = express.Router();
-var mongodb = require('../database');
+var mongodb = require('../lib/mdbConnect.js');
 
 router.get('/',function(req, res, next) {
     console.log('/petition get 패스 요청됨.');

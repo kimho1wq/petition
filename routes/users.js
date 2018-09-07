@@ -1,8 +1,8 @@
 var express = require('express');
 var router = express.Router();
 var firebase = require("firebase");
-var mongodb = require('../database');
-
+var mongodb = require('../lib/mdbConnect.js');
+//var config = requrie('../config/firebase.json');
 var config = {
     apiKey: "AIzaSyDHbuU2DzSRzXV2V9zwf9rS8DxzYfR9Ir4",
     authDomain: "mypetition-1.firebaseapp.com",
@@ -10,7 +10,8 @@ var config = {
     projectId: "mypetition-1",
     storageBucket: "mypetition-1.appspot.com",
     messagingSenderId: "643778957765"
-};
+}
+
 firebase.initializeApp(config);
 var db = firebase.firestore();
 

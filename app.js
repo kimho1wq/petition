@@ -6,17 +6,12 @@ var session = require('express-session');
 var logger = require('morgan');
 var mysql = require('mysql');
 
-var database = require('./database');
+require('./lib/mdbConnect.js');
+require('./lib/dbConnect.js');
 
 
-global.pool = mysql.createPool({
-    connectionLimit: 10,
-    host: 'localhost',
-    user: 'root',
-    password: '1234',
-    database: 'test',
-    debug: false
-});
+
+
 
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
@@ -61,5 +56,5 @@ app.use(function(err, req, res, next) {
   res.render('error');
 });
 
-database.init();
+
 module.exports = app;
